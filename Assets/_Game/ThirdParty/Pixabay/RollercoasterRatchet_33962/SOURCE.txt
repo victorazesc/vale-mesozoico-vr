@@ -1,0 +1,10 @@
+Rollercoaster ratchet
+
+Author: esperar (distributed by freesound_community)
+Source: https://pixabay.com/sound-effects/film-special-effects-rollercoaster-ratchet-33962/
+License: Pixabay Content License
+License summary: https://pixabay.com/service/license-summary/
+Downloaded: 2026-08-31
+
+Local changes: pitch lowering, equalization, dynamics processing, seamless loop
+preparation, and segmentation for lift engagement, sustained lift, and release.

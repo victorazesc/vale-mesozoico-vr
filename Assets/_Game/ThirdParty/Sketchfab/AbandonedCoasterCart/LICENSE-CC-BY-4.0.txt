@@ -1,0 +1,8 @@
+Abandonded Roller Coaster Cart by Matt Rafferty (Matt-AeroLab)
+Source: https://sketchfab.com/3d-models/abandonded-roller-coaster-cart-e557ecfcacb74d148ca25422d7685331
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License text: https://creativecommons.org/licenses/by/4.0/
+
+Changes for Vale Mesozoico VR: downloaded as GLB with 1K textures, removed the
+auxiliary cube, converted to FBX, renamed meshes/materials, and split the packed
+ORM maps into occlusion and metallic/smoothness textures for Unity URP.

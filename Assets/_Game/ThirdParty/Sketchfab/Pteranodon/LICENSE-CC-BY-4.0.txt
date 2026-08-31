@@ -1,0 +1,11 @@
+Pteranodon (Animated)
+Author: Chistodrako._. (@oscar.lopez.riviello)
+Source: https://sketchfab.com/3d-models/pteranodon-animated-7d7683df41d1405283f160e81a5dff1b
+
+Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+Adapted and optimized for Vale Mesozoico VR. Changes include GLB-to-FBX
+conversion, removal of non-character helper geometry, texture extraction and
+packing, Android ASTC compression, animation selection, culling, scale
+normalization, and a custom flight path.

@@ -1,0 +1,10 @@
+Coconut Tree by local.yany
+Source: https://sketchfab.com/3d-models/coconut-tree-2f3162bb723c4fe49af74465eae1629d
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+
+Changes made for Vale Mesozoico VR:
+- Converted from the downloadable 4K GLB to FBX.
+- Generated three geometry LODs for Meta Quest 3.
+- Reduced the runtime atlas to 2K for editor use and 1K ASTC for Android.
+- Added runtime URP materials, culling, and procedural wind animation.
