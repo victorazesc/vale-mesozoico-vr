@@ -21,10 +21,12 @@ namespace ValeMesozoico
             Transform[] transforms = FindObjectsByType<Transform>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             Transform[] palms = transforms.Where(item => item.name.StartsWith("Hero Coconut Palm ")).ToArray();
             Transform[] closedCliffs = transforms
-                .Where(item => item.name.StartsWith("Closed 3D Cliff "))
+                .Where(item => item.name.StartsWith("Closed 3D Cliff ")
+                    || item.name.StartsWith("Photogrammetry 3D Cliff "))
                 .ToArray();
             Transform[] closedBoulders = transforms
-                .Where(item => item.name.StartsWith("Closed 3D Boulder "))
+                .Where(item => item.name.StartsWith("Closed 3D Boulder ")
+                    || item.name.StartsWith("Photogrammetry 3D Boulder "))
                 .ToArray();
             int cliffs = closedCliffs.Length;
             int boulders = closedBoulders.Length;
@@ -32,14 +34,16 @@ namespace ValeMesozoico
             int closedRockLods = closedRocks.Count(item => item.GetComponent<LODGroup>() != null);
             int completeRockMeshSets = closedRocks.Count(item =>
             {
-                MeshFilter[] filters = item.GetComponentsInChildren<MeshFilter>(true);
-                return filters.Length == 3
-                    && filters.All(filter => filter.sharedMesh != null
-                    && filter.sharedMesh.vertexCount == filter.sharedMesh.uv.Length
-                    && filter.sharedMesh.vertexCount == filter.sharedMesh.normals.Length
-                    && filter.sharedMesh.bounds.size.x > 0.5f
-                    && filter.sharedMesh.bounds.size.y > 0.5f
-                    && filter.sharedMesh.bounds.size.z > 0.5f);
+                LODGroup group = item.GetComponent<LODGroup>();
+                if (group == null)
+                {
+                    return false;
+                }
+
+                LOD[] lods = group.GetLODs();
+                return lods.Length == 3
+                    && lods.All(lod => lod.renderers.Length > 0
+                        && lod.renderers.All(renderer => renderer != null));
             });
             int legacyScanObjects = transforms.Count(item => item.name.StartsWith("Photogrammetry Cliff ")
                 || item.name.StartsWith("Photogrammetry Boulder "));
@@ -61,7 +65,8 @@ namespace ValeMesozoico
             int caveTriangles = caveFilter != null && caveFilter.sharedMesh != null
                 ? caveFilter.sharedMesh.triangles.Length / 3
                 : 0;
-            int caveMouthRockLods = transforms.Count(item => item.name.StartsWith("Waterfall Cave Mouth ")
+            int caveMouthRockLods = transforms.Count(item => (item.name.StartsWith("Waterfall Cave Entrance ")
+                    || item.name.StartsWith("Waterfall Cave Exit "))
                 && item.GetComponent<LODGroup>() != null);
             bool cavePbr = caveRenderer != null
                 && caveRenderer.sharedMaterial != null
@@ -92,7 +97,8 @@ namespace ValeMesozoico
             Transform[] shorelineBlendBands = transforms
                 .Where(item => item.name.StartsWith("Wet Shoreline Blend 3D "))
                 .ToArray();
-            int shorelinePebbles = transforms.Count(item => item.name.StartsWith("Shoreline Pebble 3D ")
+            int shorelinePebbles = transforms.Count(item => (item.name.StartsWith("Shoreline Pebble 3D ")
+                    || item.name.StartsWith("Photogrammetry Shore Boulder "))
                 && item.GetComponent<LODGroup>() != null);
             Transform[] waterfallFlows = transforms
                 .Where(item => item.name.StartsWith("Waterfall Flow 3D "))
@@ -100,7 +106,8 @@ namespace ValeMesozoico
             Transform[] waterfallSources = transforms
                 .Where(item => item.name == "Waterfall Source Stream 3D")
                 .ToArray();
-            int waterfallRockLods = transforms.Count(item => item.name.StartsWith("Waterfall Rock ")
+            int waterfallRockLods = transforms.Count(item => (item.name.StartsWith("Waterfall Rock ")
+                    || item.name.StartsWith("Photogrammetry Waterfall "))
                 && item.GetComponent<LODGroup>() != null);
             int waterfallFoamVolumes = transforms.Count(item => item.name == "Waterfall Foam Volume 3D"
                 || item.name == "Waterfall Crest Volume 3D"
@@ -166,7 +173,9 @@ namespace ValeMesozoico
                 .Count(renderer => renderer.sharedMaterial != null && renderer.sharedMaterial.name == "Hero Coconut Palm Leaves"));
             Material[] rockMaterials = transforms
                 .Where(item => item.name.StartsWith("Closed 3D Cliff ")
-                    || item.name.StartsWith("Closed 3D Boulder "))
+                    || item.name.StartsWith("Closed 3D Boulder ")
+                    || item.name.StartsWith("Photogrammetry 3D Cliff ")
+                    || item.name.StartsWith("Photogrammetry 3D Boulder "))
                 .SelectMany(item => item.GetComponentsInChildren<Renderer>(true))
                 .Select(renderer => renderer.sharedMaterial)
                 .Where(material => material != null)
@@ -192,18 +201,18 @@ namespace ValeMesozoico
                 && palmSways == palms.Length
                 && barkRenderers >= palms.Length * 3
                 && leafRenderers >= palms.Length * 3
-                && pbrRockMaterials == 1
+                && pbrRockMaterials >= 2
                 && shorelineMeshes.Length == 1
                 && shallowWaterBands.Length == 3
                 && shorelineBlendBands.Length == 2
-                && shorelinePebbles == 16
+                && shorelinePebbles == 18
                 && shorelinePbrMaterials == 1
                 && shorelineTriangles > 1000
                 && shorelineTriangles <= 6000
                 && waterfallFlows.Length == 3
                 && volumetricFlows == waterfallFlows.Length
                 && waterfallFoamVolumes == 4
-                && waterfallRockLods == 0
+                && waterfallRockLods == 14
                 && waterfallPbrMaterials == waterfallFlows.Length
                 && waterfallSources.Length == 1
                 && validWaterfallSources == waterfallSources.Length
@@ -211,7 +220,7 @@ namespace ValeMesozoico
                 && waterfallTriangles <= 12000
                 && caveTriangles >= 700
                 && caveTriangles <= 2400
-                && caveMouthRockLods == 0
+                && caveMouthRockLods == 6
                 && cavePbr
                 && caveAtmospherePass
                 && trackVerticalRange >= 27f

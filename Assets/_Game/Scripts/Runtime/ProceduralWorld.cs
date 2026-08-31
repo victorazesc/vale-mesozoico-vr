@@ -40,14 +40,51 @@ namespace ValeMesozoico
 
         public static float HeightAt(float x, float z)
         {
-            float broad = Mathf.PerlinNoise((x + 180f) * 0.009f, (z + 210f) * 0.009f) * 6.4f;
-            float rolling = Mathf.PerlinNoise((x - 74f) * 0.021f, (z + 96f) * 0.021f) * 2.8f;
-            float detail = Mathf.PerlinNoise((x - 35f) * 0.047f, (z + 10f) * 0.047f) * 1.65f;
-            float ridgeNoise = Mathf.Abs(Mathf.PerlinNoise((x + 21f) * 0.015f, (z - 48f) * 0.015f) * 2f - 1f);
-            float ridges = Mathf.Pow(ridgeNoise, 1.45f) * 3.2f;
-            float edge = Mathf.Clamp01((new Vector2(x, z).magnitude - 78f) / 72f) * 14f;
-            float lake = Mathf.Clamp01(1f - Vector2.Distance(new Vector2(x, z), new Vector2(38f, 28f)) / 36f) * 5f;
-            return broad + rolling + detail + ridges + edge - lake - 5.7f;
+            float broad = Mathf.PerlinNoise((x + 180f) * 0.0085f, (z + 210f) * 0.0085f) * 8.2f;
+            float rolling = Mathf.PerlinNoise((x - 74f) * 0.019f, (z + 96f) * 0.019f) * 3.6f;
+            float detail = Mathf.PerlinNoise((x - 35f) * 0.052f, (z + 10f) * 0.052f) * 1.35f;
+            float ridgeNoise = Mathf.Abs(Mathf.PerlinNoise((x + 21f) * 0.014f, (z - 48f) * 0.014f) * 2f - 1f);
+            float ridges = Mathf.Pow(ridgeNoise, 1.8f) * 3.8f;
+
+            float radialDistance = new Vector2(x, z).magnitude;
+            float edge = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(72f, 148f, radialDistance)) * 18f;
+            float valleyWalls = EllipticalHill(x, z, -111f, 34f, 48f, 88f, 12f)
+                + EllipticalHill(x, z, 112f, 26f, 48f, 82f, 13f)
+                + EllipticalHill(x, z, 22f, 126f, 94f, 43f, 17f)
+                + EllipticalHill(x, z, -12f, -126f, 112f, 39f, 10f);
+            float terrainHeight = broad + rolling + detail + ridges + edge + valleyWalls - 6.4f;
+
+            // The lagoon is an actual basin shaped to the visible water instead of a plane
+            // cutting through generic terrain. The wide shelf gives the wet shoreline room
+            // to blend from submerged sediment into jungle ground.
+            float lagoonX = (x - 38f) / 40.5f;
+            float lagoonZ = (z - 28f) / 30.5f;
+            float lagoonDistance = Mathf.Sqrt(lagoonX * lagoonX + lagoonZ * lagoonZ);
+            float floorProgress = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.12f, 1.03f, lagoonDistance));
+            float lagoonFloor = Mathf.Lerp(-4.8f, -0.62f, floorProgress);
+            float basinMask = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.92f, 1.22f, lagoonDistance));
+            terrainHeight = Mathf.Lerp(terrainHeight, lagoonFloor, basinMask);
+
+            float shoreDistance = Mathf.Abs(lagoonDistance - 1.055f);
+            float shoreMask = 1f - Mathf.SmoothStep(0f, 1f, shoreDistance / 0.19f);
+            float shoreTarget = Mathf.Lerp(-0.48f, 0.78f, Mathf.InverseLerp(0.94f, 1.19f, lagoonDistance));
+            return Mathf.Lerp(terrainHeight, shoreTarget, shoreMask * 0.78f);
+        }
+
+        private static float EllipticalHill(
+            float x,
+            float z,
+            float centerX,
+            float centerZ,
+            float radiusX,
+            float radiusZ,
+            float height)
+        {
+            float normalizedX = (x - centerX) / radiusX;
+            float normalizedZ = (z - centerZ) / radiusZ;
+            float distance = Mathf.Sqrt(normalizedX * normalizedX + normalizedZ * normalizedZ);
+            float falloff = 1f - Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(distance));
+            return falloff * falloff * height;
         }
 
         private static void ConfigureEnvironment(Transform parent)
@@ -138,7 +175,7 @@ namespace ValeMesozoico
 
         private static void BuildTerrain(Transform parent, Material material)
         {
-            const int resolution = 97;
+            const int resolution = 129;
             int vertexCount = resolution * resolution;
             Vector3[] vertices = new Vector3[vertexCount];
             Vector2[] uvs = new Vector2[vertexCount];
@@ -181,7 +218,10 @@ namespace ValeMesozoico
             mesh.RecalculateNormals();
             mesh.RecalculateTangents();
             mesh.RecalculateBounds();
-            TrackMeshFactory.CreateMeshObject("Terrain", parent, mesh, material);
+            GameObject terrain = TrackMeshFactory.CreateMeshObject("Terrain", parent, mesh, material);
+            MeshRenderer renderer = terrain.GetComponent<MeshRenderer>();
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
+            renderer.receiveShadows = true;
         }
 
         private static void BuildWater(Transform parent, Material material)

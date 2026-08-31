@@ -9,6 +9,8 @@ namespace ValeMesozoico
     {
         private const string PteranodonResourcePath = "Models/Dinosaurs/Pteranodon/Pteranodon";
         private const string CoasterCartResourcePath = "Models/Ride/AbandonedCart/AbandonedCoasterCart";
+        private const string HeroBoulderResourcePath = "Models/EnvironmentHero/Boulder01/Boulder01";
+        private const string HeroMountainsideResourcePath = "Models/EnvironmentHero/Mountainside/Mountainside";
         private static Material _pteranodonMaterial;
         private static Material _coasterCartBodyMaterial;
         private static Material _coasterCartFrameMaterial;
@@ -43,7 +45,7 @@ namespace ValeMesozoico
             SetFloat(waterMaterial, "_Cull", 0f);
 
             Vector3 lagoonCenter = new(38f, -0.48f, 28f);
-            Mesh mesh = CreateLagoonMesh(64, 7, 40.5f, 30.5f);
+            Mesh mesh = CreateLagoonMesh(72, 8, 40.5f, 30.5f);
             GameObject water = TrackMeshFactory.CreateMeshObject("Lagoon", parent, mesh, waterMaterial);
             water.transform.position = lagoonCenter;
             water.layer = 4;
@@ -70,6 +72,7 @@ namespace ValeMesozoico
             capture.Initialize(probe);
 
             BuildLagoonShoreline(parent, waterMaterial, lagoonCenter);
+            BuildWaterfallCliff(parent);
             BuildWaterfall(parent, waterMaterial);
 
             AudioSource lagoonAudio = water.AddComponent<AudioSource>();
@@ -193,7 +196,8 @@ namespace ValeMesozoico
             GameObject root = new("Shoreline Pebbles 3D");
             root.transform.SetParent(parent, false);
             Material rockMaterial = GetClosedRockMaterial();
-            const int pebbleCount = 16;
+            Material heroBoulderMaterial = GetHeroBoulderMaterial();
+            const int pebbleCount = 18;
             for (int index = 0; index < pebbleCount; index++)
             {
                 float angle = index * Mathf.PI * 2f / pebbleCount + Mathf.Sin(index * 2.17f) * 0.11f;
@@ -204,16 +208,36 @@ namespace ValeMesozoico
                     lagoonCenter.z + Mathf.Sin(angle) * (34.7f + radialJitter * 0.65f));
                 position.y = ProceduralWorld.HeightAt(position.x, position.z) - 0.08f;
                 float height = 0.34f + Mathf.Abs(Mathf.Sin(index * 1.91f)) * 0.52f;
-                InstantiateClosedRockLod(
-                    root.transform,
-                    $"Shoreline Pebble 3D {index + 1:00}",
-                    position,
-                    Quaternion.Euler(index % 3 * 7f, index * 67f, (index % 2 == 0 ? -1f : 1f) * 9f),
-                    height,
-                    new Vector2(1.35f + index % 3 * 0.15f, 0.84f + index % 2 * 0.18f),
-                    index,
-                    rockMaterial,
-                    false);
+                Quaternion rotation = Quaternion.Euler(
+                    index % 3 * 7f,
+                    index * 67f,
+                    (index % 2 == 0 ? -1f : 1f) * 9f);
+                if (index % 3 == 0 && heroBoulderMaterial != null)
+                {
+                    InstantiateEnvironmentLod(
+                        root.transform,
+                        $"Photogrammetry Shore Boulder {index + 1:00}",
+                        HeroBoulderResourcePath,
+                        position,
+                        rotation,
+                        height * 1.12f,
+                        heroBoulderMaterial,
+                        false,
+                        index < 6);
+                }
+                else
+                {
+                    InstantiateClosedRockLod(
+                        root.transform,
+                        $"Shoreline Pebble 3D {index + 1:00}",
+                        position,
+                        rotation,
+                        height,
+                        new Vector2(1.35f + index % 3 * 0.15f, 0.84f + index % 2 * 0.18f),
+                        index,
+                        rockMaterial,
+                        false);
+                }
             }
         }
 
@@ -366,6 +390,32 @@ namespace ValeMesozoico
         private static void BuildWaterfallCliff(Transform parent)
         {
             Material rockMaterial = GetClosedRockMaterial();
+            Material mountainsideMaterial = GetHeroMountainsideMaterial() ?? rockMaterial;
+            Material boulderMaterial = GetHeroBoulderMaterial() ?? rockMaterial;
+            Vector3[] heroCliffPositions =
+            {
+                new(26.8f, -3.8f, 63.7f),
+                new(55.2f, -3.6f, 63.5f)
+            };
+            float[] heroCliffHeights = { 25.5f, 25.2f };
+            for (int i = 0; i < heroCliffPositions.Length; i++)
+            {
+                GameObject heroCliff = InstantiateEnvironmentLod(
+                    parent,
+                    $"Photogrammetry Waterfall Cliff {i + 1}",
+                    HeroMountainsideResourcePath,
+                    heroCliffPositions[i],
+                    Quaternion.Euler(-4f, 151f + i * 47f, i % 2 == 0 ? -8f : 8f),
+                    heroCliffHeights[i],
+                    mountainsideMaterial,
+                    false,
+                    true);
+                if (heroCliff != null)
+                {
+                    heroCliff.transform.localScale = new Vector3(1.45f, 1f, 1.16f);
+                }
+            }
+
             Vector3[] cliffPositions =
             {
                 new(29.7f, -4.7f, 61.4f),
@@ -403,16 +453,36 @@ namespace ValeMesozoico
             float[] boulderHeights = { 4.8f, 5.2f, 6.4f, 6.1f, 5.4f, 5.1f, 9.7f, 4.5f, 4.8f, 4.1f };
             for (int i = 0; i < boulderPositions.Length; i++)
             {
-                InstantiateClosedRockLod(
-                    parent,
-                    $"Waterfall Rock Boulder 3D {i + 1}",
-                    boulderPositions[i],
-                    Quaternion.Euler((i % 3 - 1) * 8f, 31f + i * 53f, (i % 2 == 0 ? -1f : 1f) * 7f),
-                    boulderHeights[i],
-                    new Vector2(1.12f + (i % 2) * 0.16f, 0.88f + (i % 3) * 0.11f),
-                    i,
-                    rockMaterial,
-                    i < 2);
+                Quaternion rotation = Quaternion.Euler(
+                    (i % 3 - 1) * 8f,
+                    31f + i * 53f,
+                    (i % 2 == 0 ? -1f : 1f) * 7f);
+                if (i < 2)
+                {
+                    InstantiateEnvironmentLod(
+                        parent,
+                        $"Photogrammetry Waterfall Boulder {i + 1}",
+                        HeroBoulderResourcePath,
+                        boulderPositions[i],
+                        rotation,
+                        boulderHeights[i],
+                        boulderMaterial,
+                        false,
+                        true);
+                }
+                else
+                {
+                    InstantiateClosedRockLod(
+                        parent,
+                        $"Waterfall Rock Boulder 3D {i + 1}",
+                        boulderPositions[i],
+                        rotation,
+                        boulderHeights[i],
+                        new Vector2(1.12f + (i % 2) * 0.16f, 0.88f + (i % 3) * 0.11f),
+                        i,
+                        rockMaterial,
+                        false);
+                }
             }
         }
 
@@ -683,8 +753,8 @@ namespace ValeMesozoico
         public static void BuildMountains(Transform parent, Material material, RideSpline spline)
         {
             _ = spline;
-            const int segments = 64;
-            const int bands = 4;
+            const int segments = 96;
+            const int bands = 6;
             List<Vector3> vertices = new((segments + 1) * bands);
             List<Vector2> uvs = new(vertices.Capacity);
             List<int> triangles = new(segments * (bands - 1) * 6);
@@ -697,19 +767,22 @@ namespace ValeMesozoico
                 float directionZ = Mathf.Sin(angle);
                 float broad = Mathf.PerlinNoise(directionX * 1.35f + 4.1f, directionZ * 1.35f + 7.7f);
                 float detail = Mathf.PerlinNoise(directionX * 4.8f + 18.3f, directionZ * 4.8f + 2.4f);
-                float ridgeHeight = 24f
-                    + broad * 20f
-                    + detail * 8f
-                    + Mathf.Abs(Mathf.Sin(angle * 7f + broad * 3f)) * 5f;
-                float radialJitter = (detail - 0.5f) * 12f;
+                float ridgeHeight = 27f
+                    + broad * 23f
+                    + detail * 10f
+                    + Mathf.Abs(Mathf.Sin(angle * 7f + broad * 3f)) * 6f;
+                float radialJitter = (detail - 0.5f) * 15f
+                    + Mathf.Sin(angle * 5f + broad * 2f) * 4f;
                 float[] radii =
                 {
-                    142f + radialJitter * 0.25f,
-                    158f + radialJitter * 0.55f,
-                    178f + radialJitter,
-                    215f + radialJitter * 0.4f
+                    126f + radialJitter * 0.15f,
+                    141f + radialJitter * 0.35f,
+                    157f + radialJitter * 0.72f,
+                    177f + radialJitter,
+                    204f + radialJitter * 0.62f,
+                    232f + radialJitter * 0.28f
                 };
-                float[] heightFactors = { 0f, 0.36f, 1f, 0.18f };
+                float[] heightFactors = { 0f, 0.24f, 0.68f, 1f, 0.57f, 0.12f };
 
                 for (int band = 0; band < bands; band++)
                 {
@@ -717,9 +790,8 @@ namespace ValeMesozoico
                     float x = directionX * radius;
                     float z = directionZ * radius;
                     float baseHeight = ProceduralWorld.HeightAt(x, z);
-                    float crag = band == 1
-                        ? (Mathf.PerlinNoise(t * 13f + 3f, 0.37f) - 0.5f) * 3.5f
-                        : 0f;
+                    float crag = (Mathf.PerlinNoise(t * 19f + band * 2.7f, 0.37f + band) - 0.5f)
+                        * (band >= 2 && band <= 4 ? 6f : 2f);
                     vertices.Add(new Vector3(x, baseHeight + ridgeHeight * heightFactors[band] + crag, z));
                     uvs.Add(new Vector2(t * 10f, band * 0.72f));
                 }
@@ -768,16 +840,18 @@ namespace ValeMesozoico
         {
             GameObject caveRoot = new("Waterfall Track Cave 3D");
             caveRoot.transform.SetParent(parent, false);
-            Material caveMaterial = CreatePolyHavenMaterial(
-                fallbackMaterial,
-                "Waterfall Cave Interior PBR",
-                "Models/PolyHaven/RockFace/textures/RockFace_Albedo",
-                "Models/PolyHaven/RockFace/textures/RockFace_Normal",
-                0.16f);
-            Vector2 caveTiling = new(2.2f, 2.2f);
+            Material caveSource = GetClosedRockMaterial() ?? fallbackMaterial;
+            Material caveMaterial = new(caveSource)
+            {
+                name = "Tileable Waterfall Cave Interior PBR",
+                enableInstancing = true
+            };
+            Vector2 caveTiling = new(1.25f, 0.9f);
             caveMaterial.mainTextureScale = caveTiling;
             if (caveMaterial.HasProperty("_BaseMap")) caveMaterial.SetTextureScale("_BaseMap", caveTiling);
             if (caveMaterial.HasProperty("_BumpMap")) caveMaterial.SetTextureScale("_BumpMap", caveTiling);
+            SetFloat(caveMaterial, "_Smoothness", 0.18f);
+            SetFloat(caveMaterial, "_BumpScale", 1.02f);
             SetFloat(caveMaterial, "_Cull", 0f);
 
             Mesh caveMesh = CreateTrackCaveMesh(spline, 0.398f, 0.475f, 24, 16);
@@ -789,6 +863,9 @@ namespace ValeMesozoico
             MeshRenderer caveRenderer = cave.GetComponent<MeshRenderer>();
             caveRenderer.shadowCastingMode = ShadowCastingMode.On;
             caveRenderer.receiveShadows = true;
+
+            BuildCavePortal(caveRoot.transform, spline, 0.398f, "Waterfall Cave Entrance", false);
+            BuildCavePortal(caveRoot.transform, spline, 0.475f, "Waterfall Cave Exit", true);
 
             RidePose atmospherePose = spline.PoseAtDistance(spline.Length * 0.435f);
             GameObject atmosphere = new("Cave Atmosphere");
@@ -804,6 +881,68 @@ namespace ValeMesozoico
             reverb.reverbPreset = AudioReverbPreset.Cave;
             reverb.minDistance = 4f;
             reverb.maxDistance = 21f;
+        }
+
+        private static void BuildCavePortal(
+            Transform parent,
+            RideSpline spline,
+            float progress,
+            string name,
+            bool exit)
+        {
+            GameObject root = new(name);
+            root.transform.SetParent(parent, false);
+            RidePose pose = spline.PoseAtDistance(spline.Length * progress);
+            Vector3 forward = Vector3.ProjectOnPlane(pose.Tangent, Vector3.up).normalized;
+            if (forward.sqrMagnitude < 0.5f)
+            {
+                forward = Vector3.forward;
+            }
+            Vector3 right = Vector3.Cross(Vector3.up, forward).normalized;
+            Vector3 center = pose.Position + forward * (exit ? 1.1f : -1.1f);
+            float ground = ProceduralWorld.HeightAt(center.x, center.z) - 0.9f;
+            Material fallbackMaterial = GetClosedRockMaterial();
+            Material mountainsideMaterial = GetHeroMountainsideMaterial() ?? fallbackMaterial;
+            Material boulderMaterial = GetHeroBoulderMaterial() ?? fallbackMaterial;
+
+            for (int sideIndex = 0; sideIndex < 2; sideIndex++)
+            {
+                float side = sideIndex == 0 ? -1f : 1f;
+                Vector3 position = center + right * side * 5.15f - forward * 0.35f;
+                position.y = ground;
+                Quaternion rotation = Quaternion.LookRotation(-right * side, Vector3.up)
+                    * Quaternion.Euler(side * 5f, exit ? 18f : -18f, side * 7f);
+                GameObject sideRock = InstantiateEnvironmentLod(
+                    root.transform,
+                    $"{name} Side {sideIndex + 1}",
+                    HeroMountainsideResourcePath,
+                    position,
+                    rotation,
+                    9.4f + sideIndex * 0.8f,
+                    mountainsideMaterial,
+                    false,
+                    true);
+                if (sideRock != null)
+                {
+                    sideRock.transform.localScale = new Vector3(1.38f, 1f, 1.12f);
+                }
+            }
+
+            Vector3 crownPosition = center + Vector3.up * 4.65f - forward * 0.2f;
+            GameObject crown = InstantiateEnvironmentLod(
+                root.transform,
+                $"{name} Crown",
+                HeroBoulderResourcePath,
+                crownPosition,
+                pose.Rotation * Quaternion.Euler(86f, exit ? 21f : -17f, 12f),
+                5.4f,
+                boulderMaterial,
+                false,
+                true);
+            if (crown != null)
+            {
+                crown.transform.localScale = new Vector3(2.15f, 0.72f, 1.28f);
+            }
         }
 
         private static Mesh CreateTrackCaveMesh(
@@ -876,6 +1015,8 @@ namespace ValeMesozoico
             GameObject root = new("Closed 3D Rock Landscape");
             root.transform.SetParent(parent, false);
             Material rockMaterial = GetClosedRockMaterial() ?? fallbackMaterial;
+            Material mountainsideMaterial = GetHeroMountainsideMaterial() ?? rockMaterial;
+            Material boulderMaterial = GetHeroBoulderMaterial() ?? rockMaterial;
             System.Random random = new(9631);
 
             const int cliffCount = 9;
@@ -888,21 +1029,54 @@ namespace ValeMesozoico
                 Vector3 position = pose.Position
                     + right * side * Next(random, 21f, 29f)
                     + pose.Tangent * Next(random, -4.5f, 4.5f);
-                position.y = ProceduralWorld.HeightAt(position.x, position.z) - Next(random, 2.5f, 4.3f);
+                float targetHeight = Next(random, 8.8f, 13.5f);
+                position.y = ProceduralWorld.HeightAt(position.x, position.z) - targetHeight * 0.24f;
                 Vector3 faceDirection = -right * side;
                 faceDirection.y = 0f;
                 Quaternion rotation = Quaternion.LookRotation(faceDirection.normalized, Vector3.up)
                     * Quaternion.Euler(Next(random, -8f, 8f), Next(random, -24f, 24f), Next(random, -11f, 11f));
-                InstantiateClosedRockLod(
+                GameObject hero = InstantiateEnvironmentLod(
                     root.transform,
-                    $"Closed 3D Cliff {index + 1:00}",
+                    $"Photogrammetry 3D Cliff {index + 1:00}",
+                    HeroMountainsideResourcePath,
                     position,
                     rotation,
-                    Next(random, 7.8f, 11.8f),
-                    new Vector2(Next(random, 1.45f, 2.05f), Next(random, 0.78f, 1.20f)),
-                    index,
-                    rockMaterial,
+                    targetHeight,
+                    mountainsideMaterial,
+                    false,
                     index < 4);
+                if (hero != null)
+                {
+                    hero.transform.localScale = new Vector3(
+                        Next(random, 2.15f, 2.9f),
+                        1f,
+                        Next(random, 1.08f, 1.42f));
+                    Vector3 foundationPosition = position;
+                    foundationPosition.y = ProceduralWorld.HeightAt(position.x, position.z) - targetHeight * 0.34f;
+                    InstantiateClosedRockLod(
+                        root.transform,
+                        $"Cliff Foundation 3D {index + 1:00}",
+                        foundationPosition,
+                        rotation * Quaternion.Euler(0f, 28f, 0f),
+                        targetHeight * 0.56f,
+                        new Vector2(2.25f, 1.32f),
+                        index + 3,
+                        rockMaterial,
+                        false);
+                }
+                else
+                {
+                    InstantiateClosedRockLod(
+                        root.transform,
+                        $"Closed 3D Cliff {index + 1:00}",
+                        position,
+                        rotation,
+                        targetHeight,
+                        new Vector2(Next(random, 1.45f, 2.05f), Next(random, 0.78f, 1.20f)),
+                        index,
+                        rockMaterial,
+                        index < 4);
+                }
             }
 
             const int boulderCount = 14;
@@ -916,16 +1090,41 @@ namespace ValeMesozoico
                     + right * side * Next(random, 9f, 16.5f)
                     + pose.Tangent * Next(random, -3f, 3f);
                 position.y = ProceduralWorld.HeightAt(position.x, position.z) - Next(random, 0.28f, 0.82f);
-                InstantiateClosedRockLod(
+                Quaternion rotation = Quaternion.Euler(
+                    Next(random, -8f, 8f),
+                    Next(random, 0f, 360f),
+                    Next(random, -8f, 8f));
+                float targetHeight = Next(random, 2.1f, 4.6f);
+                GameObject hero = InstantiateEnvironmentLod(
                     root.transform,
-                    $"Closed 3D Boulder {index + 1:00}",
+                    $"Photogrammetry 3D Boulder {index + 1:00}",
+                    HeroBoulderResourcePath,
                     position,
-                    Quaternion.Euler(Next(random, -8f, 8f), Next(random, 0f, 360f), Next(random, -8f, 8f)),
-                    Next(random, 1.8f, 3.9f),
-                    new Vector2(Next(random, 0.92f, 1.38f), Next(random, 0.82f, 1.24f)),
-                    index + 2,
-                    rockMaterial,
+                    rotation,
+                    targetHeight,
+                    boulderMaterial,
+                    false,
                     index < 6);
+                if (hero != null)
+                {
+                    hero.transform.localScale = new Vector3(
+                        Next(random, 1.04f, 1.26f),
+                        1f,
+                        Next(random, 0.96f, 1.18f));
+                }
+                else
+                {
+                    InstantiateClosedRockLod(
+                        root.transform,
+                        $"Closed 3D Boulder {index + 1:00}",
+                        position,
+                        rotation,
+                        targetHeight,
+                        new Vector2(Next(random, 0.92f, 1.38f), Next(random, 0.82f, 1.24f)),
+                        index + 2,
+                        rockMaterial,
+                        index < 6);
+                }
             }
         }
 
@@ -2799,8 +2998,9 @@ namespace ValeMesozoico
                 for (int segment = 0; segment < segments; segment++)
                 {
                     float angle = segment * Mathf.PI * 2f / segments;
-                    float x = Mathf.Cos(angle) * radiusX * ratio;
-                    float z = Mathf.Sin(angle) * radiusZ * ratio;
+                    float contour = Mathf.Lerp(1f, LagoonContour(angle), ratio);
+                    float x = Mathf.Cos(angle) * radiusX * ratio * contour;
+                    float z = Mathf.Sin(angle) * radiusZ * ratio * contour;
                     vertices.Add(new Vector3(x, Mathf.Sin(angle * 3f) * 0.025f * ratio, z));
                     uvs.Add(new Vector2(x / (radiusX * 2f) + 0.5f, z / (radiusZ * 2f) + 0.5f));
                 }
@@ -2839,6 +3039,14 @@ namespace ValeMesozoico
             return mesh;
         }
 
+        private static float LagoonContour(float angle)
+        {
+            return 1f
+                + Mathf.Sin(angle * 3f + 0.42f) * 0.034f
+                + Mathf.Sin(angle * 7f - 1.18f) * 0.017f
+                + Mathf.Sin(angle * 11f + 2.07f) * 0.008f;
+        }
+
         private static Mesh CreateLagoonRingMesh(
             int segments,
             int radialBands,
@@ -2860,8 +3068,9 @@ namespace ValeMesozoico
                 for (int segment = 0; segment < segments; segment++)
                 {
                     float angle = segment * Mathf.PI * 2f / segments;
-                    float x = Mathf.Cos(angle) * radiusX;
-                    float z = Mathf.Sin(angle) * radiusZ;
+                    float contour = LagoonContour(angle);
+                    float x = Mathf.Cos(angle) * radiusX * contour;
+                    float z = Mathf.Sin(angle) * radiusZ * contour;
                     float wave = Mathf.Sin(angle * 4f + t * 2.3f) * 0.014f;
                     vertices.Add(new Vector3(x, heightOffset + wave, z));
                     uvs.Add(new Vector2(x / 18f, z / 18f));
@@ -2902,8 +3111,9 @@ namespace ValeMesozoico
                 for (int segment = 0; segment < segments; segment++)
                 {
                     float angle = segment * Mathf.PI * 2f / segments;
-                    float x = Mathf.Cos(angle) * radiusX;
-                    float z = Mathf.Sin(angle) * radiusZ;
+                    float contour = LagoonContour(angle);
+                    float x = Mathf.Cos(angle) * radiusX * contour;
+                    float z = Mathf.Sin(angle) * radiusZ * contour;
                     float worldX = worldCenter.x + x;
                     float worldZ = worldCenter.y + z;
                     float terrainHeight = ProceduralWorld.HeightAt(worldX, worldZ) + 0.055f;
@@ -2945,8 +3155,9 @@ namespace ValeMesozoico
                 for (int segment = 0; segment < segments; segment++)
                 {
                     float angle = segment * Mathf.PI * 2f / segments;
-                    float x = Mathf.Cos(angle) * radiusX;
-                    float z = Mathf.Sin(angle) * radiusZ;
+                    float contour = LagoonContour(angle);
+                    float x = Mathf.Cos(angle) * radiusX * contour;
+                    float z = Mathf.Sin(angle) * radiusZ * contour;
                     float worldX = worldCenter.x + x;
                     float worldZ = worldCenter.y + z;
                     float y = ProceduralWorld.HeightAt(worldX, worldZ) + 0.065f + t * 0.004f;
