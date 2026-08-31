@@ -72,6 +72,7 @@ namespace ValeMesozoico
         private Vector3 _chaseStartPosition;
         private float _nextStompTime;
         private float _lastProgress;
+        private int _lastDeveloperSeekVersion;
         private bool _attackAnimation;
 
         internal bool ChaseActive { get; private set; }
@@ -116,6 +117,23 @@ namespace ValeMesozoico
             }
 
             float progress = _controller.RideProgress;
+            if (_controller.DeveloperScrubbing)
+            {
+                _lastProgress = progress;
+                return;
+            }
+
+            if (_lastDeveloperSeekVersion != _controller.DeveloperSeekVersion)
+            {
+                _lastDeveloperSeekVersion = _controller.DeveloperSeekVersion;
+                if (_controller.DeveloperLastSeekWasBackward)
+                {
+                    ResetEncounter();
+                    _lastProgress = progress;
+                    return;
+                }
+            }
+
             if (progress < 0.04f && _lastProgress > 0.9f)
             {
                 ResetEncounter();

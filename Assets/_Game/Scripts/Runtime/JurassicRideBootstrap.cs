@@ -50,6 +50,9 @@ namespace ValeMesozoico
             RideController controller = cart.gameObject.AddComponent<RideController>();
             ComfortFade fade = camera.gameObject.AddComponent<ComfortFade>();
             controller.Initialize(spline, fade);
+
+            RideDebugTimeline debugTimeline = cart.gameObject.AddComponent<RideDebugTimeline>();
+            debugTimeline.Initialize(controller);
         }
 
         private static void ConfigureRuntime()
@@ -269,6 +272,12 @@ namespace ValeMesozoico
         private bool _liftChainActive;
         private float _liftChainGain;
         private double _liftLoopStartDspTime = -1d;
+        private bool _developerPaused;
+        private bool _developerScrubbing;
+        private float _developerPlaybackRate = 1f;
+        private float _developerScrubStartProgress;
+        private int _developerSeekVersion;
+        private bool _developerLastSeekWasBackward;
         private float _nextSleeperHapticDistance;
         private float _nextLiftHapticTime;
         private float _nextBrakeHapticTime;
@@ -318,6 +327,12 @@ namespace ValeMesozoico
         {
             if (_spline == null)
             {
+                return;
+            }
+
+            if (_developerScrubbing)
+            {
+                ApplyPose(_distance, true, 0f);
                 return;
             }
 
@@ -432,7 +447,10 @@ namespace ValeMesozoico
                 && RideMotionProfile.IsLiftChainActive(progress, pose.Tangent.y);
             if (_trackAudio != null)
             {
-                _trackAudio.pitch = Mathf.Lerp(0.82f, 1.18f, speed01);
+                _trackAudio.pitch = Mathf.Clamp(
+                    Mathf.Lerp(0.82f, 1.18f, speed01) * _developerPlaybackRate,
+                    0.1f,
+                    3f);
                 float rollingVolume = _state == RideState.Riding
                     ? Mathf.Lerp(0.012f, 0.24f, Mathf.Pow(speed01, 0.78f))
                     : 0f;
@@ -459,7 +477,7 @@ namespace ValeMesozoico
                     _liftChainGain,
                     targetVolume,
                     Time.deltaTime * fadeSpeed);
-                _liftChainAudio.pitch = 1f;
+                _liftChainAudio.pitch = _developerPlaybackRate;
                 if (_liftChainLoopAudio != null)
                 {
                     float blend = _liftLoopStartDspTime > 0d
@@ -468,7 +486,7 @@ namespace ValeMesozoico
                     float angle = blend * Mathf.PI * 0.5f;
                     _liftChainAudio.volume = _liftChainGain * Mathf.Cos(angle);
                     _liftChainLoopAudio.volume = _liftChainGain * Mathf.Sin(angle);
-                    _liftChainLoopAudio.pitch = 1f;
+                    _liftChainLoopAudio.pitch = _developerPlaybackRate;
                 }
                 else
                 {
@@ -491,7 +509,7 @@ namespace ValeMesozoico
             _liftChainAudio.loop = _liftChainLoopAudio == null;
             _liftChainGain = 0f;
             _liftChainAudio.volume = 0f;
-            _liftChainAudio.pitch = 1f;
+            _liftChainAudio.pitch = _developerPlaybackRate;
             if (_liftChainLoopAudio == null || _liftChainStartClip == null)
             {
                 _liftLoopStartDspTime = -1d;
@@ -501,9 +519,12 @@ namespace ValeMesozoico
 
             _liftChainLoopAudio.loop = true;
             _liftChainLoopAudio.volume = 0f;
-            _liftChainLoopAudio.pitch = 1f;
+            _liftChainLoopAudio.pitch = _developerPlaybackRate;
             double startTime = AudioSettings.dspTime + 0.035d;
-            _liftLoopStartDspTime = startTime + _liftChainStartClip.length - LiftAudioCrossfadeSeconds;
+            float adjustedStartLength = _liftChainStartClip.length / Mathf.Max(0.1f, _developerPlaybackRate);
+            _liftLoopStartDspTime = startTime + Mathf.Max(
+                LiftAudioCrossfadeSeconds,
+                adjustedStartLength - LiftAudioCrossfadeSeconds);
             _liftChainAudio.PlayScheduled(startTime);
             _liftChainLoopAudio.PlayScheduled(_liftLoopStartDspTime);
         }
@@ -519,16 +540,130 @@ namespace ValeMesozoico
             }
 
             _liftChainEndAudio.Stop();
-            _liftChainEndAudio.pitch = 1f;
+            _liftChainEndAudio.pitch = _developerPlaybackRate;
             _liftChainEndAudio.volume = 0.26f;
             _liftChainEndAudio.Play();
         }
 
         internal bool LiftChainActive => _liftChainActive;
         internal float RideProgress => _spline != null ? Mathf.Clamp01(_distance / _spline.Length) : 0f;
+        internal float RideSpeed => _speed;
+        internal bool DeveloperScrubbing => _developerScrubbing;
+        internal int DeveloperSeekVersion => _developerSeekVersion;
+        internal bool DeveloperLastSeekWasBackward => _developerLastSeekWasBackward;
         internal float WheelRailVolume => _trackAudio != null ? _trackAudio.volume : 0f;
         internal float LiftChainVolume => _liftChainGain;
         internal bool LiftChainEndPlaying => _liftChainEndAudio != null && _liftChainEndAudio.isPlaying;
+
+        internal void DeveloperSeekToProgress(float normalizedProgress)
+        {
+            BeginDeveloperScrub();
+            DeveloperPreviewSeekToProgress(normalizedProgress);
+            CompleteDeveloperScrub(normalizedProgress);
+        }
+
+        internal void BeginDeveloperScrub()
+        {
+            if (_spline == null || _developerScrubbing)
+            {
+                return;
+            }
+
+            _developerScrubStartProgress = RideProgress;
+            _developerScrubbing = true;
+            StopControllerHaptics();
+            _trackAudio?.Pause();
+            _liftChainAudio?.Pause();
+            _liftChainLoopAudio?.Pause();
+            _liftChainEndAudio?.Pause();
+        }
+
+        internal void DeveloperPreviewSeekToProgress(float normalizedProgress)
+        {
+            if (_spline == null)
+            {
+                return;
+            }
+
+            float progress = Mathf.Clamp01(normalizedProgress);
+            _distance = Mathf.Min(_spline.Length - 0.02f, _spline.Length * progress);
+            RidePose pose = _spline.PoseAtDistance(_distance);
+            _speed = DeveloperSeekSpeed(progress, pose.Tangent.y);
+            _acceleration = 0f;
+            _bankAngle = pose.BankDegrees;
+            _state = RideState.Riding;
+            _stateTime = 0f;
+            ApplyPose(_distance, true, 0f);
+            _fade.SetImmediate(0f);
+        }
+
+        internal void CompleteDeveloperScrub(float normalizedProgress)
+        {
+            if (_spline == null)
+            {
+                return;
+            }
+
+            DeveloperPreviewSeekToProgress(normalizedProgress);
+            float progress = RideProgress;
+            _developerLastSeekWasBackward = progress < _developerScrubStartProgress - 0.0005f;
+            _developerSeekVersion++;
+            _developerScrubbing = false;
+            ResetRideFeedback();
+            if (_trackAudio != null && !_trackAudio.isPlaying)
+            {
+                _trackAudio.Play();
+            }
+            UpdateRideAudio();
+            Debug.Log(
+                $"[Developer Timeline] SEEK | from={_developerScrubStartProgress:F3}, "
+                + $"to={progress:F3}, backward={_developerLastSeekWasBackward}");
+        }
+
+        internal void CancelDeveloperScrub()
+        {
+            if (!_developerScrubbing)
+            {
+                return;
+            }
+
+            CompleteDeveloperScrub(RideProgress);
+        }
+
+        internal void SetDeveloperPaused(bool paused)
+        {
+            _developerPaused = paused;
+            if (paused)
+            {
+                StopControllerHaptics();
+            }
+        }
+
+        internal void SetDeveloperPlaybackRate(float playbackRate)
+        {
+            _developerPlaybackRate = Mathf.Clamp(playbackRate, 0.5f, 3f);
+            UpdateRideAudio();
+        }
+
+        private static float DeveloperSeekSpeed(float progress, float tangentY)
+        {
+            if (progress >= 0.985f)
+            {
+                return 0.12f;
+            }
+
+            if (RideMotionProfile.IsLiftChainActive(progress, tangentY))
+            {
+                return 3.4f;
+            }
+
+            if (progress >= 0.94f)
+            {
+                return 3.2f;
+            }
+
+            return progress < RideMotionProfile.LiftStart ? 2.6f : 6.2f;
+        }
 
         internal void TriggerEncounterHaptic(float amplitude, float duration)
         {
@@ -562,6 +697,11 @@ namespace ValeMesozoico
 
         private void UpdateHaptics()
         {
+            if (_developerPaused || _developerScrubbing)
+            {
+                return;
+            }
+
             float progress = Mathf.Clamp01(_distance / _spline.Length);
             float now = Time.unscaledTime;
             RidePose pose = _spline.PoseAtDistance(_distance);
@@ -598,6 +738,11 @@ namespace ValeMesozoico
 
         private void SendHapticPulse(float amplitude, float duration, float now)
         {
+            if (_developerPaused || _developerScrubbing)
+            {
+                return;
+            }
+
             if (now < _nextAllowedHapticTime)
             {
                 return;

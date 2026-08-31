@@ -19,3 +19,4 @@
 *.mdb
 *.opendb
 *.VC.db
+*.blend[0-9]
