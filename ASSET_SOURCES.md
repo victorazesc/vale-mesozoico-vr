@@ -94,6 +94,14 @@ Os PNGs de dinossauro permanecem apenas como fallback legado; a execução atual
 - Fonte preservada em `SourceAssets/Sketchfab/AbandonedCoasterCart/AbandonedCoasterCart_1K.glb`.
 - Runtime: `Assets/_Game/Resources/Models/Ride/AbandonedCart/`; o carrinho Kenney permanece como fallback.
 
+### LasquetiSpice — Animated Tyrannosaurus Rex Dinosaur Running Loop
+
+- Fonte oficial: https://sketchfab.com/3d-models/animated-tyrannosaurus-rex-dinosaur-running-loop-38007d947ae74dea83988cb0b08ee053
+- Autor: LasquetiSpice (`@LasquetiSpice`).
+- Licença: CC BY 4.0; metadados em `Blender/Assets/Sketchfab/TyrannosaurusRexRunning/SOURCE.md`.
+- Crédito: `Animated Tyrannosaurus Rex Dinosaur Running Loop by LasquetiSpice — Sketchfab — CC BY 4.0.`
+- Uso atual: T-Rex hero do render Blender PC, com rig, texturas PBR e pose da animação `roar` preservados.
+
 ### Poly Haven — rochas e vegetação
 
 - Fonte oficial: https://polyhaven.com/

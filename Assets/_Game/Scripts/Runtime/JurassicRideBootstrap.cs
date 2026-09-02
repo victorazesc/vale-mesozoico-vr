@@ -64,7 +64,13 @@ namespace ValeMesozoico
             QualitySettings.antiAliasing = 4;
             QualitySettings.shadowDistance = 45f;
             QualitySettings.shadowCascades = 1;
-            QualitySettings.lodBias = 0.8f;
+            QualitySettings.lodBias = 1f;
+            QualitySettings.streamingMipmapsActive = true;
+            QualitySettings.streamingMipmapsMemoryBudget = 320f;
+            QualitySettings.streamingMipmapsMaxLevelReduction = 2;
+            QualitySettings.asyncUploadTimeSlice = 2;
+            QualitySettings.asyncUploadBufferSize = 32;
+            QualitySettings.asyncUploadPersistentBuffer = true;
             Time.fixedDeltaTime = 1f / 72f;
 
             if (XRSettings.enabled)
@@ -76,7 +82,7 @@ namespace ValeMesozoico
                 {
                     if (display.running)
                     {
-                        display.foveatedRenderingLevel = 0.5f;
+                        display.foveatedRenderingLevel = 0.65f;
                     }
                 }
             }

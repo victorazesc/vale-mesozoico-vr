@@ -165,6 +165,8 @@ namespace ValeMesozoico.Editor
             }
 
             importer.mipmapEnabled = true;
+            importer.streamingMipmaps = true;
+            importer.streamingMipmapsPriority = isHeroEnvironment || isHeroRide || isDinosaurTexture ? 2 : 0;
             importer.maxTextureSize = isHeroEnvironment ? 2048 : 1024;
             if (isRealistic || isPolyHaven || isHeroEnvironment || isHeroRide || isDinosaurTexture)
             {

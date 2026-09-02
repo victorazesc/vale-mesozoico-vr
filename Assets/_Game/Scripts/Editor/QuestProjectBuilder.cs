@@ -295,6 +295,8 @@ namespace ValeMesozoico.Editor
             importer.textureType = TextureImporterType.Default;
             importer.alphaIsTransparency = false;
             importer.mipmapEnabled = true;
+            importer.streamingMipmaps = true;
+            importer.streamingMipmapsPriority = 0;
             importer.sRGBTexture = true;
             importer.wrapMode = TextureWrapMode.Repeat;
             importer.filterMode = FilterMode.Trilinear;
@@ -319,6 +321,8 @@ namespace ValeMesozoico.Editor
             importer.textureType = TextureImporterType.Default;
             importer.alphaIsTransparency = true;
             importer.mipmapEnabled = true;
+            importer.streamingMipmaps = true;
+            importer.streamingMipmapsPriority = 1;
             importer.sRGBTexture = true;
             importer.maxTextureSize = 1024;
             TextureImporterPlatformSettings android = importer.GetPlatformTextureSettings("Android");

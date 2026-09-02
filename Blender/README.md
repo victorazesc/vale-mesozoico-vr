@@ -21,3 +21,16 @@ Para reconstruir o arquivo a partir dos valores atuais do Unity:
 ```
 
 O Blender é a base visual. Física, áudio, XR e eventos da experiência continuam no Unity.
+
+## Passe cinematográfico para PC
+
+O mesmo `ValeMesozoico_Editable.blend` contém o passe de render PC. A câmera
+ativa é `Camera_CinematicReference`; as coleções `10_PC_` até `13_PC_` guardam
+vegetação, rochas, manadas e atmosfera. As referências ficam anexadas à câmera
+somente como guias e não aparecem no render.
+
+Para reconstruir o passe dentro do arquivo aberto, execute no Console Python:
+
+```python
+exec(compile(open("/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/enhance_pc_cinematic.py").read(), "enhance_pc_cinematic.py", "exec"))
+```
