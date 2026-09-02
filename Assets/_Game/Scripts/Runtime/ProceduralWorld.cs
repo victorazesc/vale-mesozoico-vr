@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace ValeMesozoico
 {
@@ -36,6 +37,81 @@ namespace ValeMesozoico
             OptimizedModelWorld.BuildPterosaurs(parent);
             DinosaurAnimationRuntime.RestoreAndPlay(parent);
             return materials;
+        }
+
+        public static WorldMaterials BuildForImportedEnvironment(Transform parent, RideSpline spline)
+        {
+            ConfigureImportedEnvironment(parent);
+            WorldMaterials materials = CreateMaterials();
+            OptimizedModelWorld.BuildDinosaurs(parent, spline);
+            OptimizedModelWorld.BuildPterosaurs(parent);
+            DinosaurAnimationRuntime.RestoreAndPlay(parent);
+            return materials;
+        }
+
+        private static void ConfigureImportedEnvironment(Transform parent)
+        {
+            ConfigureEnvironment(parent);
+            ConfigureImportedSky();
+            ConfigureImportedPostProcessing(parent);
+            RenderSettings.fogDensity = 0.00135f;
+            RenderSettings.fogColor = new Color(0.59f, 0.59f, 0.51f);
+            RenderSettings.ambientSkyColor = new Color(0.46f, 0.49f, 0.38f);
+            RenderSettings.ambientEquatorColor = new Color(0.30f, 0.29f, 0.21f);
+            RenderSettings.ambientGroundColor = new Color(0.12f, 0.115f, 0.07f);
+            RenderSettings.reflectionIntensity = 0.82f;
+
+            if (RenderSettings.sun != null)
+            {
+                RenderSettings.sun.color = new Color(1f, 0.86f, 0.68f);
+                RenderSettings.sun.intensity = 1.78f;
+                RenderSettings.sun.shadows = LightShadows.Soft;
+                RenderSettings.sun.shadowStrength = 0.78f;
+            }
+        }
+
+        private static void ConfigureImportedSky()
+        {
+            Shader shader = Shader.Find("Skybox/Procedural");
+            if (shader == null)
+            {
+                return;
+            }
+
+            Material sky = new(shader) { name = "Runtime PC Jurassic Sky" };
+            sky.SetColor("_SkyTint", new Color(0.39f, 0.52f, 0.64f));
+            sky.SetColor("_GroundColor", new Color(0.47f, 0.46f, 0.39f));
+            sky.SetFloat("_AtmosphereThickness", 0.92f);
+            sky.SetFloat("_Exposure", 1.12f);
+            sky.SetFloat("_SunSize", 0.035f);
+            sky.SetFloat("_SunSizeConvergence", 5f);
+            RenderSettings.skybox = sky;
+            DynamicGI.UpdateEnvironment();
+        }
+
+        private static void ConfigureImportedPostProcessing(Transform parent)
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE
+            GameObject volumeObject = new("PC Cinematic Color Grade");
+            volumeObject.transform.SetParent(parent, false);
+            Volume volume = volumeObject.AddComponent<Volume>();
+            volume.isGlobal = true;
+            volume.priority = 20f;
+            VolumeProfile profile = ScriptableObject.CreateInstance<VolumeProfile>();
+            volume.profile = profile;
+
+            Tonemapping tonemapping = profile.Add<Tonemapping>(true);
+            tonemapping.mode.Override(TonemappingMode.Neutral);
+            ColorAdjustments color = profile.Add<ColorAdjustments>(true);
+            color.postExposure.Override(0.42f);
+            color.contrast.Override(8f);
+            color.saturation.Override(10f);
+            color.colorFilter.Override(new Color(1f, 0.97f, 0.90f));
+            Bloom bloom = profile.Add<Bloom>(true);
+            bloom.threshold.Override(1.05f);
+            bloom.intensity.Override(0.10f);
+            bloom.scatter.Override(0.55f);
+#endif
         }
 
         public static float HeightAt(float x, float z)

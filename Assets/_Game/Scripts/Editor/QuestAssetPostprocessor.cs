@@ -14,6 +14,9 @@ namespace ValeMesozoico.Editor
         private const string ModelsRoot = "Assets/_Game/Resources/Models/";
         private const string RealisticTexturesRoot = "Assets/_Game/Resources/Textures/Realistic/";
         private const string SimpleLitShader = "Universal Render Pipeline/Simple Lit";
+        private const string LitShader = "Universal Render Pipeline/Lit";
+        private const string PcBlenderEnvironmentRoot =
+            "Assets/_Game/Resources/Models/Environment/ValeMesozoicoPC/";
 
         private static readonly string[] DinosaurTokens =
         {
@@ -33,7 +36,9 @@ namespace ValeMesozoico.Editor
             importer.importLights = false;
             importer.importBlendShapes = false;
             importer.addCollider = false;
-            importer.meshCompression = ModelImporterMeshCompression.Medium;
+            importer.meshCompression = IsPcBlenderEnvironment(assetPath)
+                ? ModelImporterMeshCompression.Off
+                : ModelImporterMeshCompression.Medium;
             importer.optimizeMeshPolygons = true;
             importer.optimizeMeshVertices = true;
             importer.isReadable = IsDinosaur(assetPath);
@@ -56,7 +61,7 @@ namespace ValeMesozoico.Editor
                 return;
             }
 
-            ConfigureMaterial(material);
+            ConfigureMaterial(material, IsPcBlenderEnvironment(assetPath));
         }
 
         private void OnPostprocessModel(GameObject root)
@@ -72,19 +77,19 @@ namespace ValeMesozoico.Editor
                 {
                     if (material != null)
                     {
-                        ConfigureMaterial(material);
+                        ConfigureMaterial(material, IsPcBlenderEnvironment(assetPath));
                     }
                 }
             }
         }
 
-        private static void ConfigureMaterial(Material material)
+        private static void ConfigureMaterial(Material material, bool preferPcQuality)
         {
-
-            Shader shader = Shader.Find(SimpleLitShader);
+            string shaderName = preferPcQuality ? LitShader : SimpleLitShader;
+            Shader shader = Shader.Find(shaderName);
             if (shader == null)
             {
-                Debug.LogWarning($"[Quest Assets] Shader ausente: {SimpleLitShader}. Material mantido: {material.name}");
+                Debug.LogWarning($"[Quest Assets] Shader ausente: {shaderName}. Material mantido: {material.name}");
                 return;
             }
 
@@ -111,6 +116,46 @@ namespace ValeMesozoico.Editor
             if (occlusionMap != null)
             {
                 material.EnableKeyword("_OCCLUSIONMAP");
+            }
+
+            if (!preferPcQuality)
+            {
+                return;
+            }
+
+            string lowered = material.name.ToLowerInvariant();
+            bool isFoliage = lowered.Contains("leaves", StringComparison.Ordinal)
+                || lowered.Contains("leaf", StringComparison.Ordinal)
+                || lowered.Contains("fern", StringComparison.Ordinal)
+                || lowered.Contains("anthurium", StringComparison.Ordinal)
+                || lowered.Contains("calathea", StringComparison.Ordinal)
+                || lowered.Contains("shrub", StringComparison.Ordinal)
+                || lowered.Contains("grass", StringComparison.Ordinal)
+                || lowered.Contains("coconutpalm", StringComparison.Ordinal);
+            if (isFoliage)
+            {
+                SetFloat(material, "_Surface", 0f);
+                SetFloat(material, "_AlphaClip", 1f);
+                SetFloat(material, "_Cutoff", 0.38f);
+                SetFloat(material, "_Cull", 0f);
+                material.EnableKeyword("_ALPHATEST_ON");
+                material.SetOverrideTag("RenderType", "TransparentCutout");
+                material.renderQueue = (int)RenderQueue.AlphaTest;
+            }
+
+            bool isWater = lowered.Contains("water", StringComparison.Ordinal)
+                || lowered.Contains("shallows", StringComparison.Ordinal);
+            if (isWater)
+            {
+                SetFloat(material, "_Surface", 1f);
+                SetFloat(material, "_Blend", 0f);
+                SetFloat(material, "_SrcBlend", (float)BlendMode.SrcAlpha);
+                SetFloat(material, "_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+                SetFloat(material, "_ZWrite", 0f);
+                SetFloat(material, "_Smoothness", 0.88f);
+                material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+                material.SetOverrideTag("RenderType", "Transparent");
+                material.renderQueue = (int)RenderQueue.Transparent;
             }
         }
 
@@ -150,6 +195,28 @@ namespace ValeMesozoico.Editor
             Debug.Log($"[Quest Assets] {optimized} texturas configuradas em ASTC 6x6.");
         }
 
+        public static void ReimportPcBlenderEnvironmentTexturesFromCli()
+        {
+            int reimported = 0;
+            foreach (string guid in AssetDatabase.FindAssets(
+                "t:Texture2D",
+                new[] { PcBlenderEnvironmentRoot.TrimEnd('/') }))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (AssetImporter.GetAtPath(path) is not TextureImporter importer
+                    || !ConfigureTextureImporter(importer, path))
+                {
+                    continue;
+                }
+
+                importer.SaveAndReimport();
+                reimported++;
+            }
+
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[Vale Blender] {reimported} texturas reimportadas para PC/Quest.");
+        }
+
         private static bool ConfigureTextureImporter(TextureImporter importer, string path)
         {
             string textureName = Path.GetFileNameWithoutExtension(path);
@@ -159,22 +226,27 @@ namespace ValeMesozoico.Editor
             bool isHeroEnvironment = path.IndexOf("/Models/EnvironmentHero/", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isHeroRide = path.IndexOf("/Models/Ride/AbandonedCart/", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isDinosaurTexture = IsDinosaur(path);
-            if (!isCoaster && !isRealistic && !isPolyHaven && !isHeroEnvironment && !isHeroRide && !isDinosaurTexture)
+            bool isPcBlenderEnvironment = IsPcBlenderEnvironment(path);
+            if (!isCoaster && !isRealistic && !isPolyHaven && !isHeroEnvironment && !isHeroRide
+                && !isDinosaurTexture && !isPcBlenderEnvironment)
             {
                 return false;
             }
 
             importer.mipmapEnabled = true;
-            importer.streamingMipmaps = true;
+            importer.streamingMipmaps = !isPcBlenderEnvironment;
             importer.streamingMipmapsPriority = isHeroEnvironment || isHeroRide || isDinosaurTexture ? 2 : 0;
-            importer.maxTextureSize = isHeroEnvironment ? 2048 : 1024;
-            if (isRealistic || isPolyHaven || isHeroEnvironment || isHeroRide || isDinosaurTexture)
+            importer.maxTextureSize = isHeroEnvironment || isPcBlenderEnvironment ? 2048 : 1024;
+            if (isRealistic || isPolyHaven || isHeroEnvironment || isHeroRide || isDinosaurTexture
+                || isPcBlenderEnvironment)
             {
-                bool isNormal = textureName.EndsWith("_Normal", StringComparison.OrdinalIgnoreCase);
+                bool isNormal = textureName.EndsWith("_Normal", StringComparison.OrdinalIgnoreCase)
+                    || textureName.IndexOf("_nor_gl", StringComparison.OrdinalIgnoreCase) >= 0;
                 bool isOcclusion = textureName.EndsWith("_Occlusion", StringComparison.OrdinalIgnoreCase);
                 bool isMetallicSmoothness = textureName.EndsWith(
                     "_MetallicSmoothness",
                     StringComparison.OrdinalIgnoreCase);
+                bool isRoughness = textureName.IndexOf("_rough", StringComparison.OrdinalIgnoreCase) >= 0;
                 bool isGeneratedHeightNormal = isNormal
                     && (textureName.StartsWith("TrackPaintedSteel", StringComparison.OrdinalIgnoreCase)
                         || textureName.StartsWith("RockBasaltMoss", StringComparison.OrdinalIgnoreCase)
@@ -185,6 +257,7 @@ namespace ValeMesozoico.Editor
                 bool isCutout = textureName.EndsWith("_Atlas", StringComparison.OrdinalIgnoreCase)
                     || textureName.EndsWith("_Cutout", StringComparison.OrdinalIgnoreCase)
                     || textureName.EndsWith("_Alpha", StringComparison.OrdinalIgnoreCase)
+                    || textureName.IndexOf("_alpha_", StringComparison.OrdinalIgnoreCase) >= 0
                     || isPalmAlbedo;
                 importer.textureType = isNormal ? TextureImporterType.NormalMap : TextureImporterType.Default;
                 importer.convertToNormalmap = isGeneratedHeightNormal;
@@ -196,11 +269,11 @@ namespace ValeMesozoico.Editor
                         ? 0.052f
                         : 0.035f;
                 }
-                importer.sRGBTexture = !isNormal && !isOcclusion && !isMetallicSmoothness;
+                importer.sRGBTexture = !isNormal && !isOcclusion && !isMetallicSmoothness && !isRoughness;
                 importer.alphaIsTransparency = isCutout;
                 importer.wrapMode = isCutout || isHeroRide ? TextureWrapMode.Clamp : TextureWrapMode.Repeat;
                 importer.filterMode = FilterMode.Trilinear;
-                importer.anisoLevel = 2;
+                importer.anisoLevel = isPcBlenderEnvironment ? 4 : 2;
             }
 
             TextureImporterPlatformSettings android = importer.GetPlatformTextureSettings("Android");
@@ -393,6 +466,14 @@ namespace ValeMesozoico.Editor
                 || normalized.StartsWith(RealisticTexturesRoot, StringComparison.OrdinalIgnoreCase);
         }
 
+        private static bool IsPcBlenderEnvironment(string path)
+        {
+            return !string.IsNullOrEmpty(path)
+                && path.Replace('\\', '/').StartsWith(
+                    PcBlenderEnvironmentRoot,
+                    StringComparison.OrdinalIgnoreCase);
+        }
+
         private static bool IsDinosaur(string path)
         {
             string normalized = path.Replace('\\', '/').ToLowerInvariant();
@@ -453,6 +534,14 @@ namespace ValeMesozoico.Editor
                 {
                     material.SetColor(property, value);
                 }
+            }
+        }
+
+        private static void SetFloat(Material material, string property, float value)
+        {
+            if (material.HasProperty(property))
+            {
+                material.SetFloat(property, value);
             }
         }
 

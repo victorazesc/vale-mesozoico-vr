@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -19,8 +20,25 @@ namespace ValeMesozoico.Editor
         private const string PlayModeExitRequestedKey = "ValeMesozoico.PreviewCapture.PlayModeExitRequested";
         private const string ExitCodeKey = "ValeMesozoico.PreviewCapture.ExitCode";
         private const string OutputPathKey = "ValeMesozoico.PreviewCapture.OutputPath";
+        private const string BlenderManifestResourcePath =
+            "Models/Environment/ValeMesozoicoPC/ValeMesozoicoEnvironment.export";
         private const int Width = 1920;
         private const int Height = 1080;
+
+        [Serializable]
+        private sealed class BlenderPreviewManifest
+        {
+            public BlenderReferenceCamera referenceCamera;
+        }
+
+        [Serializable]
+        private sealed class BlenderReferenceCamera
+        {
+            public Vector3 position;
+            public Vector3 forward;
+            public Vector3 up;
+            public float verticalFovDegrees;
+        }
 
         private static Camera _camera;
         private static RenderTexture _renderTarget;
@@ -172,7 +190,7 @@ namespace ValeMesozoico.Editor
             _camera.transform.SetParent(null, true);
             _camera.enabled = true;
             _camera.stereoTargetEye = StereoTargetEyeMask.None;
-            _camera.allowHDR = false;
+            _camera.allowHDR = GameObject.Find("Blender Environment") != null;
             _camera.allowMSAA = true;
             _camera.aspect = (float)Width / Height;
             _camera.nearClipPlane = 0.05f;
@@ -215,6 +233,12 @@ namespace ValeMesozoico.Editor
 
         private static Shot[] BuildShots()
         {
+            GameObject importedEnvironment = GameObject.Find("Blender Environment");
+            if (importedEnvironment != null)
+            {
+                return BuildImportedEnvironmentShots(importedEnvironment);
+            }
+
             List<Shot> shots = new(5)
             {
                 CreateSubjectShot(
@@ -252,6 +276,69 @@ namespace ValeMesozoico.Editor
                     66f)
             };
             return shots.ToArray();
+        }
+
+        private static Shot[] BuildImportedEnvironmentShots(GameObject environment)
+        {
+            List<Shot> shots = new(5);
+            TextAsset manifestAsset = Resources.Load<TextAsset>(BlenderManifestResourcePath);
+            BlenderPreviewManifest manifest = manifestAsset != null
+                ? JsonUtility.FromJson<BlenderPreviewManifest>(manifestAsset.text)
+                : null;
+            BlenderReferenceCamera reference = manifest?.referenceCamera;
+            if (reference != null && reference.forward.sqrMagnitude > 0.5f)
+            {
+                shots.Add(new Shot(
+                    "01-blender-reference.png",
+                    reference.position,
+                    reference.position + reference.forward.normalized * 120f,
+                    Mathf.Clamp(reference.verticalFovDegrees, 20f, 80f),
+                    reference.up.sqrMagnitude > 0.5f ? reference.up.normalized : Vector3.up));
+            }
+            else
+            {
+                shots.Add(new Shot(
+                    "01-blender-reference.png",
+                    new Vector3(-138f, 54f, 158f),
+                    new Vector3(0f, 7f, 0f),
+                    34f));
+            }
+
+            GameObject lagoon = FindDescendant(environment.transform, "Lagoon_Water_Editable");
+            shots.Add(CreateSubjectShot(
+                "02-lagoon-close.png",
+                lagoon,
+                new Vector3(-0.75f, 0.48f, 0.72f),
+                new Vector3(-55f, 34f, 72f),
+                new Vector3(18f, 1f, 15f),
+                52f));
+
+            shots.Add(new Shot(
+                "03-cave-and-track.png",
+                new Vector3(-14f, 17f, 111f),
+                new Vector3(43.7f, 5.4f, 59.7f),
+                51f));
+
+            shots.Add(new Shot(
+                "04-rider-start.png",
+                new Vector3(0f, 6.15f, -56.7f),
+                new Vector3(34f, 5.1f, -52f),
+                76f));
+            shots.Add(new Shot(
+                "05-high-overview.png",
+                new Vector3(-118f, 98f, 145f),
+                new Vector3(0f, 6f, 0f),
+                52f));
+            return shots.ToArray();
+        }
+
+        private static GameObject FindDescendant(Transform root, string expectedName)
+        {
+            Transform match = root.GetComponentsInChildren<Transform>(true)
+                .FirstOrDefault(candidate => candidate != null
+                    && (string.Equals(candidate.name, expectedName, StringComparison.Ordinal)
+                        || candidate.name.StartsWith(expectedName, StringComparison.Ordinal)));
+            return match != null ? match.gameObject : null;
         }
 
         private static Shot CreateSubjectShot(
@@ -309,7 +396,7 @@ namespace ValeMesozoico.Editor
             _camera.fieldOfView = shot.FieldOfView;
             _camera.transform.SetPositionAndRotation(
                 shot.Position,
-                Quaternion.LookRotation(direction.normalized, Vector3.up));
+                Quaternion.LookRotation(direction.normalized, shot.Up));
             Debug.Log($"[Vale Preview] Preparando {_shotIndex + 1}/{_shots.Length}: {shot.FileName}");
         }
 
@@ -434,17 +521,29 @@ namespace ValeMesozoico.Editor
         private readonly struct Shot
         {
             public Shot(string fileName, Vector3 position, Vector3 target, float fieldOfView)
+                : this(fileName, position, target, fieldOfView, Vector3.up)
+            {
+            }
+
+            public Shot(
+                string fileName,
+                Vector3 position,
+                Vector3 target,
+                float fieldOfView,
+                Vector3 up)
             {
                 FileName = fileName;
                 Position = position;
                 Target = target;
                 FieldOfView = fieldOfView;
+                Up = up;
             }
 
             public string FileName { get; }
             public Vector3 Position { get; }
             public Vector3 Target { get; }
             public float FieldOfView { get; }
+            public Vector3 Up { get; }
         }
     }
 }

@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -19,6 +20,14 @@ namespace ValeMesozoico
             yield return new WaitForSecondsRealtime(0.5f);
 
             Transform[] transforms = FindObjectsByType<Transform>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            Transform importedEnvironment = transforms.FirstOrDefault(item => item.name == "Blender Environment");
+            if (importedEnvironment != null)
+            {
+                yield return ValidateImportedEnvironment(importedEnvironment, transforms);
+                Destroy(gameObject);
+                yield break;
+            }
+
             Transform[] palms = transforms.Where(item => item.name.StartsWith("Hero Coconut Palm ")).ToArray();
             Transform[] closedCliffs = transforms
                 .Where(item => item.name.StartsWith("Closed 3D Cliff ")
@@ -254,7 +263,8 @@ namespace ValeMesozoico
                 + $"swayDelta={swayDelta:F3}deg");
 
             RideController controller = FindFirstObjectByType<RideController>();
-            Transform waterfallRoot = transforms.FirstOrDefault(item => item.name == "Volumetric 3D Waterfall");
+            Transform waterfallRoot = transforms.FirstOrDefault(item => item != null
+                && item.name == "Volumetric 3D Waterfall");
             bool caveEntered = false;
             float caveQaTimeout = Time.realtimeSinceStartup + 90f;
             while (controller != null && Time.realtimeSinceStartup < caveQaTimeout)
@@ -290,6 +300,128 @@ namespace ValeMesozoico
             Debug.LogError($"[Cave Ride QA] FAIL | caveEntered={caveEntered}");
 
             Destroy(gameObject);
+        }
+
+        private static IEnumerator ValidateImportedEnvironment(
+            Transform importedEnvironment,
+            Transform[] sceneTransforms)
+        {
+            Renderer[] renderers = importedEnvironment.GetComponentsInChildren<Renderer>(true);
+            MeshFilter[] filters = importedEnvironment.GetComponentsInChildren<MeshFilter>(true);
+            HashSet<Mesh> meshes = filters
+                .Where(filter => filter.sharedMesh != null)
+                .Select(filter => filter.sharedMesh)
+                .ToHashSet();
+            Material[] materials = renderers
+                .SelectMany(renderer => renderer.sharedMaterials)
+                .Where(material => material != null)
+                .Distinct()
+                .ToArray();
+            int pbrMaterials = materials.Count(material => material.shader != null
+                && (material.shader.name == "Universal Render Pipeline/Lit"
+                    || material.shader.name == "Vale Mesozoico/World Projected Ground"));
+            int texturedMaterials = materials.Count(material => material.HasProperty("_BaseMap")
+                && material.GetTexture("_BaseMap") != null);
+            int cutoutMaterials = materials.Count(material => material.HasProperty("_AlphaClip")
+                && material.GetFloat("_AlphaClip") > 0.5f
+                && material.GetTexture("_BaseMap") != null);
+
+            Transform lagoon = FindImportedDescendant(importedEnvironment, "Lagoon_Water_Editable");
+            Transform cave = FindImportedDescendant(importedEnvironment, "PC_FINAL_Cave_Tunnel_Interior");
+            Renderer lagoonRenderer = lagoon != null ? lagoon.GetComponentInChildren<Renderer>(true) : null;
+            Renderer caveRenderer = cave != null ? cave.GetComponentInChildren<Renderer>(true) : null;
+            float lagoonX = lagoonRenderer != null ? lagoonRenderer.bounds.center.x : float.NegativeInfinity;
+            float caveX = caveRenderer != null ? caveRenderer.bounds.center.x : float.NegativeInfinity;
+
+            Transform terrain = FindImportedDescendant(importedEnvironment, "Terrain_Editable_129x129");
+            MeshFilter terrainFilter = terrain != null ? terrain.GetComponentInChildren<MeshFilter>(true) : null;
+            Renderer terrainRenderer = terrain != null ? terrain.GetComponentInChildren<Renderer>(true) : null;
+            Mesh terrainMesh = terrainFilter != null ? terrainFilter.sharedMesh : null;
+            Material terrainMaterial = terrainRenderer != null ? terrainRenderer.sharedMaterial : null;
+            int terrainUvCount = terrainMesh != null
+                && terrainMesh.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.TexCoord0)
+                    ? terrainMesh.vertexCount
+                    : 0;
+            string terrainTexture = terrainMaterial != null
+                && terrainMaterial.HasProperty("_BaseMap")
+                && terrainMaterial.GetTexture("_BaseMap") != null
+                    ? terrainMaterial.GetTexture("_BaseMap").name
+                    : "none";
+            Color terrainColor = terrainMaterial != null && terrainMaterial.HasProperty("_BaseColor")
+                ? terrainMaterial.GetColor("_BaseColor")
+                : Color.clear;
+            Vector3 riderProbe = new(0f, 6.15f, -56.7f);
+            string riderGroundCandidates = string.Join(", ", renderers
+                .Where(renderer => renderer.bounds.min.x <= riderProbe.x
+                    && renderer.bounds.max.x >= riderProbe.x
+                    && renderer.bounds.min.z <= riderProbe.z
+                    && renderer.bounds.max.z >= riderProbe.z
+                    && renderer.bounds.min.y <= riderProbe.y)
+                .OrderByDescending(renderer => renderer.bounds.max.y <= riderProbe.y
+                    ? renderer.bounds.max.y
+                    : float.NegativeInfinity)
+                .Take(6)
+                .Select(renderer =>
+                    $"{renderer.transform.parent?.name ?? renderer.name}:"
+                    + $"{renderer.sharedMaterial?.name ?? "none"}@{renderer.bounds.max.y:F1}"));
+
+            Transform runningRails = sceneTransforms.FirstOrDefault(item => item.name == "Polished Running Rails");
+            MeshFilter railFilter = runningRails != null ? runningRails.GetComponent<MeshFilter>() : null;
+            float trackVerticalRange = railFilter != null && railFilter.sharedMesh != null
+                ? railFilter.sharedMesh.bounds.size.y
+                : 0f;
+
+            TropicalWindSway[] sways = importedEnvironment.GetComponentsInChildren<TropicalWindSway>(true);
+            yield return new WaitForSecondsRealtime(0.8f);
+            float swayDelta = sways.Length > 0
+                ? sways.Max(sway => sway.AppliedAngle)
+                : 0f;
+
+            bool pass = importedEnvironment.childCount >= 2700
+                && renderers.Length >= 2700
+                && meshes.Count >= 35
+                && meshes.Count <= 100
+                && materials.Length >= 16
+                && pbrMaterials == materials.Length
+                && texturedMaterials >= 12
+                && cutoutMaterials >= 5
+                && lagoonX >= 30f
+                && lagoonX <= 50f
+                && caveX >= 35f
+                && caveX <= 55f
+                && terrainUvCount > 0
+                && terrainTexture != "none"
+                && trackVerticalRange >= 27f
+                && sways.Length >= 150
+                && swayDelta > 0.002f;
+
+            string message =
+                $"[Imported Environment QA] {(pass ? "PASS" : "FAIL")} | "
+                + $"instances={importedEnvironment.childCount}, renderers={renderers.Length}, "
+                + $"meshes={meshes.Count}, materials={materials.Length}, pbrMaterials={pbrMaterials}, "
+                + $"texturedMaterials={texturedMaterials}, cutoutMaterials={cutoutMaterials}, "
+                + $"lagoonX={lagoonX:F1}, caveX={caveX:F1}, "
+                + $"terrainUvs={terrainUvCount}, terrainTexture={terrainTexture}, "
+                + $"terrainColor={terrainColor}, "
+                + $"riderGround=[{riderGroundCandidates}], "
+                + $"trackVerticalRange={trackVerticalRange:F1}m, sways={sways.Length}, "
+                + $"swayDelta={swayDelta:F3}deg";
+            if (pass)
+            {
+                Debug.Log(message);
+            }
+            else
+            {
+                Debug.LogError(message);
+            }
+        }
+
+        private static Transform FindImportedDescendant(Transform root, string expectedName)
+        {
+            return root.GetComponentsInChildren<Transform>(true)
+                .FirstOrDefault(candidate => candidate != null
+                    && (candidate.name == expectedName
+                        || candidate.name.StartsWith(expectedName)));
         }
     }
 }

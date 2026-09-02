@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.XR;
 
 namespace ValeMesozoico
@@ -41,7 +42,15 @@ namespace ValeMesozoico
             Transform worldRoot = new GameObject("Jurassic Ride").transform;
             worldRoot.SetParent(transform, false);
             RideSpline spline = new(CreateTrackPoints());
-            WorldMaterials materials = ProceduralWorld.Build(worldRoot, spline);
+            WorldMaterials materials;
+            if (ImportedBlenderEnvironment.TryAttach(worldRoot, out _))
+            {
+                materials = ProceduralWorld.BuildForImportedEnvironment(worldRoot, spline);
+            }
+            else
+            {
+                materials = ProceduralWorld.Build(worldRoot, spline);
+            }
             TrackMeshFactory.CreateTrack(worldRoot, spline, materials.Rail, materials.Sleeper, materials.Support);
 
             Transform cart = BuildCart(worldRoot, materials);
@@ -194,8 +203,13 @@ namespace ValeMesozoico
             camera.fieldOfView = 75f;
             camera.clearFlags = RenderSettings.skybox != null ? CameraClearFlags.Skybox : CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.39f, 0.55f, 0.59f);
+#if UNITY_EDITOR || UNITY_STANDALONE
+            camera.allowHDR = true;
+#else
             camera.allowHDR = false;
+#endif
             camera.allowMSAA = true;
+            camera.GetUniversalAdditionalCameraData().renderPostProcessing = true;
             cameraObject.AddComponent<AudioListener>();
             cameraObject.AddComponent<XRHeadTracker>();
             return camera;

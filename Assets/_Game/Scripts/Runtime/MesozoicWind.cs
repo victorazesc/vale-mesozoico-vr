@@ -36,6 +36,8 @@ namespace ValeMesozoico
         private float _response;
         private bool _initialized;
 
+        internal float AppliedAngle { get; private set; }
+
         public void Initialize(float phase, float amplitude, float response)
         {
             _phase = phase;
@@ -65,13 +67,14 @@ namespace ValeMesozoico
             Vector3 windLocal = transform.parent != null
                 ? transform.parent.InverseTransformDirection(windWorld)
                 : windWorld;
-            float gust = MesozoicWind.Gust(Time.time, _phase);
+            float gust = MesozoicWind.Gust(Time.unscaledTime, _phase);
             float bend = _amplitude * Mathf.Lerp(0.42f, 1f, gust);
-            float flutter = Mathf.Sin(Time.time * 2.15f + _phase * 2.3f) * _amplitude * 0.12f;
+            float flutter = Mathf.Sin(Time.unscaledTime * 2.15f + _phase * 2.3f) * _amplitude * 0.12f;
             Quaternion target = _restRotation
                 * Quaternion.Euler(windLocal.z * bend, flutter, -windLocal.x * bend);
-            float blend = 1f - Mathf.Exp(-Mathf.Max(0.1f, _response) * Time.deltaTime);
+            float blend = 1f - Mathf.Exp(-Mathf.Max(0.1f, _response) * Time.unscaledDeltaTime);
             transform.localRotation = Quaternion.Slerp(transform.localRotation, target, blend);
+            AppliedAngle = Quaternion.Angle(_restRotation, transform.localRotation);
         }
     }
 }
