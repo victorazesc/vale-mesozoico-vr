@@ -5,10 +5,10 @@ namespace ValeMesozoico
     // Advanced only by the ride's clock: the complete capture can pause and replay.
     internal sealed class PteranodonDropSequence : MonoBehaviour
     {
-        internal enum Phase { Waiting, Approaching, Circling, Screeching, Swooping, RearApproaching,
-            Grabbing, Lifting, Carrying, Returning, Releasing, Falling, Impacting, Departing, Complete }
-        internal const float OrbitSeconds = 6.5f;
-        private const float OrbitRadius = 14f;
+        internal enum Phase { Waiting, Approaching, Swooping, Grabbing, Lifting, Carrying, Returning,
+            Releasing, Falling, Impacting, Departing, Complete }
+        private const float ApproachSeconds = 1.8f;
+        private const float SwoopSeconds = 3.8f;
         private const float ThrowHeight = 4f;
         private const float ThrowSeconds = .22f;
         private const float ThrowSpeed = 7f;
@@ -22,11 +22,10 @@ namespace ValeMesozoico
         private PteranodonGrabRig _rig;
         private DinosaurAudioEmitter _call;
         private AudioSource _impact;
-        private Vector3 _crest, _forward, _right, _center, _liftEnd, _departure;
-        private Vector3 _birdStart;
+        private Vector3 _crest, _forward, _right, _liftEnd, _departure;
         private Quaternion _crestRotation, _phaseRotation, _birdRotation;
         private Quaternion _landingRotation, _departureRotation;
-        private FlightPath _valleyPath, _returnPath;
+        private FlightPath _pickupPath, _valleyPath, _returnPath;
         private float _elapsed, _flightClock;
         private float _fallSeconds, _departureClock;
         private bool _panelsMeasured;
@@ -55,6 +54,8 @@ namespace ValeMesozoico
         internal Vector3 LandingPosition { get; private set; }
         internal float LandingSlope { get; private set; }
         internal int ImpactCount { get; private set; }
+        internal float MaxPickupPositionStep { get; private set; }
+        internal float MaxPickupRotationStep { get; private set; }
         internal float CameraShakeOffset => _seatAnchor != null
             ? Vector3.Distance(_seatAnchor.localPosition, _seatPosition) : 0f;
         internal Vector3 CrestPosition => _crest;
@@ -86,13 +87,14 @@ namespace ValeMesozoico
             sequence._crest = crest.Position + sequence._crestRotation * Vector3.up * 0.4f;
             sequence._forward = Vector3.ProjectOnPlane(crest.Tangent, Vector3.up).normalized;
             sequence._right = Vector3.Cross(Vector3.up, sequence._forward);
-            sequence._center = sequence._crest + Vector3.up * 8f;
             sequence.ConfigureLanding(spline);
             sequence.LakeCenter = FindLake();
             sequence.BuildFlightPaths();
             sequence._call = EnhancedProceduralAudio.AttachDinosaurCall(sequence._actor, "Pteranodon", 7469);
             sequence._call.enabled = false;
-            sequence._impact = root.AddComponent<AudioSource>();
+            GameObject impactAudio = new("Cave Drop Impact Audio");
+            impactAudio.transform.SetParent(root.transform, false);
+            sequence._impact = impactAudio.AddComponent<AudioSource>();
             sequence._impact.clip = CreateImpactClip();
             sequence._impact.playOnAwake = false;
             sequence._impact.spatialBlend = 1f;
@@ -112,10 +114,11 @@ namespace ValeMesozoico
             MeasurePanels();
             _flightClock = 0f;
             _rig.SampleFlight(0f);
-            PoseBird(OrbitPosition(0f) - _right * 34f + Vector3.up * 12f, _right, -10f);
+            BuildDirectPickupPath();
+            PoseBird(_pickupPath.Position(0f), FlightDirection(_pickupPath, 0f), 0f);
             _actor.SetActive(true);
             Enter(Phase.Approaching);
-            Debug.Log($"[Cave Drop] HOLD | crest={_crest.y:F2}m, span=14m, panels={_panelsMeasured}");
+            Debug.Log($"[Cave Drop] HOLD | crest={_crest.y:F2}m, directFrontPickup=True, panels={_panelsMeasured}");
         }
 
         internal void Tick(float deltaTime)
@@ -125,66 +128,29 @@ namespace ValeMesozoico
             _flightClock += deltaTime * (CurrentPhase == Phase.Grabbing ? 1.65f : 1.2f);
             _rig.SampleFlight(_flightClock);
             Vector3 previous = _controller.transform.position;
+            Vector3 previousBirdPosition = _actor.transform.position;
+            Quaternion previousBirdRotation = _actor.transform.rotation;
+            Phase previousPhase = CurrentPhase;
             switch (CurrentPhase)
             {
                 case Phase.Approaching:
-                    float approach = Ease(_elapsed / 3f);
-                    Vector3 end = OrbitPosition(0f);
-                    PoseBird(Vector3.Lerp(end - _right * 34f + Vector3.up * 12f, end, approach), _right, -10f);
-                    if (_elapsed >= 3f) Enter(Phase.Circling);
-                    break;
-                case Phase.Circling:
-                    float angle = Mathf.Min(_elapsed / OrbitSeconds, 2f) * Mathf.PI * 2f;
-                    PoseBird(OrbitPosition(angle), OrbitPosition(angle + 0.01f) - OrbitPosition(angle), -14f);
-                    CompletedLaps = Mathf.Min(2, Mathf.FloorToInt((_elapsed + 0.00001f) / OrbitSeconds));
-                    if (_elapsed >= OrbitSeconds * 2f)
+                    float approach = Ease(_elapsed / ApproachSeconds) * 0.3f;
+                    PoseBird(_pickupPath.Position(approach), FlightDirection(_pickupPath, approach), 0f);
+                    if (!Screeched && _elapsed >= 0.35f)
                     {
-                        CompletedLaps = 2;
                         Screeched = _call.PlayNow(1.45f, 0.84f);
-                        _birdStart = _actor.transform.position;
-                        Enter(Phase.Screeching);
                     }
-                    break;
-                case Phase.Screeching:
-                    float line = Ease(_elapsed / 3f);
-                    Vector3 staging = _crest + _forward * 34f + Vector3.up * 12f;
-                    Vector3 p = Bezier(_birdStart, _birdStart + _right * 18f,
-                        staging + _forward * 12f, staging, line);
-                    PoseBird(p, Vector3.Slerp(_right, -_forward, line), Mathf.Lerp(-14f, 0f, line));
-                    _rig.Screech(Mathf.Sin(line * Mathf.PI));
-                    if (_elapsed >= 3f) { _birdStart = p; Enter(Phase.Swooping); }
+                    _rig.Screech(Mathf.Sin(Mathf.Clamp01((_elapsed - 0.25f) / 1.25f) * Mathf.PI));
+                    if (_elapsed >= ApproachSeconds) Enter(Phase.Swooping);
                     break;
                 case Phase.Swooping:
-                    float swoop = Ease(_elapsed / 3.8f);
-                    // Keep the head-on approach, then clear the cabin before turning behind it.
-                    Vector3 passEnd = _crest - _forward * 18f + Vector3.up * 8f;
-                    PoseBird(Vector3.Lerp(_birdStart, passEnd, swoop), -_forward, 0f);
-                    if (_elapsed >= 3.8f) { _birdStart = passEnd; Enter(Phase.RearApproaching); }
-                    break;
-                case Phase.RearApproaching:
-                    float rear = Ease(_elapsed / 4.2f);
-                    Vector3 behind = _birdStart + _right * 12f - Vector3.up * 2f;
-                    Vector3 catchPosition = BirdPositionForCart(_crest, Quaternion.LookRotation(_forward));
-                    Vector3 a, b, c, d;
-                    float segment;
-                    if (rear < .5f)
-                    {
-                        a = _birdStart; b = a - _forward * 16f;
-                        d = behind; c = d - _forward * 16f;
-                        segment = rear * 2f;
-                    }
-                    else
-                    {
-                        a = behind; b = a + _forward * 8f;
-                        d = catchPosition; c = d - _forward * 10f;
-                        segment = (rear - .5f) * 2f;
-                    }
-                    Vector3 rearDirection = Bezier(a, b, c, d, Mathf.Min(1f, segment + .001f))
-                        - Bezier(a, b, c, d, Mathf.Max(0f, segment - .001f));
-                    PoseBird(Bezier(a, b, c, d, segment), Vector3.ProjectOnPlane(rearDirection, Vector3.up),
-                        -18f * Mathf.Sin(rear * Mathf.PI));
-                    ReachPanels(Ease((rear - .85f) / .15f), 0f);
-                    if (_elapsed >= 4.2f) Enter(Phase.Grabbing);
+                    float swoop = Mathf.Lerp(0.3f, 1f, Ease(_elapsed / SwoopSeconds));
+                    PoseBirdSmooth(_pickupPath.Position(swoop), FlightDirection(_pickupPath, swoop), 0f,
+                        130f * deltaTime);
+                    ReachPanels(Ease((swoop - .86f) / .14f), 0f);
+                    float pickupAlignment = Vector3.Dot(
+                        Vector3.ProjectOnPlane(_actor.transform.forward, Vector3.up).normalized, _forward);
+                    if (_elapsed >= SwoopSeconds && pickupAlignment > .985f) Enter(Phase.Grabbing);
                     break;
                 case Phase.Grabbing:
                     SetCart(_crest, _crestRotation);
@@ -269,7 +235,7 @@ namespace ValeMesozoico
                     if (_elapsed >= SuspensionSeconds)
                     {
                         Enter(Phase.Departing);
-                        Debug.Log($"[Cave Drop] RELEASE | laps={CompletedLaps}, grip={GripGap:F3}m, "
+                        Debug.Log($"[Cave Drop] RELEASE | directFrontPickup=True, grip={GripGap:F3}m, "
                             + $"returnGap={ReturnPositionGap:F4}m, rotation={ReturnRotationGap:F3}deg");
                     }
                     break;
@@ -277,6 +243,22 @@ namespace ValeMesozoico
                     Depart(deltaTime);
                     if (_departureClock >= 5f) { _actor.SetActive(false); Enter(Phase.Complete); }
                     break;
+            }
+            if (previousPhase == Phase.Approaching || previousPhase == Phase.Swooping || previousPhase == Phase.Grabbing)
+            {
+                float positionStep = Vector3.Distance(previousBirdPosition, _actor.transform.position);
+                float rotationStep = Quaternion.Angle(previousBirdRotation, _actor.transform.rotation);
+                if (positionStep > MaxPickupPositionStep || rotationStep > MaxPickupRotationStep)
+                {
+                    MaxPickupPositionStep = Mathf.Max(MaxPickupPositionStep, positionStep);
+                    MaxPickupRotationStep = Mathf.Max(MaxPickupRotationStep, rotationStep);
+                    if (positionStep > .75f || rotationStep > 12f)
+                    {
+                        Debug.LogWarning($"[Cave Drop] PICKUP STEP | phase={previousPhase}, time={_elapsed:F3}, "
+                            + $"position={positionStep:F3}m, rotation={rotationStep:F2}deg, "
+                            + $"from={previousBirdPosition}, to={_actor.transform.position}");
+                    }
+                }
             }
             AirSpeed = ControlsCartPose ? Vector3.Distance(previous, _controller.transform.position) / Mathf.Max(0.001f, deltaTime) : 0f;
         }
@@ -324,7 +306,8 @@ namespace ValeMesozoico
 
         private void PoseCarrier(Vector3 cartAnchor, Quaternion rotation, float reach, float curl, float loosen = 0f)
         {
-            _actor.transform.SetPositionAndRotation(BirdPositionForCart(cartAnchor, rotation), rotation);
+            Vector3 target = BirdPositionForCart(cartAnchor, rotation);
+            _actor.transform.SetPositionAndRotation(target, rotation);
             _birdRotation = rotation;
             if (loosen > 0f) _rig.RaiseWings(loosen);
             ReachPanels(reach, curl, loosen);
@@ -345,9 +328,13 @@ namespace ValeMesozoico
             _actor.transform.SetPositionAndRotation(position, _birdRotation);
         }
 
-        private Vector3 OrbitPosition(float angle) => _center
-            + (_forward * Mathf.Cos(angle) + _right * Mathf.Sin(angle)) * OrbitRadius
-            + Vector3.up * Mathf.Sin(angle * 2f) * 0.5f;
+        private void PoseBirdSmooth(Vector3 position, Vector3 direction, float bank, float maximumRotation)
+        {
+            Quaternion target = Quaternion.LookRotation(direction.normalized, Vector3.up)
+                * Quaternion.Euler(0f, 0f, bank);
+            _birdRotation = Quaternion.RotateTowards(_birdRotation, target, maximumRotation);
+            _actor.transform.SetPositionAndRotation(position, _birdRotation);
+        }
 
         private void Enter(Phase phase)
         {
@@ -387,6 +374,23 @@ namespace ValeMesozoico
                 _crest - _forward * 26f + Vector3.up * 14f,
                 LandingPosition - _forward * 12f + Vector3.up * 9f,
                 LandingPosition + Vector3.up * ThrowHeight });
+        }
+
+        private void BuildDirectPickupPath()
+        {
+            Quaternion carrierRotation = Quaternion.LookRotation(_forward, Vector3.up);
+            Vector3 catchPosition = BirdPositionForCart(_crest, carrierRotation);
+            _pickupPath = new FlightPath(new[]
+            {
+                _crest + _forward * 38f + Vector3.up * 14f,
+                _crest + _forward * 27f + Vector3.up * 11f,
+                _crest + _forward * 15f + Vector3.up * 7f,
+                _crest + _forward * 5f + Vector3.up * 5f,
+                _crest - _forward * 5f + Vector3.up * 9f,
+                _crest - _forward * 12f + Vector3.up * 11f,
+                catchPosition - _forward * 10f,
+                catchPosition
+            });
         }
 
         private static Vector3 FindLake()
@@ -461,6 +465,8 @@ namespace ValeMesozoico
             ReleaseHeight = 0f;
             ImpactSpeed = 0f;
             ImpactCount = 0;
+            MaxPickupPositionStep = 0f;
+            MaxPickupRotationStep = 0f;
             ReturnPositionGap = 0f;
             ReturnRotationGap = 0f;
             _fallSeconds = 0f;
@@ -482,11 +488,15 @@ namespace ValeMesozoico
 
         private static Quaternion FlightRotation(FlightPath path, float t)
         {
-            Vector3 direction = (path.Position(Mathf.Min(1f, t + 0.005f)) - path.Position(Mathf.Max(0f, t - 0.005f))).normalized;
+            Vector3 direction = FlightDirection(path, t);
             Vector3 flat = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
             return Quaternion.LookRotation(flat, Vector3.up)
                 * Quaternion.Euler(Mathf.Clamp(-Mathf.Asin(direction.y) * Mathf.Rad2Deg * 0.3f, -14f, 14f), 0f, 0f);
         }
+
+        private static Vector3 FlightDirection(FlightPath path, float t)
+            => (path.Position(Mathf.Min(1f, t + 0.005f))
+                - path.Position(Mathf.Max(0f, t - 0.005f))).normalized;
 
         private sealed class FlightPath
         {

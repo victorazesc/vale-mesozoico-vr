@@ -79,7 +79,8 @@ namespace ValeMesozoico
                 float drift = 0f, maxGrip = 0f, maxActualGap = 0f, headClearance = float.PositiveInfinity;
                 float lowLake = float.PositiveInfinity;
                 bool paused = false, forward = false, lakeShot = false;
-                bool frontPass = false, behindPass = false, rearPickup = false, rearShot = false;
+                bool frontApproach = false, directPickup = false, pickupShot = false;
+                float maxPickupLateral = 0f;
                 float minCarryAlignment = 1f;
                 bool fallingObserved = false, impactObserved = false;
                 float previousFallTime = -1f, previousFallHeight = 0f, firstFallSpeed = 0f, lastFallSpeed = 0f;
@@ -100,24 +101,37 @@ namespace ValeMesozoico
                     float alignment = Vector3.Dot(
                         Vector3.ProjectOnPlane(controller.transform.forward, Vector3.up).normalized,
                         Vector3.ProjectOnPlane(sequence.Actor.transform.forward, Vector3.up).normalized);
-                    if (phase == PteranodonDropSequence.Phase.Swooping)
+                    if (phase == PteranodonDropSequence.Phase.Approaching
+                        || phase == PteranodonDropSequence.Phase.Swooping)
                     {
-                        frontPass |= birdOffset > 6f;
-                        behindPass |= frontPass && birdOffset < -6f;
+                        Vector3 crestRight = Vector3.Cross(Vector3.up, crestForward);
+                        maxPickupLateral = Mathf.Max(maxPickupLateral,
+                            Mathf.Abs(Vector3.Dot(sequence.Actor.transform.position - crest, crestRight)));
                     }
-                    if (phase == PteranodonDropSequence.Phase.RearApproaching)
+                    if (phase == PteranodonDropSequence.Phase.Approaching)
                     {
-                        rearPickup |= behindPass && birdOffset < -6f && alignment > .98f;
-                        if (!rearShot && sequence.PhaseTime > 3.8f)
-                        {
-                            Vector3 cart = controller.transform.position;
-                            Capture("rear-pickup", cart + sequence.Actor.transform.right * 11f
-                                - crestForward * 9f + Vector3.up * 5f, cart + Vector3.up * 2f);
-                            rearShot = true;
-                        }
+                        frontApproach |= birdOffset > 12f && alignment < -.98f;
+                    }
+                    if (phase == PteranodonDropSequence.Phase.Swooping && !pickupShot && sequence.PhaseTime > 3.35f)
+                    {
+                        Vector3 cart = controller.transform.position;
+                        Capture("direct-front-pickup", cart + sequence.Actor.transform.right * 11f
+                            - crestForward * 9f + Vector3.up * 5f, cart + Vector3.up * 2f);
+                        pickupShot = true;
                     }
                     if (phase == PteranodonDropSequence.Phase.Grabbing)
-                        Require(rearPickup && alignment > .98f, "pickup follows the pass and approach from behind");
+                    {
+                        directPickup |= frontApproach && alignment > .98f;
+                        Require(directPickup && maxPickupLateral < 1.5f,
+                            $"direct centered pickup after head-on approach: lateral={maxPickupLateral:F2}m");
+                        if (!pickupShot)
+                        {
+                            Vector3 cart = controller.transform.position;
+                            Capture("direct-front-pickup", cart + sequence.Actor.transform.right * 11f
+                                - crestForward * 9f + Vector3.up * 5f, cart + Vector3.up * 2f);
+                            pickupShot = true;
+                        }
+                    }
                     bool impactPhase = phase >= PteranodonDropSequence.Phase.Releasing
                         && phase <= PteranodonDropSequence.Phase.Impacting;
                     if (sequence.PhaseTime > (impactPhase ? .035f : 1f) && shots.Add(phase))
@@ -207,9 +221,13 @@ namespace ValeMesozoico
                     }
                     yield return null;
                 }
-                Require(sequence.Released && sequence.CompletedLaps == 2 && sequence.Screeched, "release follows two circles and screech");
-                Require(frontPass && behindPass && rearPickup && forward && paused && lowLake > 3f && lowLake < 14f,
-                    $"front pass, rear pickup, forward flight, pause, lake height={lowLake:F2}m");
+                Require(sequence.Released && sequence.CompletedLaps == 0 && sequence.Screeched,
+                    "release follows direct approach with no circles");
+                Require(frontApproach && directPickup && pickupShot
+                    && maxPickupLateral < 1.5f && forward && paused && lowLake > 3f && lowLake < 14f,
+                    $"direct front pickup, centered approach, forward flight, pause, lateral={maxPickupLateral:F2}m, lake height={lowLake:F2}m");
+                Require(sequence.MaxPickupPositionStep < .75f && sequence.MaxPickupRotationStep < 12f,
+                    $"pickup continuity: positionStep={sequence.MaxPickupPositionStep:F3}m, rotationStep={sequence.MaxPickupRotationStep:F2}deg");
                 Require(fallingObserved && impactObserved && sequence.ReleaseHeight > 2.5f
                     && sequence.ImpactCount == 1 && sequence.ImpactSpeed > 9f && lastFallSpeed > firstFallSpeed + .5f,
                     $"airborne throw and one impact: height={sequence.ReleaseHeight:F2}, speed={sequence.ImpactSpeed:F2}");
@@ -248,10 +266,10 @@ namespace ValeMesozoico
                 deadline = Time.realtimeSinceStartup + 90f;
                 while ((!sequence.Released || sequence.CurrentPhase == PteranodonDropSequence.Phase.Impacting)
                     && Time.realtimeSinceStartup < deadline) yield return null;
-                Require(sequence.Released && sequence.CompletedLaps == 2 && sequence.Screeched
+                Require(sequence.Released && sequence.CompletedLaps == 0 && sequence.Screeched
                     && sequence.ImpactCount == 1, "complete replay with exactly one impact");
                 controller.SetDeveloperPlaybackRate(1f);
-                string report = $"PASS | crest={crest.y:F2}m, laps=2, holdDrift={drift:F4}m, "
+                string report = $"PASS | crest={crest.y:F2}m, laps=0, holdDrift={drift:F4}m, "
                     + $"peakCrestBrake={peakBrake:F3}m/s2, stopSpeedStep={stopStep:F4}m/s, "
                     + $"grip={maxGrip:F3}m, actualSkinGap={maxActualGap:F3}m, headClearance={headClearance:F2}m, "
                     + $"lakeHeight={lowLake:F2}m, returnGap={sequence.ReturnPositionGap:F4}m, "
@@ -260,7 +278,9 @@ namespace ValeMesozoico
                     + $"landingSlope={sequence.LandingSlope:F3}, impactTravel={impactTravel:F2}m, downhillRelease=PASS, "
                     + $"freeFall=PASS, impact=PASS, cameraReset=PASS, "
                     + $"peakSpeed={maximumSpeed*3.6f:F1}km/h, caveEntry={caveEntrySpeed*3.6f:F1}km/h, "
-                    + $"frontPass=PASS, rearPickup=PASS, forwardFlight=PASS, minAlignment={minCarryAlignment:F4}, "
+                    + $"frontApproach=PASS, directPickup=PASS, centeredApproach=PASS, "
+                    + $"maxPickupLateral={maxPickupLateral:F2}m, forwardFlight=PASS, minAlignment={minCarryAlignment:F4}, "
+                    + $"pickupPositionStep={sequence.MaxPickupPositionStep:F3}m, pickupRotationStep={sequence.MaxPickupRotationStep:F2}deg, "
                     + $"pause=PASS, seek=PASS, replay=PASS\nGeometry: {geometry}\nFlight: {flightGeometry}\n";
                 File.WriteAllText(Path.Combine(Output, "qa.txt"), report);
                 Debug.Log("[Cave Drop QA] " + report);
