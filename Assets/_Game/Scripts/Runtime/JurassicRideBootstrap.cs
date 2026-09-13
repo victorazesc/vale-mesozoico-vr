@@ -65,6 +65,9 @@ namespace ValeMesozoico
             controller.Initialize(spline, fade);
             controller.AttachCaveDrop(PteranodonDropSequence.Create(worldRoot, controller, spline));
 
+            RideGameFlow gameFlow = camera.gameObject.AddComponent<RideGameFlow>();
+            gameFlow.Initialize(controller, fade);
+
             RideDebugTimeline debugTimeline = cart.gameObject.AddComponent<RideDebugTimeline>();
             debugTimeline.Initialize(controller);
         }
@@ -277,10 +280,11 @@ namespace ValeMesozoico
 
         private enum RideState
         {
+            WaitingToStart,
             Boarding,
             Riding,
             Arrival,
-            Resetting
+            Completed
         }
 
         private RideSpline _spline;
@@ -317,11 +321,13 @@ namespace ValeMesozoico
         private InputDevice _leftController;
         private InputDevice _rightController;
 
+        internal event Action RideCompleted;
+
         public void Initialize(RideSpline spline, ComfortFade fade)
         {
             _spline = spline;
             _fade = fade;
-            _state = RideState.Boarding;
+            _state = RideState.WaitingToStart;
             _stateTime = 0f;
             _distance = 0f;
             _speed = 0f;
@@ -351,7 +357,7 @@ namespace ValeMesozoico
             _bankAngle = _spline.PoseAtDistance(0f).BankDegrees;
             ResetRideFeedback();
             ApplyPose(0f, true, 0f);
-            _fade.SetImmediate(1f);
+            _fade.SetImmediate(0f);
         }
 
         private void Update()
@@ -370,6 +376,14 @@ namespace ValeMesozoico
             _stateTime += Time.deltaTime;
             switch (_state)
             {
+                case RideState.WaitingToStart:
+                    _speed = 0f;
+                    _acceleration = 0f;
+                    ApplyPose(0f, true, 0f);
+                    UpdateRideAudio();
+                    _fade.SetTarget(0f);
+                    break;
+
                 case RideState.Boarding:
                     ApplyPose(0f, true, 0f);
                     UpdateRideAudio();
@@ -415,21 +429,35 @@ namespace ValeMesozoico
                     }
                     if (_stateTime > 4.5f)
                     {
-                        ChangeState(RideState.Resetting);
+                        ChangeState(RideState.Completed);
+                        RideCompleted?.Invoke();
                     }
                     break;
 
-                case RideState.Resetting:
-                    _distance = 0f;
+                case RideState.Completed:
                     _speed = 0f;
                     _acceleration = 0f;
-                    ApplyPose(0f, true, 0f);
-                    if (_stateTime > 0.45f)
-                    {
-                        ChangeState(RideState.Boarding);
-                    }
+                    ApplyPose(_spline.Length - 0.02f, false, Time.deltaTime);
+                    UpdateRideAudio();
                     break;
             }
+        }
+
+        internal bool StartRide()
+        {
+            if (_spline == null || _state != RideState.WaitingToStart)
+            {
+                return false;
+            }
+
+            _distance = 0f;
+            _speed = 0f;
+            _acceleration = 0f;
+            _bankAngle = _spline.PoseAtDistance(0f).BankDegrees;
+            _caveDrop?.ResetForProgress(0f);
+            _fade.SetImmediate(1f);
+            ChangeState(RideState.Boarding);
+            return true;
         }
 
         private void ChangeState(RideState state)
@@ -440,9 +468,8 @@ namespace ValeMesozoico
             {
                 ResetRideFeedback();
             }
-            else if (state == RideState.Resetting)
+            else if (state == RideState.Completed)
             {
-                _caveDrop?.ResetForProgress(0f);
                 StopControllerHaptics();
             }
         }
@@ -635,6 +662,7 @@ namespace ValeMesozoico
         }
 
         internal bool LiftChainActive => _liftChainActive;
+        internal bool WaitingToStart => _state == RideState.WaitingToStart;
         internal float RideProgress => _spline != null ? Mathf.Clamp01(_distance / _spline.Length) : 0f;
         internal float RideSpeed => _speed;
         internal float RideAcceleration => _acceleration;
