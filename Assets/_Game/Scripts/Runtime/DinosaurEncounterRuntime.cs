@@ -13,6 +13,7 @@ namespace ValeMesozoico
         private float _angle;
         private bool _initialized;
         private bool _animationPrepared;
+        private TriceratopsGrounding _grounding;
 
         internal void Initialize(Vector3 center, float radius, float speed, float phase)
         {
@@ -21,6 +22,15 @@ namespace ValeMesozoico
             _speed = Mathf.Max(0.1f, speed);
             _phase = phase;
             _angle = phase;
+            _grounding = GetComponent<TriceratopsGrounding>();
+            if (_grounding != null)
+            {
+                float angle = _angle + _phase;
+                Vector3 start = _center + new Vector3(Mathf.Cos(angle) * _radius, 0f, Mathf.Sin(angle) * _radius * 0.68f);
+                start.y = OptimizedModelWorld.DinosaurGroundHeightAt(start.x, start.z);
+                transform.SetPositionAndRotation(start,
+                    Quaternion.LookRotation(new Vector3(-Mathf.Sin(angle), 0f, Mathf.Cos(angle) * 0.68f)));
+            }
             _initialized = true;
         }
 
@@ -34,7 +44,8 @@ namespace ValeMesozoico
             if (!_animationPrepared)
             {
                 _animationPrepared = true;
-                DinosaurAnimationRuntime.PlayPreferred(gameObject, "walk", 0.76f + _speed * 0.16f);
+                if (_grounding == null)
+                    DinosaurAnimationRuntime.PlayPreferred(gameObject, "walk", 0.76f + _speed * 0.16f);
             }
 
             float angularSpeed = _speed / Mathf.Max(0.5f, _radius);
@@ -42,7 +53,6 @@ namespace ValeMesozoico
             float x = Mathf.Cos(_angle + _phase) * _radius;
             float z = Mathf.Sin(_angle + _phase) * _radius * 0.68f;
             Vector3 target = _center + new Vector3(x, 0f, z);
-            target.y = ProceduralWorld.HeightAt(target.x, target.z);
             Vector3 tangent = new(
                 -Mathf.Sin(_angle + _phase),
                 0f,
@@ -52,16 +62,24 @@ namespace ValeMesozoico
                 Quaternion targetRotation = Quaternion.LookRotation(tangent.normalized, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 1.8f);
             }
-            transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime * 1.65f);
+            Vector3 position = Vector3.Lerp(transform.position, target, Time.deltaTime * 1.65f);
+            position.y = OptimizedModelWorld.DinosaurGroundHeightAt(position.x, position.z);
+            if (_grounding != null)
+            {
+                Vector3 travel = position - transform.position;
+                travel.y = 0f;
+                _grounding.SetMovementSpeed(travel.magnitude / Mathf.Max(0.0001f, Time.deltaTime));
+            }
+            transform.position = position;
         }
     }
 
     internal sealed class TyrannosaurusChaseSequence : MonoBehaviour
     {
-        internal const float TriggerProgress = 0.625f;
-        internal const float RoarProgress = 0.65f;
-        internal const float BreakProgress = TrackMeshFactory.BreakEndProgress + 0.014f;
-        internal const float EndProgress = 0.84f;
+        internal static float TriggerProgress { get; private set; } = 0.625f;
+        internal static float RoarProgress { get; private set; } = 0.65f;
+        internal static float BreakProgress => TrackMeshFactory.BreakEndProgress + 0.014f;
+        internal static float EndProgress { get; private set; } = 0.84f;
 
         private RideSpline _spline;
         private GameObject _tyrannosaurus;
@@ -85,6 +103,9 @@ namespace ValeMesozoico
         internal void Initialize(RideSpline spline, GameObject tyrannosaurus)
         {
             _spline = spline;
+            TriggerProgress = RideMotionProfile.DropRecoveryEnd + 2f / spline.Length;
+            RoarProgress = TriggerProgress + 7f / spline.Length;
+            EndProgress = Mathf.Max(spline.MapBaseProgress(0.84f), BreakProgress + 24f / spline.Length);
             _tyrannosaurus = tyrannosaurus;
             _roar = tyrannosaurus != null ? tyrannosaurus.GetComponent<DinosaurAudioEmitter>() : null;
             if (_tyrannosaurus != null)
@@ -226,7 +247,7 @@ namespace ValeMesozoico
             RidePose pose = _spline.PoseAtDistance(_spline.Length * Mathf.Clamp01(progress));
             Vector3 right = pose.Rotation * Vector3.right;
             Vector3 targetPosition = pose.Position + right * sideOffset;
-            targetPosition.y = ProceduralWorld.HeightAt(targetPosition.x, targetPosition.z);
+            targetPosition.y = OptimizedModelWorld.DinosaurGroundHeightAt(targetPosition.x, targetPosition.z);
             Quaternion targetRotation = Quaternion.LookRotation(
                 Vector3.ProjectOnPlane(pose.Tangent, Vector3.up).normalized,
                 Vector3.up);
@@ -237,10 +258,12 @@ namespace ValeMesozoico
             }
 
             float step = Mathf.Min(Time.deltaTime, 0.05f);
-            _tyrannosaurus.transform.position = Vector3.MoveTowards(
+            Vector3 position = Vector3.MoveTowards(
                 _tyrannosaurus.transform.position,
                 targetPosition,
                 14.5f * step);
+            position.y = OptimizedModelWorld.DinosaurGroundHeightAt(position.x, position.z);
+            _tyrannosaurus.transform.position = position;
             _tyrannosaurus.transform.rotation = Quaternion.Slerp(
                 _tyrannosaurus.transform.rotation,
                 targetRotation,
@@ -314,20 +337,51 @@ namespace ValeMesozoico
             Animation[] animations = group != null
                 ? group.GetComponentsInChildren<Animation>(true)
                 : System.Array.Empty<Animation>();
+            BrachiosaurusHeadClearance[] headGuards = group != null
+                ? group.GetComponentsInChildren<BrachiosaurusHeadClearance>(true)
+                : System.Array.Empty<BrachiosaurusHeadClearance>();
             TyrannosaurusChaseSequence chase = group != null
                 ? group.GetComponent<TyrannosaurusChaseSequence>()
                 : null;
             TrackBreakSetpiece breakaway = FindFirstObjectByType<TrackBreakSetpiece>();
             int groundDinosaurs = actors.Count(actor =>
-                actor.name.StartsWith("Apatosaurus")
+                actor.name.StartsWith("Brachiosaurus")
                 || actor.name.StartsWith("Triceratops")
                 || actor.name.StartsWith("Tyrannosaurus"));
             int totalTriangles = skinned
                 .Where(renderer => renderer.sharedMesh != null)
                 .Sum(renderer => renderer.sharedMesh.triangles.Length / 3);
+            int geometryValid = 0;
+            int grounded = 0;
+            Mesh posedMesh = new();
+            foreach (Transform actor in actors.Where(item => !item.name.StartsWith("Pteranodon")))
+            {
+                bool hasVertices = false;
+                Bounds posedBounds = default;
+                foreach (SkinnedMeshRenderer renderer in actor.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+                {
+                    renderer.BakeMesh(posedMesh, true);
+                    foreach (Vector3 vertex in posedMesh.vertices)
+                    {
+                        Vector3 world = renderer.transform.TransformPoint(vertex);
+                        if (!hasVertices) posedBounds = new Bounds(world, Vector3.zero);
+                        else posedBounds.Encapsulate(world);
+                        hasVertices = true;
+                    }
+                }
+                if (hasVertices && posedBounds.size.y >= 1f && posedBounds.size.y <= 15f) geometryValid++;
+                Vector3 position = actor.position;
+                if (Mathf.Abs(position.y - OptimizedModelWorld.DinosaurGroundHeightAt(position.x, position.z)) < 0.05f)
+                    grounded++;
+            }
+            Destroy(posedMesh);
             bool staticPass = actors.Length >= 9
-                && groundDinosaurs >= 6
-                && roamers.Length == 5
+                && groundDinosaurs >= 9
+                && roamers.Length == 4
+                && geometryValid == groundDinosaurs
+                && grounded == groundDinosaurs
+                && headGuards.Length == 2
+                && headGuards.All(guard => guard.CurrentClearance >= guard.RequiredClearance - 0.03f)
                 && emitters.Length >= 7
                 && skinned.Length >= 6
                 && animations.Length >= 6
@@ -340,6 +394,8 @@ namespace ValeMesozoico
             Debug.Log(
                 $"[Dinosaur QA] {(staticPass ? "PASS" : "FAIL")} | actors={actors.Length}, "
                 + $"ground3D={groundDinosaurs}, roamers={roamers.Length}, audioEmitters={emitters.Length}, "
+                + $"geometryValid={geometryValid}, grounded={grounded}, "
+                + $"protectedLongNecks={headGuards.Length}, "
                 + $"skinnedRenderers={skinned.Length}, animations={animations.Length}, "
                 + $"triangles={totalTriangles}, breakFragments={(breakaway != null ? breakaway.FragmentCount : 0)}");
 

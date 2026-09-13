@@ -42,9 +42,12 @@ namespace ValeMesozoico
             Transform worldRoot = new GameObject("Jurassic Ride").transform;
             worldRoot.SetParent(transform, false);
             RideSpline spline = new(CreateTrackPoints());
+            RideMotionProfile.Configure(spline);
             WorldMaterials materials;
-            if (ImportedBlenderEnvironment.TryAttach(worldRoot, out _))
+            if (ImportedBlenderEnvironment.TryAttach(worldRoot, out GameObject environment))
             {
+                MountainTrackCave.Build(environment.transform, spline);
+                MountainRockVegetation.BuildForestFloor(environment.transform, spline);
                 materials = ProceduralWorld.BuildForImportedEnvironment(worldRoot, spline);
             }
             else
@@ -52,6 +55,7 @@ namespace ValeMesozoico
                 materials = ProceduralWorld.Build(worldRoot, spline);
             }
             TrackMeshFactory.CreateTrack(worldRoot, spline, materials.Rail, materials.Sleeper, materials.Support);
+            BakedSceneLighting.Apply(worldRoot);
 
             Transform cart = BuildCart(worldRoot, materials);
             Camera camera = BuildCameraRig(cart);
@@ -59,6 +63,7 @@ namespace ValeMesozoico
             RideController controller = cart.gameObject.AddComponent<RideController>();
             ComfortFade fade = camera.gameObject.AddComponent<ComfortFade>();
             controller.Initialize(spline, fade);
+            controller.AttachCaveDrop(PteranodonDropSequence.Create(worldRoot, controller, spline));
 
             RideDebugTimeline debugTimeline = cart.gameObject.AddComponent<RideDebugTimeline>();
             debugTimeline.Initialize(controller);
@@ -104,10 +109,12 @@ namespace ValeMesozoico
                 new Vector3(0f, 4.2f, -56f),
                 new Vector3(34f, 5f, -52f),
                 new Vector3(64f, 8f, -34f),
-                new Vector3(80f, 14f, -5f),
-                new Vector3(76f, 24f, 27f),
-                new Vector3(58f, 35f, 48f),
-                new Vector3(44f, 18f, 56f),
+                new Vector3(80f, 17f, -5f),
+                new Vector3(76f, 43f, 27f),
+                new Vector3(62f, 67f, 43f),
+                new Vector3(58f, 68f, 48f),
+                new Vector3(53f, 62f, 52f),
+                new Vector3(44f, 26f, 56f),
                 new Vector3(38f, 6.5f, 64f),
                 new Vector3(15f, 5.5f, 76f),
                 new Vector3(-22f, 7f, 72f),
@@ -210,6 +217,7 @@ namespace ValeMesozoico
 #endif
             camera.allowMSAA = true;
             camera.GetUniversalAdditionalCameraData().renderPostProcessing = true;
+            camera.GetUniversalAdditionalCameraData().requiresDepthTexture = true;
             cameraObject.AddComponent<AudioListener>();
             cameraObject.AddComponent<XRHeadTracker>();
             return camera;
@@ -276,12 +284,15 @@ namespace ValeMesozoico
         }
 
         private RideSpline _spline;
+        private PteranodonDropSequence _caveDrop;
         private ComfortFade _fade;
         private RideState _state;
         private float _distance;
         private float _speed;
         private float _acceleration;
         private float _bankAngle;
+        private float _crestBrakeElapsed = -1f;
+        private float _crestBrakeDuration, _crestBrakeDistance, _crestBrakeSpeed, _crestBrakeAcceleration;
         private float _stateTime;
         private AudioSource _trackAudio;
         private AudioSource _liftChainAudio;
@@ -431,39 +442,97 @@ namespace ValeMesozoico
             }
             else if (state == RideState.Resetting)
             {
+                _caveDrop?.ResetForProgress(0f);
                 StopControllerHaptics();
             }
         }
 
         private void StepRide(float deltaTime)
         {
+            _caveDrop?.Tick(deltaTime);
+            if (_caveDrop != null && _caveDrop.IsHolding)
+            {
+                _speed = 0f;
+                _acceleration = 0f;
+                return;
+            }
             RidePose pose = _spline.PoseAtDistance(_distance);
             float progress = Mathf.Clamp01(_distance / _spline.Length);
             float remainingDistance = Mathf.Max(0f, _spline.Length - _distance);
             float targetAcceleration = RideMotionProfile.TargetAcceleration(progress, pose.Tangent.y, remainingDistance, _speed);
-            _acceleration = Mathf.MoveTowards(_acceleration, targetAcceleration, RideMotionProfile.MaxJerk * deltaTime);
-            _acceleration = Mathf.Clamp(_acceleration, -RideMotionProfile.MaxBraking, RideMotionProfile.MaxAcceleration);
+            bool waitingForAttack = _caveDrop != null && _caveDrop.Ready && !_caveDrop.Released;
+            float crestDistance = _spline.Length * RideMotionProfile.CrestStart;
+            if (waitingForAttack && crestDistance - _distance <= 14f)
+            {
+                StepCrestBrake(crestDistance, deltaTime);
+                return;
+            }
+            _acceleration = Mathf.MoveTowards(_acceleration, targetAcceleration,
+                RideMotionProfile.JerkLimit(progress) * deltaTime);
+            _acceleration = Mathf.Clamp(_acceleration,
+                -RideMotionProfile.BrakingLimit(progress), RideMotionProfile.AccelerationLimit(progress));
             _speed = Mathf.Clamp(_speed + _acceleration * deltaTime, 0f, RideMotionProfile.MaxSpeed);
             _distance = Mathf.Min(_spline.Length - 0.02f, _distance + _speed * deltaTime);
         }
 
+        private void StepCrestBrake(float crestDistance, float deltaTime)
+        {
+            if (_crestBrakeElapsed < 0f)
+            {
+                _crestBrakeElapsed = 0f;
+                _crestBrakeDistance = _distance;
+                _crestBrakeSpeed = _speed;
+                _crestBrakeAcceleration = _acceleration;
+                _crestBrakeDuration = Mathf.Max(0.25f,
+                    2f * Mathf.Max(0f, crestDistance - _distance) / Mathf.Max(0.12f, _speed));
+            }
+            _crestBrakeElapsed = Mathf.Min(_crestBrakeElapsed + deltaTime, _crestBrakeDuration);
+            RideMotionProfile.SampleCrestBrake(_crestBrakeElapsed / _crestBrakeDuration,
+                crestDistance - _crestBrakeDistance, _crestBrakeDuration,
+                _crestBrakeSpeed, _crestBrakeAcceleration, out float offset, out _speed, out _acceleration);
+            _distance = Mathf.Min(crestDistance, _crestBrakeDistance + offset);
+            if (_crestBrakeElapsed >= _crestBrakeDuration)
+            {
+                ApplyPose(_distance, true, 0f);
+                _caveDrop.BeginHold();
+            }
+        }
+
+        internal void AttachCaveDrop(PteranodonDropSequence sequence) => _caveDrop = sequence;
+
+        internal void ReleaseCaveDrop()
+        {
+            if (_caveDrop == null || !_caveDrop.Released) return;
+            _distance = _caveDrop.LandingDistance;
+            _bankAngle = _spline.PoseAtDistance(_distance).BankDegrees;
+            _speed = Mathf.Clamp(_caveDrop.ImpactSpeed * -_caveDrop.LandingSlope, 4f, 12f);
+            _acceleration = 0f;
+        }
+
         private void ApplyPose(float distance, bool immediateBank, float deltaTime)
         {
+            if (_caveDrop != null && _caveDrop.ControlsCartPose) return;
             RidePose pose = _spline.PoseAtDistance(distance);
-            _bankAngle = immediateBank
+            bool inversion = _spline.IsInversionAtDistance(distance);
+            _bankAngle = immediateBank || inversion
                 ? pose.BankDegrees
                 : Mathf.MoveTowardsAngle(_bankAngle, pose.BankDegrees, 15f * deltaTime);
             Quaternion baseRotation = Quaternion.LookRotation(pose.Tangent, Vector3.up);
-            Quaternion rideRotation = baseRotation * Quaternion.AngleAxis(_bankAngle, Vector3.forward);
-            transform.SetPositionAndRotation(pose.Position + rideRotation * Vector3.up * 0.40f, rideRotation);
+            Quaternion rideRotation = inversion ? pose.Rotation
+                : baseRotation * Quaternion.AngleAxis(_bankAngle, Vector3.forward);
+            Vector3 ridePosition = pose.Position + rideRotation * Vector3.up * 0.40f;
+            _caveDrop?.ApplyRideImpact(ref ridePosition, ref rideRotation);
+            transform.SetPositionAndRotation(ridePosition, rideRotation);
         }
 
         private void UpdateRideAudio()
         {
+            if (_spline == null) return;
             float speed01 = Mathf.InverseLerp(0f, RideMotionProfile.MaxSpeed, _speed);
             RidePose pose = _spline.PoseAtDistance(_distance);
             float progress = Mathf.Clamp01(_distance / _spline.Length);
             bool liftChainActive = _state == RideState.Riding
+                && _speed > 0.15f && (_caveDrop == null || !_caveDrop.IsHolding)
                 && RideMotionProfile.IsLiftChainActive(progress, pose.Tangent.y);
             if (_trackAudio != null)
             {
@@ -471,7 +540,7 @@ namespace ValeMesozoico
                     Mathf.Lerp(0.82f, 1.18f, speed01) * _developerPlaybackRate,
                     0.1f,
                     3f);
-                float rollingVolume = _state == RideState.Riding
+                float rollingVolume = _state == RideState.Riding && _speed > 0.05f
                     ? Mathf.Lerp(0.012f, 0.24f, Mathf.Pow(speed01, 0.78f))
                     : 0f;
                 _trackAudio.volume = Mathf.MoveTowards(
@@ -568,6 +637,10 @@ namespace ValeMesozoico
         internal bool LiftChainActive => _liftChainActive;
         internal float RideProgress => _spline != null ? Mathf.Clamp01(_distance / _spline.Length) : 0f;
         internal float RideSpeed => _speed;
+        internal float RideAcceleration => _acceleration;
+        internal RideSpline Spline => _spline;
+        internal bool CrestBraking => _crestBrakeElapsed >= 0f && _caveDrop != null
+            && !_caveDrop.IsHolding && !_caveDrop.Released;
         internal bool DeveloperScrubbing => _developerScrubbing;
         internal int DeveloperSeekVersion => _developerSeekVersion;
         internal bool DeveloperLastSeekWasBackward => _developerLastSeekWasBackward;
@@ -590,6 +663,7 @@ namespace ValeMesozoico
             }
 
             _developerScrubStartProgress = RideProgress;
+            _caveDrop?.ResetForProgress(RideProgress);
             _developerScrubbing = true;
             StopControllerHaptics();
             _trackAudio?.Pause();
@@ -629,6 +703,7 @@ namespace ValeMesozoico
             _developerLastSeekWasBackward = progress < _developerScrubStartProgress - 0.0005f;
             _developerSeekVersion++;
             _developerScrubbing = false;
+            _caveDrop?.ResetForProgress(progress);
             ResetRideFeedback();
             if (_trackAudio != null && !_trackAudio.isPlaying)
             {
@@ -692,6 +767,7 @@ namespace ValeMesozoico
 
         private void ResetRideFeedback()
         {
+            _crestBrakeElapsed = -1f;
             _liftChainActive = false;
             _liftChainGain = 0f;
             _liftLoopStartDspTime = -1d;
@@ -809,13 +885,67 @@ namespace ValeMesozoico
 
     internal static class RideMotionProfile
     {
-        internal const float MaxSpeed = 10f;
+        internal const float MaxSpeed = 26f;
         internal const float MaxAcceleration = 1.2f;
         internal const float MaxBraking = 1.8f;
         internal const float MaxJerk = 3f;
         internal const float LiftStart = 0.03f;
-        internal const float CrestStart = 0.355f;
+        internal static float CrestStart { get; private set; } = 0.353f;
+        internal static float DropRecoveryStart { get; private set; }
+        internal static float DropRecoveryEnd { get; private set; }
+        internal static float InversionsStart { get; private set; }
         internal const float BrakeHapticStart = 0.93f;
+
+        internal static void SampleCrestBrake(float time, float distance, float duration,
+            float entrySpeed, float entryAcceleration, out float position, out float speed, out float acceleration)
+        {
+            // Match incoming velocity/acceleration and reach the crest with both
+            // at zero. This avoids a final speed cutoff or a snap to the stop.
+            float t = Mathf.Clamp01(time);
+            if (t >= 1f)
+            {
+                position = distance;
+                speed = acceleration = 0f;
+                return;
+            }
+            float velocity = entrySpeed * duration;
+            float accel = entryAcceleration * duration * duration;
+            float c3 = 10f * distance - 6f * velocity - 1.5f * accel;
+            float c4 = -15f * distance + 8f * velocity + 1.5f * accel;
+            float c5 = 6f * distance - 3f * velocity - 0.5f * accel;
+            position = t * (velocity + t * (0.5f * accel + t * (c3 + t * (c4 + t * c5))));
+            speed = Mathf.Max(0f, (velocity + t * (accel + t * (3f * c3 + t * (4f * c4 + t * 5f * c5)))) / duration);
+            acceleration = (accel + t * (6f * c3 + t * (12f * c4 + t * 20f * c5))) / (duration * duration);
+        }
+
+        internal static void Configure(RideSpline spline)
+        {
+            MountainTrackCave.Configure(spline);
+            InversionsStart = spline.InversionsStartProgress;
+            DropRecoveryStart = spline.InversionsEndProgress;
+            DropRecoveryEnd = DropRecoveryStart + 60f / spline.Length;
+            TrackMeshFactory.ConfigureBreak(spline);
+            float highest = float.NegativeInfinity;
+            for (int i = 800; i <= 2200; i++)
+            {
+                float progress = i / 4000f;
+                float height = spline.PoseAtDistance(spline.Length * progress).Position.y;
+                if (height <= highest) continue;
+                highest = height;
+                CrestStart = progress;
+            }
+        }
+
+        internal static float AccelerationLimit(float progress) =>
+            progress >= CrestStart && progress < DropRecoveryStart ? 9.2f : MaxAcceleration;
+
+        internal static float BrakingLimit(float progress) =>
+            progress >= InversionsStart && progress < DropRecoveryStart ? 10f
+            : progress >= DropRecoveryStart && progress < DropRecoveryEnd ? 4.6f : MaxBraking;
+
+        internal static float JerkLimit(float progress) =>
+            progress >= InversionsStart && progress < DropRecoveryStart ? 38f
+            : progress >= CrestStart && progress < DropRecoveryEnd ? 10f : MaxJerk;
 
         internal static bool IsLiftChainActive(float progress, float tangentY)
         {
@@ -839,6 +969,18 @@ namespace ValeMesozoico
             else if (IsLiftChainActive(progress, tangentY))
             {
                 target = (3.4f - speed) * 1.05f + gravity * 0.12f;
+            }
+            else if (progress >= CrestStart && progress < DropRecoveryStart)
+            {
+                target = -9.81f * tangentY * 0.92f - (0.07f + speed * speed * 0.0012f);
+                if (progress >= InversionsStart && speed < 14f)
+                    target = Mathf.Max(target, (14f - speed) * 2f);
+                else if (speed < 4f) target = Mathf.Max(target, 2.2f);
+                if (speed > 25.5f) target = Mathf.Min(target, -(speed - 25.5f) * 4f);
+            }
+            else if (progress >= DropRecoveryStart && progress < DropRecoveryEnd)
+            {
+                target = (9.7f - speed) * 1.5f + gravity * 0.1f;
             }
             else if (progress < 0.72f)
             {
@@ -866,7 +1008,7 @@ namespace ValeMesozoico
                 target = (desiredSpeed - speed) * 1.35f + gravity * 0.08f;
             }
 
-            return Mathf.Clamp(target, -MaxBraking, MaxAcceleration);
+            return Mathf.Clamp(target, -BrakingLimit(progress), AccelerationLimit(progress));
         }
     }
 
@@ -877,10 +1019,20 @@ namespace ValeMesozoico
         private Vector3 _originPosition;
         private Quaternion _yawCorrection = Quaternion.identity;
         private bool _calibrated;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        [SerializeField, Range(0.05f, 1f)] private float _mouseSensitivity = 0.2f;
+        private Quaternion _desktopNeutralRotation;
+        private float _desktopYaw;
+        private float _desktopPitch;
+        private int _mouseControlId;
+#endif
 
         private void Awake()
         {
             _seatEyePosition = transform.localPosition;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            _desktopNeutralRotation = transform.localRotation;
+#endif
         }
 
         private void OnEnable()
@@ -898,7 +1050,93 @@ namespace ValeMesozoico
         private void OnDisable()
         {
             Application.onBeforeRender -= ApplyHeadPose;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            ReleaseDesktopDrag();
+#endif
         }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        private void OnApplicationFocus(bool focused)
+        {
+            if (!focused)
+            {
+                ReleaseDesktopDrag();
+            }
+        }
+
+        private void OnGUI()
+        {
+            int controlId = GUIUtility.GetControlID(FocusType.Passive);
+            if (XRSettings.isDeviceActive || InputDevices.GetDeviceAtXRNode(XRNode.Head).isValid)
+            {
+                ReleaseDesktopDrag();
+                return;
+            }
+
+            Event current = Event.current;
+            switch (current.GetTypeForControl(controlId))
+            {
+                case EventType.MouseDown:
+                    if (current.button != 0 || GUIUtility.hotControl != 0
+                        || !new Rect(0f, 0f, Screen.width, Screen.height).Contains(current.mousePosition)
+                        || RideDebugTimeline.ContainsScreenPoint(current.mousePosition))
+                    {
+                        break;
+                    }
+
+                    Vector3 angles = (Quaternion.Inverse(_desktopNeutralRotation) * transform.localRotation).eulerAngles;
+                    _desktopYaw = angles.y;
+                    _desktopPitch = Mathf.DeltaAngle(0f, angles.x);
+                    _mouseControlId = controlId;
+                    GUIUtility.hotControl = controlId;
+                    GUIUtility.keyboardControl = 0;
+                    current.Use();
+                    break;
+                case EventType.MouseDrag:
+                    if (_mouseControlId != controlId || GUIUtility.hotControl != controlId)
+                    {
+                        break;
+                    }
+
+                    // IMGUI deltas are in pixels, independent of the ride's playback speed.
+                    _desktopYaw = Mathf.Repeat(_desktopYaw + current.delta.x * _mouseSensitivity, 360f);
+                    _desktopPitch = Mathf.Clamp(_desktopPitch + current.delta.y * _mouseSensitivity, -80f, 80f);
+                    transform.localRotation = _desktopNeutralRotation * Quaternion.Euler(_desktopPitch, _desktopYaw, 0f);
+                    current.Use();
+                    break;
+                case EventType.MouseUp:
+                    if (current.button == 0 && _mouseControlId == controlId)
+                    {
+                        ReleaseDesktopDrag();
+                        current.Use();
+                    }
+                    break;
+                case EventType.Ignore:
+                    ReleaseDesktopDrag();
+                    break;
+                case EventType.KeyDown:
+                    if (current.keyCode == KeyCode.R && GUIUtility.keyboardControl == 0
+                        && !current.alt && !current.control && !current.command)
+                    {
+                        _desktopYaw = 0f;
+                        _desktopPitch = 0f;
+                        transform.localPosition = _seatEyePosition;
+                        transform.localRotation = _desktopNeutralRotation;
+                        current.Use();
+                    }
+                    break;
+            }
+        }
+
+        private void ReleaseDesktopDrag()
+        {
+            if (_mouseControlId != 0 && GUIUtility.hotControl == _mouseControlId)
+            {
+                GUIUtility.hotControl = 0;
+            }
+            _mouseControlId = 0;
+        }
+#endif
 
         private void LateUpdate()
         {

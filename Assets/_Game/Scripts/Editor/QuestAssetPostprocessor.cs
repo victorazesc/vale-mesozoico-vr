@@ -36,7 +36,8 @@ namespace ValeMesozoico.Editor
             importer.importLights = false;
             importer.importBlendShapes = false;
             importer.addCollider = false;
-            importer.meshCompression = IsPcBlenderEnvironment(assetPath)
+            bool isTriceratops = assetPath.EndsWith("/Triceratops.fbx", StringComparison.OrdinalIgnoreCase);
+            importer.meshCompression = IsPcBlenderEnvironment(assetPath) || isTriceratops
                 ? ModelImporterMeshCompression.Off
                 : ModelImporterMeshCompression.Medium;
             importer.optimizeMeshPolygons = true;
@@ -51,6 +52,12 @@ namespace ValeMesozoico.Editor
             if (isDinosaur)
             {
                 importer.animationCompression = ModelImporterAnimationCompression.Optimal;
+                if (isTriceratops)
+                {
+                    importer.importNormals = ModelImporterNormals.Import;
+                    importer.animationPositionError = 0.05f;
+                    importer.animationRotationError = 0.05f;
+                }
             }
         }
 
@@ -226,6 +233,7 @@ namespace ValeMesozoico.Editor
             bool isHeroEnvironment = path.IndexOf("/Models/EnvironmentHero/", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isHeroRide = path.IndexOf("/Models/Ride/AbandonedCart/", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isDinosaurTexture = IsDinosaur(path);
+            bool isCrestPteranodon = path.Contains("/Dinosaurs/PteranodonCrest/", StringComparison.OrdinalIgnoreCase);
             bool isPcBlenderEnvironment = IsPcBlenderEnvironment(path);
             if (!isCoaster && !isRealistic && !isPolyHaven && !isHeroEnvironment && !isHeroRide
                 && !isDinosaurTexture && !isPcBlenderEnvironment)
@@ -236,7 +244,9 @@ namespace ValeMesozoico.Editor
             importer.mipmapEnabled = true;
             importer.streamingMipmaps = !isPcBlenderEnvironment;
             importer.streamingMipmapsPriority = isHeroEnvironment || isHeroRide || isDinosaurTexture ? 2 : 0;
-            importer.maxTextureSize = isHeroEnvironment || isPcBlenderEnvironment ? 2048 : 1024;
+            importer.maxTextureSize = isHeroEnvironment || isPcBlenderEnvironment || isCrestPteranodon
+                || path.Contains("/TriceratopsSkin/", StringComparison.OrdinalIgnoreCase) ? 2048 : 1024;
+            if (isCrestPteranodon) importer.npotScale = TextureImporterNPOTScale.ToLarger;
             if (isRealistic || isPolyHaven || isHeroEnvironment || isHeroRide || isDinosaurTexture
                 || isPcBlenderEnvironment)
             {
@@ -249,6 +259,7 @@ namespace ValeMesozoico.Editor
                 bool isRoughness = textureName.IndexOf("_rough", StringComparison.OrdinalIgnoreCase) >= 0;
                 bool isGeneratedHeightNormal = isNormal
                     && (textureName.StartsWith("TrackPaintedSteel", StringComparison.OrdinalIgnoreCase)
+                        || textureName.StartsWith("TrackRustedSteel", StringComparison.OrdinalIgnoreCase)
                         || textureName.StartsWith("RockBasaltMoss", StringComparison.OrdinalIgnoreCase)
                         || textureName.StartsWith("WetShore", StringComparison.OrdinalIgnoreCase));
                 bool isPalmAlbedo = path.IndexOf(
@@ -270,7 +281,8 @@ namespace ValeMesozoico.Editor
                         : 0.035f;
                 }
                 importer.sRGBTexture = !isNormal && !isOcclusion && !isMetallicSmoothness && !isRoughness;
-                importer.alphaIsTransparency = isCutout;
+                importer.alphaIsTransparency = isCutout
+                    || textureName.StartsWith("TrackWheelWear", StringComparison.OrdinalIgnoreCase);
                 importer.wrapMode = isCutout || isHeroRide ? TextureWrapMode.Clamp : TextureWrapMode.Repeat;
                 importer.filterMode = FilterMode.Trilinear;
                 importer.anisoLevel = isPcBlenderEnvironment ? 4 : 2;
@@ -279,7 +291,8 @@ namespace ValeMesozoico.Editor
             TextureImporterPlatformSettings android = importer.GetPlatformTextureSettings("Android");
             android.name = "Android";
             android.overridden = true;
-            android.maxTextureSize = 1024;
+            android.maxTextureSize = isCrestPteranodon
+                || path.Contains("/TriceratopsSkin/", StringComparison.OrdinalIgnoreCase) ? 2048 : 1024;
             android.format = TextureImporterFormat.ASTC_6x6;
             android.textureCompression = TextureImporterCompression.Compressed;
             importer.SetPlatformTextureSettings(android);

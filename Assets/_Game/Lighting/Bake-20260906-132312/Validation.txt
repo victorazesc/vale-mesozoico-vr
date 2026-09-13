@@ -1,0 +1,1 @@
+[Vale Lightmap] CONCLUIDO: 1482/1482 renderers estáticos, 2 lightmaps, Directional Light=Mixed, bake=True, dados=Assets/_Game/Scenes/JurassicRide/LightingData.asset

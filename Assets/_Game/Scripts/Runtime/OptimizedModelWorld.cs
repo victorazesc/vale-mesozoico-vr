@@ -22,6 +22,7 @@ namespace ValeMesozoico
         private static Material _closedRockMaterial;
         private static Material _shorelineMaterial;
         private static readonly Mesh[,] ClosedRockLods = new Mesh[6, 3];
+        private static ForestFloorSurface _dinosaurGround;
 
         public static void BuildWater(Transform parent, Material sourceMaterial)
         {
@@ -1877,63 +1878,73 @@ namespace ValeMesozoico
 
         public static void BuildDinosaurs(Transform parent, RideSpline spline)
         {
+            _dinosaurGround = parent.Find("Blender Environment") != null ? ForestFloorSurface.Load() : null;
             GameObject dinosaurs = new("Animated 3D Dinosaurs");
             dinosaurs.transform.SetParent(parent, false);
 
-            GameObject apatosaurus = CreateDinosaur(
+            GameObject brachiosaurus = CreateDinosaur(
                 dinosaurs.transform,
                 spline,
-                "Apatosaurus",
-                "Models/Dinosaurs/Apatosaurus",
-                0.18f,
-                24f,
-                14.5f,
+                "Brachiosaurus",
+                "Models/Dinosaurs/Brachiosaurus/Brachiosaurus",
+                0.14f,
+                -14.5f,
+                10.5f,
                 0.007f);
-            AddDinosaurRoam(apatosaurus, 3.2f, 0.54f, 0.3f);
+            // AddDinosaurRoam(brachiosaurus, 1.5f, 0.4f, 0.3f);
 
-            GameObject youngApatosaurus = CreateDinosaur(
+            GameObject youngBrachiosaurus = CreateDinosaur(
                 dinosaurs.transform,
                 spline,
-                "Apatosaurus Young",
-                "Models/Dinosaurs/Apatosaurus",
-                0.27f,
-                -22f,
-                9.2f,
+                "Brachiosaurus Young",
+                "Models/Dinosaurs/Brachiosaurus/Brachiosaurus",
+                0.915f,
+                -12.5f,
+                7.5f,
                 0.008f);
-            AddDinosaurRoam(youngApatosaurus, 2.4f, 0.68f, 2.1f);
+            // AddDinosaurRoam(youngBrachiosaurus, 1.2f, 0.42f, 2.1f);
 
             GameObject triceratops = CreateDinosaur(
                 dinosaurs.transform,
                 spline,
                 "Triceratops",
                 "Models/Dinosaurs/Triceratops",
-                0.50f,
-                -18f,
-                5.4f,
-                0.009f);
-            AddDinosaurRoam(triceratops, 3f, 0.92f, 4.4f);
+                0.15f,
+                8f,
+                3.2f,
+                0.009f, 10.08f);
+            // AddDinosaurRoam(triceratops, 3.4f, 0.60f, 4.4f);
 
             GameObject herdLeader = CreateDinosaur(
                 dinosaurs.transform,
                 spline,
                 "Triceratops Herd Leader",
                 "Models/Dinosaurs/Triceratops",
-                0.56f,
-                18f,
-                4.8f,
-                0.009f);
-            AddDinosaurRoam(herdLeader, 2.7f, 0.84f, 1.4f);
+                0.535f,
+                13f,
+                3.5f,
+                0.009f, 10.8f);
+            AddDinosaurRoam(herdLeader, 3.6f, 0.58f, 1.4f);
 
             GameObject herdYoung = CreateDinosaur(
                 dinosaurs.transform,
                 spline,
                 "Triceratops Herd Young",
                 "Models/Dinosaurs/Triceratops",
-                0.59f,
-                22f,
-                4.1f,
-                0.01f);
-            AddDinosaurRoam(herdYoung, 2.2f, 0.96f, 3.2f);
+                0.555f,
+                11.5f,
+                2.4f,
+                0.01f, 6.72f);
+            AddDinosaurRoam(herdYoung, 2.5f, 0.55f, 3.2f);
+
+            GameObject valleyTriceratops = CreateDinosaur(dinosaurs.transform, spline,
+                "Triceratops Valley", "Models/Dinosaurs/Triceratops", 0.81f, -12f, 3.2f, 0.009f, 9.84f);
+            AddDinosaurRoam(valleyTriceratops, 3.2f, 0.56f, 1.1f);
+            GameObject returnTriceratops = CreateDinosaur(dinosaurs.transform, spline,
+                "Triceratops Return", "Models/Dinosaurs/Triceratops", 0.945f, -13f, 3f, 0.009f, 9.6f);
+            AddDinosaurRoam(returnTriceratops, 3.2f, 0.54f, 3.7f);
+            CreateDinosaur(dinosaurs.transform, spline,
+                "Tyrannosaurus Rex Lookout", "Models/Dinosaurs/Trex", 0.87f, -14f, 5.5f, 0.004f);
 
             GameObject tyrannosaurus = CreateDinosaur(
                 dinosaurs.transform,
@@ -1942,7 +1953,7 @@ namespace ValeMesozoico
                 "Models/Dinosaurs/Trex",
                 0.64f,
                 4.5f,
-                9.5f,
+                6f,
                 0.004f);
             if (tyrannosaurus != null)
             {
@@ -1967,6 +1978,13 @@ namespace ValeMesozoico
 
             DinosaurRoamMotion motion = actor.AddComponent<DinosaurRoamMotion>();
             motion.Initialize(actor.transform.position, radius, speed, phase);
+        }
+
+        internal static float DinosaurGroundHeightAt(float x, float z)
+        {
+            return _dinosaurGround != null && _dinosaurGround.Sample(x, z, out Vector3 point, out _)
+                ? point.y
+                : ProceduralWorld.HeightAt(x, z);
         }
 
         public static void BuildPterosaurs(Transform parent)
@@ -2015,6 +2033,27 @@ namespace ValeMesozoico
                     EnhancedProceduralAudio.AttachDinosaurCall(actor, "Pteranodon", 7401);
                 }
             }
+        }
+
+        internal static GameObject BuildDropPteranodon(Transform parent)
+        {
+            GameObject actor = InstantiateSizedModel(parent, "Pteranodon Crest Attack",
+                "Models/Dinosaurs/PteranodonCrest/PteranodonCrest", Vector3.zero, Quaternion.identity, 14f,
+                true, 0f, true, false);
+            if (actor != null)
+            {
+                Material material = new(Shader.Find("Universal Render Pipeline/Lit"))
+                { name = "Crest Pteranodon Natural Skin", enableInstancing = true };
+                material.SetTexture("_BaseMap", Resources.Load<Texture2D>("Models/Dinosaurs/PteranodonCrest/PteranodonCrest_BaseColor"));
+                material.SetTexture("_BumpMap", Resources.Load<Texture2D>("Models/Dinosaurs/PteranodonCrest/PteranodonCrest_Normal"));
+                material.SetFloat("_BumpScale", 0.6f);
+                material.SetFloat("_Smoothness", 0.22f);
+                material.SetFloat("_Metallic", 0f);
+                material.SetFloat("_Cull", 0f);
+                material.EnableKeyword("_NORMALMAP");
+                foreach (Renderer skin in actor.GetComponentsInChildren<Renderer>()) skin.sharedMaterial = material;
+            }
+            return actor;
         }
 
         public static bool AttachCoasterTrain(Transform cart, Material fallbackBody, Material fallbackDark)
@@ -2163,12 +2202,14 @@ namespace ValeMesozoico
             float trackFraction,
             float sideOffset,
             float targetHeight,
-            float cullHeight)
+            float cullHeight,
+            float targetLength = 0f)
         {
-            RidePose pose = spline.PoseAtDistance(spline.Length * trackFraction);
-            Vector3 right = pose.Rotation * Vector3.right;
+            // Anchor land animals to the ground route, independently of added aerial sections.
+            RidePose pose = spline.PoseAtDistance(spline.Length * spline.MapBaseProgress(trackFraction));
+            Vector3 right = Vector3.Cross(Vector3.up, pose.Tangent).normalized;
             Vector3 position = pose.Position + right * sideOffset;
-            position.y = ProceduralWorld.HeightAt(position.x, position.z);
+            position.y = DinosaurGroundHeightAt(position.x, position.z);
             Vector3 lookDirection = pose.Position - position;
             lookDirection.y = 0f;
             Quaternion rotation = lookDirection.sqrMagnitude > 0.01f
@@ -2187,10 +2228,60 @@ namespace ValeMesozoico
 
             if (actor != null)
             {
+                // Imported animation envelopes are much larger than these FBX meshes.
+                // Size and ground the actual posed geometry, then repair its culling bounds.
+                DinosaurAnimationRuntime.PlayPreferred(actor, "idle");
+                actor.GetComponentInChildren<Animation>(true)?.Sample();
+                if (targetLength > 0f)
+                {
+                    TriceratopsGrounding.Configure(actor, targetLength);
+                }
+                else if (TryGetDinosaurGeometryBounds(actor, out Bounds geometry) && geometry.size.y > 0.00001f)
+                {
+                    Transform modelScale = actor.transform.Find("Model Scale");
+                    modelScale.localScale *= targetHeight / geometry.size.y;
+                    TryGetDinosaurGeometryBounds(actor, out geometry);
+                    modelScale.position += new Vector3(position.x - geometry.center.x,
+                        position.y - geometry.min.y, position.z - geometry.center.z);
+                    actor.GetComponent<LODGroup>()?.RecalculateBounds();
+                }
+                if (name.StartsWith("Brachiosaurus", StringComparison.OrdinalIgnoreCase))
+                {
+                    BrachiosaurusHeadClearance.Configure(actor, targetHeight);
+                }
                 EnhancedProceduralAudio.AttachDinosaurCall(actor, name, Mathf.RoundToInt(trackFraction * 10000f));
             }
 
             return actor;
+        }
+
+        internal static bool TryGetDinosaurGeometryBounds(GameObject actor, out Bounds bounds)
+        {
+            bounds = default;
+            bool found = false;
+            Mesh baked = new();
+            foreach (SkinnedMeshRenderer skin in actor.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            {
+                skin.BakeMesh(baked, true);
+                Vector3[] vertices = baked.vertices;
+                if (vertices.Length == 0) continue;
+                Transform root = skin.rootBone != null ? skin.rootBone : skin.transform;
+                Vector3 first = skin.transform.TransformPoint(vertices[0]);
+                Bounds localBounds = new(root.InverseTransformPoint(first), Vector3.zero);
+                if (!found) bounds = new Bounds(first, Vector3.zero);
+                found = true;
+                foreach (Vector3 vertex in vertices)
+                {
+                    Vector3 world = skin.transform.TransformPoint(vertex);
+                    bounds.Encapsulate(world);
+                    localBounds.Encapsulate(root.InverseTransformPoint(world));
+                }
+                // Leave room for steps, tail sways and the run/roar poses.
+                localBounds.Expand(localBounds.size * 0.5f);
+                skin.localBounds = localBounds;
+            }
+            UnityEngine.Object.Destroy(baked);
+            return found;
         }
 
         private static GameObject InstantiateClosedRockLod(
@@ -3510,9 +3601,9 @@ namespace ValeMesozoico
             return texture;
         }
 
-        private static Texture2D CreateWaterNormalTexture()
+        internal static Texture2D CreateWaterNormalTexture()
         {
-            const int size = 128;
+            const int size = 256;
             Texture2D texture = new(size, size, TextureFormat.RGBA32, true, true)
             {
                 name = "Procedural Lagoon Normal",
@@ -3520,17 +3611,32 @@ namespace ValeMesozoico
                 filterMode = FilterMode.Trilinear,
                 anisoLevel = 1
             };
-            Color[] pixels = new Color[size * size];
+            float[] heights = new float[size * size];
             for (int y = 0; y < size; y++)
             {
                 for (int x = 0; x < size; x++)
                 {
-                    float angleA = (x * 5f + y * 3f) * Mathf.PI * 2f / size;
-                    float angleB = (x * -3f + y * 7f) * Mathf.PI * 2f / size + 1.8f;
-                    float angleC = (x * 9f + y * -4f) * Mathf.PI * 2f / size + 0.6f;
-                    float dx = Mathf.Cos(angleA) * 0.08f + Mathf.Cos(angleB) * -0.045f + Mathf.Cos(angleC) * 0.035f;
-                    float dy = Mathf.Cos(angleA) * 0.048f + Mathf.Cos(angleB) * 0.105f + Mathf.Cos(angleC) * -0.018f;
-                    Vector3 normal = new Vector3(-dx, -dy, 1f).normalized;
+                    float u = x / (float)size;
+                    float v = y / (float)size;
+                    // Integer domain rotations preserve tiling while preventing
+                    // the three noise grids from lining up into visible bands.
+                    heights[y * size + x] = PeriodicNoise(u, v, 4, 0xA341316Cu) * 0.68f
+                        + PeriodicNoise(u + v + 0.37f, v - u + 0.19f, 7, 0xC8013EA4u) * 0.24f
+                        + PeriodicNoise(2f * u - v + 0.11f, u + v + 0.41f, 13, 0xAD90777Du) * 0.08f;
+                }
+            }
+            Color[] pixels = new Color[size * size];
+            for (int y = 0; y < size; y++)
+            {
+                int previousRow = ((y + size - 1) % size) * size;
+                int nextRow = ((y + 1) % size) * size;
+                for (int x = 0; x < size; x++)
+                {
+                    float dx = heights[y * size + (x + 1) % size]
+                        - heights[y * size + (x + size - 1) % size];
+                    float dy = heights[nextRow + x] - heights[previousRow + x];
+                    Vector2 slope = Vector2.ClampMagnitude(new Vector2(dx, dy) * (size * 0.006f), 0.16f);
+                    Vector3 normal = new Vector3(-slope.x, -slope.y, 1f).normalized;
                     pixels[y * size + x] = new Color(
                         normal.x * 0.5f + 0.5f,
                         normal.y * 0.5f + 0.5f,
@@ -3541,6 +3647,37 @@ namespace ValeMesozoico
             texture.SetPixels(pixels);
             texture.Apply(true, true);
             return texture;
+
+            static float PeriodicNoise(float u, float v, int cells, uint seed)
+            {
+                float gx = u * cells;
+                float gy = v * cells;
+                int x = Mathf.FloorToInt(gx);
+                int y = Mathf.FloorToInt(gy);
+                float tx = gx - x;
+                float ty = gy - y;
+                tx = tx * tx * tx * (tx * (tx * 6f - 15f) + 10f);
+                ty = ty * ty * ty * (ty * (ty * 6f - 15f) + 10f);
+                return Mathf.Lerp(
+                    Mathf.Lerp(GridValue(x, y, cells, seed), GridValue(x + 1, y, cells, seed), tx),
+                    Mathf.Lerp(GridValue(x, y + 1, cells, seed), GridValue(x + 1, y + 1, cells, seed), tx), ty);
+            }
+
+            static float GridValue(int x, int y, int cells, uint seed)
+            {
+                x = ((x % cells) + cells) % cells;
+                y = ((y % cells) + cells) % cells;
+                unchecked
+                {
+                    uint hash = (uint)x * 0x8DA6B343u ^ (uint)y * 0xD8163841u ^ seed;
+                    hash ^= hash >> 16;
+                    hash *= 0x7FEB352Du;
+                    hash ^= hash >> 15;
+                    hash *= 0x846CA68Bu;
+                    hash ^= hash >> 16;
+                    return (hash >> 8) * (2f / 16777215f) - 1f;
+                }
+            }
         }
 
         private static void ConfigureSky()

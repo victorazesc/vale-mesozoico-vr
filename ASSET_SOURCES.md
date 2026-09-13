@@ -26,6 +26,12 @@ Textura gerada com a ferramenta integrada de imagens da OpenAI em 2026-08-31 par
 - `TrackPaintedSteel_Normal.png` e `TrackPaintedSteel_SpecGloss.png`: mapas derivados localmente para relevo da pintura e resposta PBR.
 - Prompt final: `seamless light gray-white painted structural steel, subtle orange-peel coating, fine scratches, sparse tiny chips and restrained grime, neutral scan-like lighting, no baked shadows or seams`.
 
+Atlas de folhas gerado por IA com a ferramenta integrada de imagens da OpenAI (`image_gen`) em 2026-09-05:
+
+- `Assets/_Game/Resources/Textures/Realistic/JungleVineLeaves_Atlas.png`: quatro folhas de vinha tropical em atlas 2 × 2, com fundo transparente e recorte por alpha, para a vegetação da entrada da caverna.
+- `QuestAssetPostprocessor` configura transparência do alpha, mipmaps e compressão ASTC 6x6 no Android/Quest, com limite de 1024 pixels.
+- Origem e prompt exato preservados em `SourceAssets/Generated/JungleVineLeaves/SOURCE.md`.
+
 Os PNGs de dinossauro permanecem apenas como fallback legado; a execução atual usa os modelos 3D abaixo.
 
 ## Modelos 3D importados
@@ -36,7 +42,36 @@ Os PNGs de dinossauro permanecem apenas como fallback legado; a execução atual
 - Licença: CC0 1.0; cópia local em `Assets/_Game/ThirdParty/Quaternius/LICENSE.txt`.
 - `Assets/_Game/Resources/Models/Dinosaurs/Trex.fbx`
 - `Assets/_Game/Resources/Models/Dinosaurs/Apatosaurus.fbx`
-- `Assets/_Game/Resources/Models/Dinosaurs/Triceratops.fbx`
+- Triceratops anterior (substituído pelo download abaixo em 2026-09-06): derivação do original CC0, preservado em
+  `SourceAssets/Quaternius/AnimatedDinosaurs/Triceratops.fbx`. Reprodução por
+  `Tools/Blender/refine_triceratops.py`: silhueta subdividida, normais suaves,
+  olhos/narinas, atlas de pele e normal map em `Models/Dinosaurs/TriceratopsSkin`.
+  A pele original gerada por IA está em `SourceAssets/Generated/Triceratops/Triceratops_Hide_BaseColor.png`;
+  projeção triplanar, pigmentação e bake feitos no Blender. A textura é uma interpretação visual.
+  22.496 triângulos, um material compartilhado, seis animações; subdivisão aplicada na exportação.
+  Texturas 2048 px no desktop e ASTC 6x6/2048 px no Android.
+  Escala dos adultos: 8,0–9,0 m de comprimento; referência paleontológica:
+  https://www.nhm.ac.uk/discover/dino-directory/triceratops.html (9 m). Jovem: 5,6 m, escolha de cena.
+
+### Triceratops — download fornecido pelo usuário
+
+- Origem: `/Users/victorazevedo/Downloads/triceratops.zip`, recebido em 2026-09-06;
+  modelo `source/sanjiaolong(1).glb`. O ZIP não contém autor, URL ou licença;
+  este modelo não herda a licença CC0 do modelo anterior.
+- Original preservado em `SourceAssets/Downloaded/Triceratops/Triceratops.glb`;
+  arquivo editável em `Triceratops.blend`, na mesma pasta.
+- Importação reproduzível: `Tools/Blender/import_downloaded_triceratops.py`.
+  Malha, UVs, esqueleto e animação de repouso originais preservados; olhos e boca
+  unidos à malha com pesos no crânio. Cartões separados de brilho dos olhos omitidos
+  na adaptação para URP; globos oculares e íris mantidos.
+  Caminhada de quatro tempos acrescentada
+  ao esqueleto original para acompanhar o movimento da manada.
+- Runtime: `Assets/_Game/Resources/Models/Dinosaurs/Triceratops.fbx`;
+  11.153 triângulos, 7.530 vértices na origem, 58 ossos e um material compartilhado.
+  Mapas originais de cor e normal em `TriceratopsSkin`; roughness convertido
+  para smoothness no alpha de `Triceratops_MetallicSmoothness.png`.
+- Texturas 2048 px; mipmaps e ASTC 6x6 no Android pelo importador existente.
+  Comprimentos, rotas, sons e poeira das cinco instâncias mantidos.
 
 ### Chistodrako._. — Pteranodon (Animated)
 
@@ -47,6 +82,7 @@ Os PNGs de dinossauro permanecem apenas como fallback legado; a execução atual
 - Alterações: versão GLB 1K convertida para FBX, câmera/objeto auxiliar removidos, nomes normalizados, mapas PBR extraídos, roughness convertido para smoothness, texturas configuradas em ASTC 6x6 e integração de voo/culling própria.
 - Fonte preservada em `SourceAssets/Sketchfab/Pteranodon/Pteranodon_Animated_1K.glb`.
 - Runtime: `Assets/_Game/Resources/Models/Dinosaurs/Pteranodon/Pteranodon.fbx` e quatro mapas PBR 1024 x 1024 na mesma pasta.
+- Exemplar do pico (2026-09-06): fonte GLB original gratuita com mapas 2K preservada em `SourceAssets/Sketchfab/Pteranodon/Original/`; variante aprovada com crista inclinada, olhos menores e nova textura de pele criada com imagegen. Mantém 13.494 triângulos e o esqueleto original. Voo de origem e pegada/soltura próprias. Arquivo Blender em `SourceAssets/Generated/PteranodonCrest/PteranodonCrest.blend`; runtime separado em `Assets/_Game/Resources/Models/Dinosaurs/PteranodonCrest/`. A licença e o crédito acima também se aplicam à variante.
 
 ### local.yany — Coconut Tree
 

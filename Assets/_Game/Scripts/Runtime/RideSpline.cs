@@ -25,9 +25,13 @@ namespace ValeMesozoico
 
     internal sealed class RideSpline
     {
-        private const int LookupSamples = 1024;
+        private const int LookupSamples = 4096;
+        private const int BaseSamples = 1024;
         private readonly Vector3[] _points;
         private readonly float[] _distances = new float[LookupSamples + 1];
+        private readonly float[] _baseDistances = new float[BaseSamples + 1];
+        private readonly RideInversions _inversions;
+        private readonly float _inversionStart, _inversionEnd;
 
         public RideSpline(Vector3[] points)
         {
@@ -37,6 +41,21 @@ namespace ValeMesozoico
             }
 
             _points = points;
+            Vector3 previousBase = EvaluateBase(0f);
+            for (int i = 1; i <= BaseSamples; i++)
+            {
+                Vector3 current = EvaluateBase(i / (float)BaseSamples);
+                _baseDistances[i] = _baseDistances[i - 1] + Vector3.Distance(previousBase, current);
+                previousBase = current;
+            }
+            if (points.Length >= 15)
+            {
+                _inversionStart = 11f / points.Length;
+                _inversionEnd = 12f / points.Length;
+                Vector3 entry = (EvaluateBase(_inversionStart + 0.0001f) - EvaluateBase(_inversionStart - 0.0001f)).normalized;
+                Vector3 exit = (EvaluateBase(_inversionEnd + 0.0001f) - EvaluateBase(_inversionEnd - 0.0001f)).normalized;
+                _inversions = new RideInversions(points[11], points[12], entry, exit);
+            }
             Vector3 previous = Evaluate(0f);
             for (int i = 1; i <= LookupSamples; i++)
             {
@@ -50,8 +69,47 @@ namespace ValeMesozoico
         }
 
         public float Length { get; }
+        internal float InversionsStartProgress => ProgressAtParameter(_inversionStart);
+        internal float InversionsEndProgress => ProgressAtParameter(_inversionEnd);
+        internal Vector3 InversionRight => _inversions.Right;
+
+        internal IEnumerable<float> InversionSupportDistances()
+        {
+            if (_inversions == null) yield break;
+            foreach (float time in RideInversions.SupportTimes)
+                yield return ProgressAtParameter(Mathf.Lerp(_inversionStart, _inversionEnd, time)) * Length;
+        }
+
+        internal float MapBaseProgress(float progress)
+        {
+            float distance = Mathf.Clamp01(progress) * _baseDistances[BaseSamples];
+            return ProgressAtParameter(ParameterAtDistance(_baseDistances, distance));
+        }
+
+        private float ProgressAtParameter(float normalized)
+        {
+            float index = Mathf.Clamp01(normalized) * LookupSamples;
+            int lower = Mathf.Min(LookupSamples - 1, Mathf.FloorToInt(index));
+            return Mathf.Lerp(_distances[lower], _distances[lower + 1], index - lower) / Length;
+        }
+
+        internal bool IsInversionAtDistance(float distance) => IsInversion(ParameterAtDistance(_distances, Mathf.Repeat(distance, Length)));
+        internal bool IsLoopAtDistance(float distance) => _inversions != null
+            && _inversions.IsLoop(InversionTime(ParameterAtDistance(_distances, Mathf.Repeat(distance, Length))));
+        internal bool IsCorkscrewAtDistance(float distance) => _inversions != null
+            && _inversions.IsCorkscrew(InversionTime(ParameterAtDistance(_distances, Mathf.Repeat(distance, Length))));
+
+        private bool IsInversion(float normalized) => _inversions != null
+            && normalized >= _inversionStart && normalized <= _inversionEnd;
+        private float InversionTime(float normalized) => (normalized - _inversionStart) / (_inversionEnd - _inversionStart);
 
         public Vector3 Evaluate(float normalized)
+        {
+            float wrapped = Mathf.Repeat(normalized, 1f);
+            return IsInversion(wrapped) ? _inversions.Evaluate(InversionTime(wrapped)) : EvaluateBase(wrapped);
+        }
+
+        private Vector3 EvaluateBase(float normalized)
         {
             float wrapped = Mathf.Repeat(normalized, 1f);
             float scaled = wrapped * _points.Length;
@@ -74,30 +132,39 @@ namespace ValeMesozoico
         public RidePose PoseAtDistance(float distance)
         {
             float wrappedDistance = Mathf.Repeat(distance, Length);
-            int upper = Array.BinarySearch(_distances, wrappedDistance);
+            float normalized = ParameterAtDistance(_distances, wrappedDistance);
+            Vector3 position = Evaluate(normalized);
+            Vector3 tangent = TangentAt(normalized);
+            bool inversion = IsInversion(normalized);
+            float sectionTime = inversion ? InversionTime(normalized) : 0f;
+            float bank = BankAt(normalized) * (inversion ? _inversions.BankWeight(sectionTime) : 1f);
+            Vector3 up = inversion ? _inversions.UpHint(sectionTime) : Vector3.up;
+            Quaternion rotation = Quaternion.LookRotation(tangent, up) * Quaternion.AngleAxis(bank, Vector3.forward);
+            return new RidePose(position, rotation, tangent, normalized, bank);
+        }
+
+        private static float ParameterAtDistance(float[] distances, float distance)
+        {
+            int samples = distances.Length - 1;
+            int upper = Array.BinarySearch(distances, distance);
             if (upper < 0)
             {
                 upper = ~upper;
             }
 
-            upper = Mathf.Clamp(upper, 1, LookupSamples);
+            upper = Mathf.Clamp(upper, 1, samples);
             int lower = upper - 1;
-            float segmentLength = _distances[upper] - _distances[lower];
+            float segmentLength = distances[upper] - distances[lower];
             float interpolation = segmentLength > 0.0001f
-                ? (wrappedDistance - _distances[lower]) / segmentLength
+                ? (distance - distances[lower]) / segmentLength
                 : 0f;
-            float normalized = Mathf.Lerp(lower / (float)LookupSamples, upper / (float)LookupSamples, interpolation);
-
-            Vector3 position = Evaluate(normalized);
-            Vector3 tangent = TangentAt(normalized);
-            float bank = BankAt(normalized);
-            Quaternion rotation = Quaternion.LookRotation(tangent, Vector3.up) * Quaternion.AngleAxis(bank, Vector3.forward);
-            return new RidePose(position, rotation, tangent, normalized, bank);
+            return Mathf.Lerp(lower / (float)samples, upper / (float)samples, interpolation);
         }
 
         private Vector3 TangentAt(float normalized)
         {
-            return (Evaluate(normalized + 0.001f) - Evaluate(normalized - 0.001f)).normalized;
+            const float sample = 1f / (LookupSamples * 4f);
+            return (Evaluate(normalized + sample) - Evaluate(normalized - sample)).normalized;
         }
 
         private float BankAt(float normalized)
@@ -127,8 +194,17 @@ namespace ValeMesozoico
 
     internal static class TrackMeshFactory
     {
-        internal const float BreakStartProgress = 218f / 288f;
-        internal const float BreakEndProgress = 224f / 288f;
+        internal const int PathSegments = 768;
+        internal static float BreakStartProgress { get; private set; } = 218f / 288f;
+        internal static float BreakEndProgress { get; private set; } = 224f / 288f;
+
+        internal static void ConfigureBreak(RideSpline spline)
+        {
+            float originalStart = spline.MapBaseProgress(218f / 288f);
+            float originalEnd = spline.MapBaseProgress(224f / 288f);
+            BreakStartProgress = Mathf.Max(originalStart, RideMotionProfile.DropRecoveryEnd + 12f / spline.Length);
+            BreakEndProgress = BreakStartProgress + originalEnd - originalStart;
+        }
 
         public static GameObject CreateTrack(Transform parent, RideSpline spline, Material rail, Material sleeper, Material support)
         {
@@ -148,7 +224,9 @@ namespace ValeMesozoico
             CreateMeshObject("Painted Central Spine", root.transform, BuildCentralSpine(spline), sleeper);
             CreateMeshObject("Painted Y Brackets", root.transform, BuildBrackets(spline), sleeper);
             CreateMeshObject("Bolted Spine Couplers", root.transform, BuildCouplers(spline), support);
-            CreateMeshObject("Tubular Ground Supports", root.transform, BuildSupports(spline), support);
+            ForestFloorSurface groundSurface = parent.Find("Blender Environment") != null
+                ? ForestFloorSurface.Load() : null;
+            CreateMeshObject("Tubular Ground Supports", root.transform, BuildSupports(spline, groundSurface), support);
             Material liftChainMaterial = CreateLiftChainMaterial(support);
             GameObject liftChain = CreateMeshObject(
                 "Procedural Lift Chain 3D",
@@ -163,35 +241,37 @@ namespace ValeMesozoico
 
         private static Mesh BuildRunningRails(RideSpline spline)
         {
-            const int pathSegments = 288;
+            const int pathSegments = PathSegments;
             const int ringSegments = 10;
             const float gauge = 0.66f;
 
             List<Vector3> vertices = new((pathSegments + 1) * ringSegments * 2);
+            List<Vector3> normals = new(vertices.Capacity);
             List<Vector2> uvs = new(vertices.Capacity);
             List<int> triangles = new(pathSegments * ringSegments * 12);
-            AddSplineTube(spline, pathSegments, ringSegments, -gauge, 0.08f, 0.072f, vertices, uvs, triangles, true);
-            AddSplineTube(spline, pathSegments, ringSegments, gauge, 0.08f, 0.072f, vertices, uvs, triangles, true);
-            return CreateTexturedMesh("Procedural Polished Running Rails", vertices, uvs, triangles);
+            AddSplineTube(spline, pathSegments, ringSegments, -gauge, 0.08f, 0.072f, vertices, uvs, triangles, true, normals);
+            AddSplineTube(spline, pathSegments, ringSegments, gauge, 0.08f, 0.072f, vertices, uvs, triangles, true, normals);
+            return CreateTexturedMesh("Procedural Polished Running Rails", vertices, uvs, triangles, normals);
         }
 
         private static Mesh BuildWheelContactGrease(RideSpline spline)
         {
-            const int pathSegments = 288;
+            const int pathSegments = PathSegments;
             const int bandSegments = 4;
             const float gauge = 0.66f;
             const float railVerticalOffset = 0.08f;
-            const float overlayRadius = 0.0735f;
-            const float baseHalfAngle = 0.34f;
+            const float railRadius = 0.072f;
+            const int railRingSegments = 10;
 
             int verticesPerBand = (pathSegments + 1) * (bandSegments + 1);
             List<Vector3> vertices = new(verticesPerBand * 2);
+            List<Vector3> normals = new(vertices.Capacity);
             List<Vector2> uvs = new(vertices.Capacity);
             List<int> triangles = new(pathSegments * bandSegments * 12);
 
             AddWheelContactBand(-gauge);
             AddWheelContactBand(gauge);
-            return CreateTexturedMesh("Procedural Wheel Contact Grease Bands", vertices, uvs, triangles);
+            return CreateTexturedMesh("Procedural Wheel Contact Grease Bands", vertices, uvs, triangles, normals);
 
             void AddWheelContactBand(float lateralOffset)
             {
@@ -204,10 +284,10 @@ namespace ValeMesozoico
                     Vector3 right = pose.Rotation * Vector3.right;
                     Vector3 up = pose.Rotation * Vector3.up;
                     Vector3 center = pose.Position + right * lateralOffset + up * railVerticalOffset;
-                    float edgeVariation = Mathf.Sin(distance * 0.73f) * 0.022f
-                        + Mathf.Sin(distance * 2.17f + lateralOffset) * 0.011f;
-                    float centerVariation = Mathf.Sin(distance * 0.41f + lateralOffset * 2f) * 0.012f;
-                    float halfAngle = baseHalfAngle + edgeVariation;
+                    float seed = lateralOffset < 0f ? 13.7f : 37.2f;
+                    float centerVariation = (Mathf.PerlinNoise(distance * 0.27f, seed) - 0.5f) * 0.09f;
+                    float halfAngle = Mathf.Lerp(0.14f, 0.30f, Mathf.PerlinNoise(distance * 0.63f, seed + 8f));
+                    halfAngle = Mathf.Min(halfAngle, 0.30f - Mathf.Abs(centerVariation));
 
                     for (int band = 0; band <= bandSegments; band++)
                     {
@@ -215,9 +295,16 @@ namespace ValeMesozoico
                         float angle = Mathf.PI * 0.5f
                             + centerVariation
                             + Mathf.Lerp(-halfAngle, halfAngle, cross);
-                        Vector3 radial = right * Mathf.Cos(angle) + up * Mathf.Sin(angle);
-                        vertices.Add(center + radial * overlayRadius);
-                        uvs.Add(new Vector2(distance * 0.46f, cross));
+                        // Follow the actual flat tube face; a circular overlay floats above its ten-sided mesh.
+                        float ring = angle / (Mathf.PI * 2f) * railRingSegments;
+                        float firstAngle = Mathf.Floor(ring) * Mathf.PI * 2f / railRingSegments;
+                        float nextAngle = firstAngle + Mathf.PI * 2f / railRingSegments;
+                        Vector3 first = right * Mathf.Cos(firstAngle) + up * Mathf.Sin(firstAngle);
+                        Vector3 next = right * Mathf.Cos(nextAngle) + up * Mathf.Sin(nextAngle);
+                        Vector3 radial = Vector3.Lerp(first, next, ring - Mathf.Floor(ring));
+                        vertices.Add(center + radial * railRadius + up * 0.0004f);
+                        normals.Add(radial.normalized);
+                        uvs.Add(new Vector2(distance * 0.23f + seed, Mathf.Lerp(0.17f, 0.83f, cross)));
                     }
                 }
 
@@ -244,12 +331,13 @@ namespace ValeMesozoico
 
         private static Mesh BuildCentralSpine(RideSpline spline)
         {
-            const int pathSegments = 288;
+            const int pathSegments = PathSegments;
             List<Vector3> vertices = new((pathSegments + 1) * 12);
+            List<Vector3> normals = new(vertices.Capacity);
             List<Vector2> uvs = new(vertices.Capacity);
             List<int> triangles = new(pathSegments * 72);
-            AddSplineTube(spline, pathSegments, 12, 0f, -0.47f, 0.235f, vertices, uvs, triangles, true);
-            return CreateTexturedMesh("Procedural Painted Central Spine", vertices, uvs, triangles);
+            AddSplineTube(spline, pathSegments, 12, 0f, -0.47f, 0.235f, vertices, uvs, triangles, true, normals);
+            return CreateTexturedMesh("Procedural Painted Central Spine", vertices, uvs, triangles, normals);
         }
 
         private static Mesh BuildBrackets(RideSpline spline)
@@ -268,7 +356,6 @@ namespace ValeMesozoico
                 RidePose pose = spline.PoseAtDistance(distance);
                 Vector3 right = pose.Rotation * Vector3.right;
                 Vector3 up = pose.Rotation * Vector3.up;
-                Vector3 tangent = pose.Tangent;
                 Vector3 spineJunction = pose.Position - up * 0.28f;
                 Vector3 leftRail = pose.Position - right * 0.66f + up * 0.08f;
                 Vector3 rightRail = pose.Position + right * 0.66f + up * 0.08f;
@@ -278,8 +365,7 @@ namespace ValeMesozoico
                 AddTubeSegment(vertices, uvs, triangles, spineJunction, leftMount, 0.045f, 6);
                 AddTubeSegment(vertices, uvs, triangles, spineJunction, rightMount, 0.045f, 6);
                 AddTubeSegment(vertices, uvs, triangles, leftMount, rightMount, 0.032f, 6);
-                AddTubeSegment(vertices, uvs, triangles, leftRail - tangent * 0.055f, leftRail + tangent * 0.055f, 0.086f, 8);
-                AddTubeSegment(vertices, uvs, triangles, rightRail - tangent * 0.055f, rightRail + tangent * 0.055f, 0.086f, 8);
+                // Weld the brackets underneath; full collars would obstruct the wheel-contact surface.
             }
 
             return CreateTexturedMesh("Procedural Painted Y Brackets", vertices, uvs, triangles);
@@ -323,33 +409,73 @@ namespace ValeMesozoico
             return CreateTexturedMesh("Procedural Bolted Spine Couplers", vertices, uvs, triangles);
         }
 
-        private static Mesh BuildSupports(RideSpline spline)
+        private static Mesh BuildSupports(RideSpline spline, ForestFloorSurface groundSurface)
         {
             List<Vector3> vertices = new();
             List<Vector2> uvs = new();
             List<int> triangles = new();
             for (float distance = 4f; distance < spline.Length; distance += 10.5f)
             {
-                RidePose pose = spline.PoseAtDistance(distance);
-                Vector3 right = pose.Rotation * Vector3.right;
-                Vector3 trackUp = pose.Rotation * Vector3.up;
-                Vector3 spineCenter = pose.Position - trackUp * 0.47f;
-                float ground = ProceduralWorld.HeightAt(spineCenter.x, spineCenter.z);
-                Vector3 baseCenter = new(spineCenter.x, ground + 0.08f, spineCenter.z);
-                Vector3 supportTop = spineCenter - Vector3.up * 0.12f;
-                if (supportTop.y - baseCenter.y < 0.55f)
-                {
-                    continue;
-                }
-
-                AddTubeSegment(vertices, uvs, triangles, baseCenter, supportTop, 0.13f, 8);
-                AddTubeSegment(vertices, uvs, triangles, baseCenter - Vector3.up * 0.05f, baseCenter + Vector3.up * 0.06f, 0.23f, 10);
-                Vector3 braceAnchor = Vector3.Lerp(baseCenter, supportTop, 0.64f);
-                AddTubeSegment(vertices, uvs, triangles, braceAnchor, spineCenter - right * 0.46f, 0.055f, 6);
-                AddTubeSegment(vertices, uvs, triangles, braceAnchor, spineCenter + right * 0.46f, 0.055f, 6);
+                if (!spline.IsInversionAtDistance(distance)) AddSupport(distance, Vector3.zero, false);
+            }
+            foreach (float distance in spline.InversionSupportDistances())
+            {
+                Vector3 trackUp = spline.PoseAtDistance(distance).Rotation * Vector3.up;
+                bool shoulder = spline.IsLoopAtDistance(distance) && Mathf.Abs(trackUp.y) < 0.3f;
+                Vector3 outward = shoulder ? Vector3.ProjectOnPlane(-trackUp, Vector3.up).normalized * 3.2f : Vector3.zero;
+                float spread = shoulder ? 2.6f : 1.45f;
+                AddSupport(distance, outward - spline.InversionRight * spread, true);
+                AddSupport(distance, outward + spline.InversionRight * spread, true);
             }
 
             return CreateTexturedMesh("Procedural Tubular Ground Supports", vertices, uvs, triangles);
+
+            void AddSupport(float distance, Vector3 footprintOffset, bool inclined)
+            {
+                // Attach to the rendered spine segment, which is linear between spline samples.
+                float samplePosition = distance / spline.Length * PathSegments;
+                int segment = Mathf.FloorToInt(samplePosition);
+                RidePose first = spline.PoseAtDistance(spline.Length * segment / PathSegments);
+                RidePose next = spline.PoseAtDistance(spline.Length * (segment + 1) / PathSegments);
+                float blend = samplePosition - segment;
+                Quaternion rotation = Quaternion.Slerp(first.Rotation, next.Rotation, blend);
+                Vector3 right = rotation * Vector3.right;
+                Vector3 trackUp = rotation * Vector3.up;
+                Vector3 spineCenter = Vector3.Lerp(first.Position - first.Rotation * Vector3.up * 0.47f,
+                    next.Position - next.Rotation * Vector3.up * 0.47f, blend);
+                Vector3 columnCenter = spineCenter + footprintOffset;
+                float footRadius = inclined ? 0.42f : 0.23f;
+                float ground = GroundHeight(columnCenter.x, columnCenter.z);
+                float lowestGround = ground;
+                float highestGround = ground;
+                for (int sample = 0; sample < 16; sample++)
+                {
+                    float angle = sample * Mathf.PI * 2f / 16f;
+                    float footGround = GroundHeight(columnCenter.x + Mathf.Cos(angle) * footRadius,
+                        columnCenter.z + Mathf.Sin(angle) * footRadius);
+                    lowestGround = Mathf.Min(lowestGround, footGround);
+                    highestGround = Mathf.Max(highestGround, footGround);
+                }
+                Vector3 baseCenter = new(columnCenter.x, lowestGround - 0.12f, columnCenter.z);
+                Vector3 footTop = new(columnCenter.x, highestGround + 0.10f, columnCenter.z);
+                Vector3 supportTop = inclined ? spineCenter - trackUp * 0.04f : columnCenter - Vector3.up * 0.12f;
+                if (supportTop.y - footTop.y < 0.55f)
+                {
+                    return;
+                }
+
+                AddTubeSegment(vertices, uvs, triangles, baseCenter, supportTop, inclined ? 0.17f : 0.13f, 8);
+                AddTubeSegment(vertices, uvs, triangles, baseCenter, footTop, footRadius, 10, true);
+                Vector3 braceAnchor = Vector3.Lerp(baseCenter, supportTop, inclined ? 0.86f : 0.64f);
+                float mountOffset = inclined ? 0.12f : 0.155f;
+                const float braceRadius = 0.055f;
+                AddTubeSegment(vertices, uvs, triangles, braceAnchor, spineCenter - right * mountOffset - trackUp * 0.055f, braceRadius, 6);
+                AddTubeSegment(vertices, uvs, triangles, braceAnchor, spineCenter + right * mountOffset - trackUp * 0.055f, braceRadius, 6);
+            }
+
+            float GroundHeight(float x, float z) => groundSurface != null
+                && groundSurface.Sample(x, z, out Vector3 point, out _)
+                ? point.y : ProceduralWorld.HeightAt(x, z);
         }
 
         private static Mesh BuildLiftChain(RideSpline spline)
@@ -535,13 +661,26 @@ namespace ValeMesozoico
                 enableInstancing = true,
                 doubleSidedGI = true
             };
-            Color oilyWear = new(0.13f, 0.052f, 0.018f, 1f);
+            Texture2D wear = Resources.Load<Texture2D>("Textures/Realistic/Track/TrackWheelWear_Albedo");
+            Color oilyWear = new(0.58f, 0.56f, 0.51f, wear != null ? 0.76f : 0f);
             if (material.HasProperty("_BaseColor")) material.SetColor("_BaseColor", oilyWear);
             if (material.HasProperty("_Color")) material.SetColor("_Color", oilyWear);
-            if (material.HasProperty("_Metallic")) material.SetFloat("_Metallic", 0.48f);
-            if (material.HasProperty("_Smoothness")) material.SetFloat("_Smoothness", 0.29f);
-            if (material.HasProperty("_Cull")) material.SetFloat("_Cull", 0f);
-            Vector2 streakScale = new(2.7f, 0.72f);
+            if (material.HasProperty("_BaseMap")) material.SetTexture("_BaseMap", wear);
+            if (material.HasProperty("_MainTex")) material.SetTexture("_MainTex", wear);
+            if (material.HasProperty("_Metallic")) material.SetFloat("_Metallic", 0.52f);
+            if (material.HasProperty("_Smoothness")) material.SetFloat("_Smoothness", 0.32f);
+            if (material.HasProperty("_BumpScale")) material.SetFloat("_BumpScale", 0.12f);
+            if (material.HasProperty("_Cull")) material.SetFloat("_Cull", 2f);
+            material.SetFloat("_Surface", 1f);
+            material.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+            material.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+            material.SetFloat("_ZWrite", 0f);
+            material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            material.SetOverrideTag("RenderType", "Transparent");
+            material.renderQueue = (int)RenderQueue.Transparent;
+            material.SetShaderPassEnabled("ShadowCaster", false);
+            material.SetShaderPassEnabled("DepthOnly", false);
+            Vector2 streakScale = Vector2.one;
             if (material.HasProperty("_BaseMap")) material.SetTextureScale("_BaseMap", streakScale);
             if (material.HasProperty("_MainTex")) material.SetTextureScale("_MainTex", streakScale);
             if (material.HasProperty("_BumpMap")) material.SetTextureScale("_BumpMap", streakScale);
@@ -558,9 +697,11 @@ namespace ValeMesozoico
             List<Vector3> vertices,
             List<Vector2> uvs,
             List<int> triangles,
-            bool leaveBreakawayGap = false)
+            bool leaveBreakawayGap = false,
+            List<Vector3> normals = null)
         {
             int vertexOffset = vertices.Count;
+            int rowWidth = ringSegments + 1;
             for (int path = 0; path <= pathSegments; path++)
             {
                 float distance = spline.Length * path / pathSegments;
@@ -568,10 +709,13 @@ namespace ValeMesozoico
                 Vector3 right = pose.Rotation * Vector3.right;
                 Vector3 up = pose.Rotation * Vector3.up;
                 Vector3 center = pose.Position + right * lateralOffset + up * verticalOffset;
-                for (int ring = 0; ring < ringSegments; ring++)
+                for (int ring = 0; ring <= ringSegments; ring++)
                 {
-                    float angle = ring * Mathf.PI * 2f / ringSegments;
-                    vertices.Add(center + (right * Mathf.Cos(angle) + up * Mathf.Sin(angle)) * radius);
+                    // Duplicate the UV seam, with matching radial normals on both sides.
+                    float angle = (ring % ringSegments) * Mathf.PI * 2f / ringSegments;
+                    Vector3 radial = right * Mathf.Cos(angle) + up * Mathf.Sin(angle);
+                    vertices.Add(center + radial * radius);
+                    normals?.Add(radial);
                     uvs.Add(new Vector2(ring / (float)ringSegments, distance * 0.34f));
                 }
             }
@@ -588,13 +732,12 @@ namespace ValeMesozoico
 
                 for (int ring = 0; ring < ringSegments; ring++)
                 {
-                    int nextRing = (ring + 1) % ringSegments;
-                    int a = vertexOffset + path * ringSegments + ring;
-                    int b = vertexOffset + path * ringSegments + nextRing;
-                    int c = vertexOffset + (path + 1) * ringSegments + ring;
-                    int d = vertexOffset + (path + 1) * ringSegments + nextRing;
-                    triangles.Add(a); triangles.Add(c); triangles.Add(b);
-                    triangles.Add(b); triangles.Add(c); triangles.Add(d);
+                    int a = vertexOffset + path * rowWidth + ring;
+                    int b = a + 1;
+                    int c = a + rowWidth;
+                    int d = c + 1;
+                    triangles.Add(a); triangles.Add(b); triangles.Add(c);
+                    triangles.Add(b); triangles.Add(d); triangles.Add(c);
                 }
             }
         }
@@ -606,7 +749,8 @@ namespace ValeMesozoico
             Vector3 start,
             Vector3 end,
             float radius,
-            int ringSegments)
+            int ringSegments,
+            bool capEnds = false)
         {
             Vector3 axis = end - start;
             float length = axis.magnitude;
@@ -643,19 +787,44 @@ namespace ValeMesozoico
                 triangles.Add(a); triangles.Add(c); triangles.Add(b);
                 triangles.Add(b); triangles.Add(c); triangles.Add(d);
             }
+
+            if (!capEnds) return;
+            for (int endIndex = 0; endIndex < 2; endIndex++)
+            {
+                int capCenter = vertices.Count;
+                vertices.Add(endIndex == 0 ? start : end);
+                uvs.Add(new Vector2(0.5f, 0.5f));
+                // Separate cap vertices keep the foot's top flat instead of rounding its rim normals.
+                for (int ring = 0; ring < ringSegments; ring++)
+                {
+                    vertices.Add(vertices[vertexOffset + endIndex * ringSegments + ring]);
+                    float angle = ring * Mathf.PI * 2f / ringSegments;
+                    uvs.Add(new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * 0.5f + Vector2.one * 0.5f);
+                }
+                for (int ring = 0; ring < ringSegments; ring++)
+                {
+                    int a = capCenter + 1 + ring;
+                    int b = capCenter + 1 + (ring + 1) % ringSegments;
+                    triangles.Add(capCenter);
+                    triangles.Add(endIndex == 0 ? a : b);
+                    triangles.Add(endIndex == 0 ? b : a);
+                }
+            }
         }
 
         private static Mesh CreateTexturedMesh(
             string name,
             List<Vector3> vertices,
             List<Vector2> uvs,
-            List<int> triangles)
+            List<int> triangles,
+            List<Vector3> normals = null)
         {
             Mesh mesh = NewMesh(name, vertices.Count);
             mesh.SetVertices(vertices);
             mesh.SetUVs(0, uvs);
             mesh.SetTriangles(triangles, 0);
-            mesh.RecalculateNormals();
+            if (normals != null) mesh.SetNormals(normals);
+            else mesh.RecalculateNormals();
             mesh.RecalculateTangents();
             mesh.RecalculateBounds();
             return mesh;

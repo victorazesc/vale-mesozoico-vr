@@ -151,6 +151,7 @@ namespace ValeMesozoico
 
             environment = new GameObject("Blender Environment");
             environment.transform.SetParent(parent, false);
+            EnvironmentPlacementCorrections corrections = EnvironmentPlacementCorrections.LoadForAttachment();
             int missingTemplates = 0;
             foreach (EnvironmentInstance placement in manifest.instances)
             {
@@ -182,6 +183,7 @@ namespace ValeMesozoico
                 geometry.AddComponent<MeshFilter>().sharedMesh = template.Mesh;
                 geometry.AddComponent<MeshRenderer>().sharedMaterials = template.Materials;
 
+                corrections.Apply(instance);
                 if (IsWindReactive(instance.name))
                 {
                     TropicalWindSway sway = instance.AddComponent<TropicalWindSway>();
@@ -190,6 +192,7 @@ namespace ValeMesozoico
                 }
             }
 
+            corrections.Report();
             if (missingTemplates > 0 || environment.transform.childCount != manifest.objectCount)
             {
                 Debug.LogError(
@@ -248,17 +251,45 @@ namespace ValeMesozoico
                     name = definition.name,
                     enableInstancing = true
                 };
-                SetColor(material, "_BaseColor", definition.baseColor);
-                SetColor(material, "_Color", definition.baseColor);
+                // Match the established mountain greens without grading the whole
+                // scene. Fern02 is shared with its approved groundcover and keeps
+                // its source palette; each other species retains a distinct tint.
+                (Color tint, float smoothness) = definition.name switch
+                {
+                    "M_Terrain_Jungle_PBR" => (new Color(0.82f, 0.87f, 0.81f), definition.smoothness),
+                    "PC_PolyHaven_PachiraLeaves_CC0" => (new Color(0.72f, 0.94f, 0.75f), 0.22f),
+                    "PC_PolyHaven_Shrub02_CC0" => (new Color(0.76f, 0.96f, 0.74f), 0.18f),
+                    "PC_PolyHaven_Calathea_CC0" => (new Color(0.83f, 0.97f, 0.82f), 0.28f),
+                    "PC_PolyHaven_Anthurium_CC0" => (new Color(0.80f, 0.96f, 0.77f), 0.30f),
+                    "PC_Jurassic_Meadow_Grass_PBR" => (new Color(0.24f, 0.37f, 0.19f), 0.10f),
+                    // Palm leaves and bark share an atlas: only soften highlights.
+                    "PC_CoconutPalm_LOD0" => (definition.baseColor, 0.18f),
+                    "PC_Boulder_LOD0" => (new Color(0.84f, 0.90f, 0.96f), 0.18f),
+                    "PC_Mountainside_LOD0" => (new Color(0.90f, 0.94f, 0.98f), 0.18f),
+                    "PC_PolyHaven_RockMossSet01_CC0" => (new Color(0.90f, 0.94f, 0.98f), 0.18f),
+                    _ => (definition.baseColor, definition.smoothness)
+                };
+                tint.a = definition.baseColor.a;
+                SetColor(material, "_BaseColor", tint);
+                SetColor(material, "_Color", tint);
                 SetFloat(material, "_Metallic", Mathf.Clamp01(definition.metallic));
-                SetFloat(material, "_Smoothness", Mathf.Clamp01(definition.smoothness));
+                SetFloat(material, "_Smoothness", Mathf.Clamp01(smoothness));
                 SetFloat(material, "_TileScale", 1f / 14f);
                 if (definition.name == "M_Terrain_Jungle_PBR")
                 {
                     SetFloat(material, "_Cull", (float)CullMode.Off);
+                    SetFloat(material, "_TileScale", 1f / 7f);
+                    SetFloat(material, "_BumpScale", 0.32f);
                 }
 
                 Texture2D baseTexture = LoadTexture(definition.baseTexture);
+                if (definition.name == "M_Terrain_Jungle_PBR")
+                {
+                    // Soil, fallen litter and sparse moss sit beneath the living
+                    // plants; the lush texture printed whole plants onto the floor.
+                    baseTexture = Resources.Load<Texture2D>("Textures/Realistic/JungleGround_Albedo")
+                        ?? baseTexture;
+                }
                 Texture2D normalTexture = LoadTexture(definition.normalTexture);
                 Texture2D occlusionTexture = LoadTexture(definition.occlusionTexture);
                 Texture2D maskTexture = LoadTexture(definition.maskTexture);
@@ -279,6 +310,7 @@ namespace ValeMesozoico
                 {
                     material.EnableKeyword("_METALLICSPECGLOSSMAP");
                 }
+                ConfigureRockSurface(material, definition.name);
 
                 if (definition.transparent)
                 {
@@ -309,6 +341,86 @@ namespace ValeMesozoico
             }
 
             return materials;
+        }
+
+        private static void ConfigureRockSurface(Material material, string materialName)
+        {
+            bool boulder = materialName == "PC_Boulder_LOD0";
+            bool mountainside = materialName == "PC_Mountainside_LOD0";
+            if (!boulder && !mountainside && materialName != "PC_PolyHaven_RockMossSet01_CC0")
+            {
+                return;
+            }
+            if (!mountainside && ConfigureRockDetail(material, boulder ? 0.55f : 0.82f)) return;
+            SetFloat(material, "_BumpScale", 0.82f);
+            Texture2D detailNormal = Resources.Load<Texture2D>(
+                "Textures/Realistic/Rocks/RockBasaltMoss_Normal");
+            if (detailNormal != null && material.HasProperty("_DetailNormalMap")
+                && material.HasProperty("_DetailAlbedoMap"))
+            {
+                // URP shares the detail-albedo UV transform with its normal map.
+                // Scale zero with _DETAIL_SCALED keeps the original albedo intact.
+                SetTexture(material, "_DetailNormalMap", detailNormal);
+                SetFloat(material, "_DetailNormalMapScale", mountainside ? 0.08f : boulder ? 0.07f : 0.06f);
+                SetFloat(material, "_DetailAlbedoMapScale", 0f);
+                float detailTiling = mountainside ? 12f : 10f;
+                material.SetTextureScale("_DetailAlbedoMap", Vector2.one * detailTiling);
+                material.DisableKeyword("_DETAIL_MULX2");
+                material.EnableKeyword("_DETAIL_SCALED");
+            }
+            if (!boulder && !mountainside)
+            {
+                return;
+            }
+
+            // The imported rocks retain the hero assets' UVs and albedos. Restore
+            // their existing PBR maps instead of applying uniform gloss everywhere.
+            string family = boulder ? "Boulder01" : "Mountainside";
+            string resource = $"Models/EnvironmentHero/{family}/{family}";
+            Texture2D specGloss = Resources.Load<Texture2D>(resource + "_SpecGloss");
+            Texture2D occlusion = Resources.Load<Texture2D>(resource + "_Occlusion");
+            if (specGloss != null)
+            {
+                SetTexture(material, "_SpecGlossMap", specGloss);
+                SetFloat(material, "_WorkflowMode", 0f);
+                material.EnableKeyword("_SPECULAR_SETUP");
+                material.EnableKeyword("_METALLICSPECGLOSSMAP");
+                material.EnableKeyword("_SPECGLOSSMAP");
+            }
+            if (occlusion != null)
+            {
+                SetTexture(material, "_OcclusionMap", occlusion);
+                SetFloat(material, "_OcclusionStrength", 0.78f);
+                material.EnableKeyword("_OCCLUSIONMAP");
+            }
+        }
+
+        private static bool ConfigureRockDetail(Material material, float surfaceDetail)
+        {
+            Shader shader = Resources.Load<Shader>("Shaders/MountainRock");
+            Texture atlas = material.GetTexture("_BaseMap");
+            Color tint = material.GetColor("_BaseColor");
+            Texture2D detail = Resources.Load<Texture2D>("Textures/Realistic/Rocks/RockBasaltMoss_Albedo");
+            Texture2D normal = Resources.Load<Texture2D>("Textures/Realistic/Rocks/RockBasaltMoss_Normal");
+            if (shader == null || atlas == null || detail == null || normal == null) return false;
+
+            // Share the mountain's mineral palette and world-space fractures;
+            // retain a little of each scanned rock's original color variation.
+            material.shader = shader;
+            material.shaderKeywords = Array.Empty<string>();
+            material.EnableKeyword("_ROCK_ATLAS_DETAIL");
+            material.SetTexture("_RockAtlasMap", atlas);
+            material.SetTexture("_BaseMap", detail);
+            material.SetTexture("_BumpMap", normal);
+            material.SetColor("_BaseColor", tint);
+            material.SetColor("_StoneColor", new Color(0.53f, 0.50f, 0.44f));
+            material.SetFloat("_WorldScale", 0.25f);
+            material.SetFloat("_RockDetailStrength", surfaceDetail);
+            material.SetFloat("_RockAtlasDesaturation", 0.22f);
+            material.SetFloat("_BumpScale", 0.22f);
+            material.SetFloat("_Smoothness", 0.12f);
+            material.enableInstancing = true;
+            return true;
         }
 
         private static Texture2D LoadTexture(string textureName)
@@ -389,14 +501,45 @@ namespace ValeMesozoico
 
             if (renderer.sharedMaterial != null)
             {
-                Material animatedWater = new(renderer.sharedMaterial)
+                Shader waterShader = Shader.Find("Vale Mesozoico/Lagoon Water");
+                if (waterShader == null)
                 {
-                    name = $"{renderer.sharedMaterial.name} Runtime",
-                    enableInstancing = true
-                };
-                renderer.sharedMaterial = animatedWater;
-                WaterSurfaceAnimator animator = renderer.gameObject.AddComponent<WaterSurfaceAnimator>();
-                animator.Initialize(animatedWater, false);
+                    Debug.LogWarning("[Lagoon Water] Shader de água indisponível; material original preservado.");
+                }
+                else
+                {
+                    Material animatedWater = new(waterShader)
+                    {
+                        name = "M_Lagoon_Water Runtime",
+                        enableInstancing = true
+                    };
+                    animatedWater.SetTexture("_BumpMap", OptimizedModelWorld.CreateWaterNormalTexture());
+                    bool rebuilt = LagoonWaterSurface.Rebuild(renderer);
+                    if (!rebuilt) animatedWater.SetFloat("_WaveAmplitude", 0f);
+                    renderer.sharedMaterial = animatedWater;
+                    Transform terrain = FindDescendant(environment.transform, "Terrain_Editable_129x129");
+                    MeshRenderer terrainRenderer = terrain != null
+                        ? terrain.GetComponentInChildren<MeshRenderer>(true) : null;
+                    if (terrainRenderer != null && terrainRenderer.sharedMaterial != null
+                        && terrainRenderer.sharedMaterial.HasProperty("_LagoonLevel"))
+                    {
+                        Bounds waterBounds = renderer.bounds;
+                        terrainRenderer.sharedMaterial.SetFloat("_LagoonLevel", waterBounds.center.y);
+                        terrainRenderer.sharedMaterial.SetVector("_LagoonBounds", new Vector4(
+                            waterBounds.min.x, waterBounds.min.z, waterBounds.max.x, waterBounds.max.z));
+                    }
+                    // Depth fade follows the actual basin. These legacy overlays
+                    // floated above it and obscured the bottom near the shore.
+                    foreach (string name in new[] { "PC_Lagoon_Shallows", "PC_REFINE_Shoreline_Gradient" })
+                    {
+                        Transform overlay = FindDescendant(environment.transform, name);
+                        if (overlay == null) continue;
+                        foreach (Renderer overlayRenderer in overlay.GetComponentsInChildren<Renderer>(true))
+                            overlayRenderer.enabled = false;
+                    }
+                    Debug.Log($"[Lagoon Water] PASS shader={waterShader.name}, depthTransparency=true, "
+                        + $"animatedNormals=2, waveMesh={rebuilt}, oldShoreOverlays=disabled");
+                }
             }
 
             Bounds bounds = renderer.bounds;

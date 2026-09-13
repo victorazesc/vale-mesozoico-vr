@@ -19,6 +19,21 @@ namespace ValeMesozoico
         internal bool IsPaused => _paused;
         internal float PlaybackRate => PlaybackRates[_playbackRateIndex];
 
+        private static float UiScale => Mathf.Clamp(Screen.width / 1200f, 0.78f, 1.25f);
+
+        private static Rect GetPanelRect(float uiScale)
+        {
+            float virtualWidth = Screen.width / uiScale;
+            float virtualHeight = Screen.height / uiScale;
+            float panelWidth = Mathf.Min(820f, virtualWidth - 32f);
+            return new Rect((virtualWidth - panelWidth) * 0.5f, virtualHeight - 112f, panelWidth, 92f);
+        }
+
+        internal static bool ContainsScreenPoint(Vector2 point)
+        {
+            return DeveloperUiAllowed && GetPanelRect(UiScale).Contains(point / UiScale);
+        }
+
         internal void Initialize(RideController controller)
         {
             _controller = controller;
@@ -41,13 +56,10 @@ namespace ValeMesozoico
             EnsureStyles();
             Matrix4x4 previousMatrix = GUI.matrix;
             Color previousColor = GUI.color;
-            float uiScale = Mathf.Clamp(Screen.width / 1200f, 0.78f, 1.25f);
+            float uiScale = UiScale;
             GUI.matrix = Matrix4x4.Scale(new Vector3(uiScale, uiScale, 1f));
 
-            float virtualWidth = Screen.width / uiScale;
-            float virtualHeight = Screen.height / uiScale;
-            float panelWidth = Mathf.Min(820f, virtualWidth - 32f);
-            Rect panel = new((virtualWidth - panelWidth) * 0.5f, virtualHeight - 112f, panelWidth, 92f);
+            Rect panel = GetPanelRect(uiScale);
 
             GUI.color = new Color(0.025f, 0.035f, 0.035f, 0.92f);
             GUI.Box(panel, GUIContent.none);
@@ -94,6 +106,13 @@ namespace ValeMesozoico
             if (GUI.Button(new Rect(panel.x + 204f, buttonY, 78f, 25f), "+ 5%", _buttonStyle))
             {
                 _controller.DeveloperSeekToProgress(_controller.RideProgress + 0.05f);
+            }
+
+            if (panel.width >= 760f && !UnityEngine.XR.XRSettings.isDeviceActive
+                && !UnityEngine.XR.InputDevices.GetDeviceAtXRNode(UnityEngine.XR.XRNode.Head).isValid)
+            {
+                GUI.Label(new Rect(panel.x + 296f, buttonY, panel.width - 448f, 25f),
+                    "Arraste: olhar  |  R: centralizar", _labelStyle);
             }
 
             if (GUI.Button(

@@ -32,7 +32,7 @@ namespace ValeMesozoico
             PlayPreferred(
                 actor,
                 resourcePath,
-                isFlying ? "fly" : isChaser ? "run" : "idle",
+                isFlying ? "fly" : isChaser ? "run" : actor.name.StartsWith("Triceratops") ? "idle" : "idle",
                 isFlying ? 0.9f : isChaser ? 1.08f : 0.9f);
         }
 
@@ -87,7 +87,9 @@ namespace ValeMesozoico
             state.wrapMode = WrapMode.Loop;
             float variation = Mathf.Abs(actor.name.GetHashCode() % 15) * 0.01f;
             state.speed = Mathf.Max(0.2f, speed + variation);
-            animation.cullingType = AnimationCullingType.BasedOnRenderers;
+            bool groundTriceratops = actor.name.StartsWith("Triceratops", StringComparison.OrdinalIgnoreCase);
+            animation.cullingType = groundTriceratops
+                ? AnimationCullingType.AlwaysAnimate : AnimationCullingType.BasedOnRenderers;
             if (!animation.Play(selected.name))
             {
                 Debug.LogWarning($"Falha ao iniciar animação idle: {actor.name}");
@@ -98,7 +100,7 @@ namespace ValeMesozoico
             {
                 skinned.enabled = true;
                 skinned.updateWhenOffscreen = false;
-                skinned.quality = SkinQuality.Bone2;
+                skinned.quality = groundTriceratops ? SkinQuality.Bone4 : SkinQuality.Bone2;
             }
 
             RemoveStaticFallbacks(actor);
@@ -152,9 +154,9 @@ namespace ValeMesozoico
                 return "Models/Dinosaurs/Pteranodon/Pteranodon";
             }
 
-            if (actorName.StartsWith("Apatosaurus", StringComparison.OrdinalIgnoreCase))
+            if (actorName.StartsWith("Brachiosaurus", StringComparison.OrdinalIgnoreCase))
             {
-                return "Models/Dinosaurs/Apatosaurus";
+                return "Models/Dinosaurs/Brachiosaurus/Brachiosaurus";
             }
 
             if (actorName.StartsWith("Triceratops", StringComparison.OrdinalIgnoreCase))

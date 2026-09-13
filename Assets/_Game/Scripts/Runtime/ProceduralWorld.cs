@@ -179,6 +179,7 @@ namespace ValeMesozoico
             lightObject.transform.rotation = Quaternion.Euler(42f, -28f, 0f);
             Light sun = lightObject.AddComponent<Light>();
             sun.type = LightType.Directional;
+            sun.lightmapBakeType = LightmapBakeType.Mixed;
             sun.color = new Color(1f, 0.91f, 0.76f);
             sun.intensity = 1.28f;
             sun.shadows = LightShadows.Hard;
@@ -199,6 +200,8 @@ namespace ValeMesozoico
             Texture2D trackAlbedo = Resources.Load<Texture2D>("Textures/Realistic/Track/TrackPaintedSteel_Albedo");
             Texture2D trackNormal = Resources.Load<Texture2D>("Textures/Realistic/Track/TrackPaintedSteel_Normal");
             Texture2D trackSpecGloss = Resources.Load<Texture2D>("Textures/Realistic/Track/TrackPaintedSteel_SpecGloss");
+            Texture2D rustAlbedo = Resources.Load<Texture2D>("Textures/Realistic/Track/TrackRustedSteel_Albedo") ?? trackAlbedo;
+            Texture2D rustNormal = Resources.Load<Texture2D>("Textures/Realistic/Track/TrackRustedSteel_Normal") ?? trackNormal;
             WorldMaterials materials = new WorldMaterials
             {
                 Ground = CreateLit("Ground", new Color(0.82f, 0.94f, 0.78f), 0f, 0.12f, groundTexture, groundNormal, 0.72f),
@@ -206,8 +209,8 @@ namespace ValeMesozoico
                 Rock = CreateLit("Mossy Basalt", new Color(0.78f, 0.82f, 0.76f), 0f, 0.24f, rockTexture, rockNormal, 1.05f),
                 Trunk = CreateLit("Tree Trunks", new Color(0.24f, 0.13f, 0.065f), 0f, 0.11f),
                 Foliage = CreateLit("Foliage", new Color(0.12f, 0.34f, 0.12f), 0f, 0.08f),
-                Rail = CreateLit("Oxide Red Running Rails", new Color(0.72f, 0.13f, 0.045f), 0.48f, 0.52f, trackAlbedo, trackNormal, 0.28f),
-                Sleeper = CreateLit("Burnt Orange Steel Spine", new Color(0.84f, 0.28f, 0.045f), 0.18f, 0.42f, trackAlbedo, trackNormal, 0.34f),
+                Rail = CreateLit("Weathered Rust Running Rails", new Color(0.96f, 0.93f, 0.90f), 0.08f, 0.24f, rustAlbedo, rustNormal, 0.50f),
+                Sleeper = CreateLit("Rusted Steel Spine", new Color(0.82f, 0.77f, 0.71f), 0.04f, 0.16f, rustAlbedo, rustNormal, 0.65f),
                 Support = CreateLit("Forest Green Tubular Supports", new Color(0.075f, 0.24f, 0.13f), 0.16f, 0.34f, trackAlbedo, trackNormal, 0.30f),
                 Cart = CreateLit("Cart", new Color(0.28f, 0.055f, 0.035f), 0.46f, 0.43f),
                 CartDark = CreateLit("Cart Dark", new Color(0.035f, 0.04f, 0.035f), 0.4f, 0.32f)
@@ -218,15 +221,16 @@ namespace ValeMesozoico
             {
                 materials.Rock.SetTextureScale("_BumpMap", new Vector2(2.4f, 2.4f));
             }
-            ConfigureTrackMaterial(materials.Rail, null);
-            ConfigureTrackMaterial(materials.Sleeper, trackSpecGloss);
+            // Match the rust grain to the tube circumference instead of stretching it along the route.
+            ConfigureTrackMaterial(materials.Rail, null, 6.5f);
+            ConfigureTrackMaterial(materials.Sleeper, null, 3.5f);
             ConfigureTrackMaterial(materials.Support, trackSpecGloss);
             return materials;
         }
 
-        private static void ConfigureTrackMaterial(Material material, Texture2D specGloss)
+        private static void ConfigureTrackMaterial(Material material, Texture2D specGloss, float longitudinalScale = 1f)
         {
-            Vector2 scale = new(1.15f, 1f);
+            Vector2 scale = new(1f, longitudinalScale);
             material.mainTextureScale = scale;
             if (material.HasProperty("_BaseMap"))
             {
