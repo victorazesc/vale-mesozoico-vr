@@ -1,0 +1,2 @@
+[Track QA] PASS | meshes=7, materials=5, totalTriangles=59724, completeMeshes=True, wheelContactTriangles=4512, wheelContactPass=True, liftChainTriangles=19596, liftChainMeshPass=True, materialsPass=True, audioSources=4, audioPass=True, transitionPass=True, budgetPass=True, railSeamsPass=True, supportContactsPass=True, groundedSupports=42, maxFootGap=0.0000m, maxTopRadius=0.2194m
+[Vale Preview] Captura concluída: 8 PNGs em /Users/victorazevedo/projetos/vale-mesozoico-vr/Builds/Previews/Track

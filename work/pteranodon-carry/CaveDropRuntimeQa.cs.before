@@ -1,0 +1,240 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.IO;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
+namespace ValeMesozoico
+{
+    internal sealed class CaveDropRuntimeQa : MonoBehaviour
+    {
+        private const string RequestedKey = "ValeMesozoico.CaveDropQA";
+        private static string Output => Path.GetFullPath("Builds/Previews/CaveDrop");
+
+        [MenuItem("Vale Mesozoico/Preview/Cave Drop Encounter")]
+        private static void RunPreview()
+        {
+            if (EditorApplication.isPlaying)
+            {
+                if (FindFirstObjectByType<CaveDropRuntimeQa>() == null)
+                    new GameObject("Cave Drop QA").AddComponent<CaveDropRuntimeQa>();
+                return;
+            }
+            SessionState.SetBool(RequestedKey, true);
+            EditorApplication.isPlaying = true;
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Begin()
+        {
+            if (!SessionState.GetBool(RequestedKey, false)) return;
+            SessionState.SetBool(RequestedKey, false);
+            new GameObject("Cave Drop QA").AddComponent<CaveDropRuntimeQa>();
+        }
+
+        private IEnumerator Start()
+        {
+            Directory.CreateDirectory(Output);
+            File.WriteAllText(Path.Combine(Output, "qa.txt"), "Cave drop: RUNNING\n");
+            bool pass = false;
+            float previousTimeScale = Time.timeScale;
+            Time.timeScale = 1f;
+            try
+            {
+                yield return new WaitForSecondsRealtime(0.8f);
+                TrackRuntimeQa trackQa = FindFirstObjectByType<TrackRuntimeQa>();
+                while (trackQa != null && !trackQa.InitialValidationComplete) yield return null;
+                RideController controller = FindFirstObjectByType<RideController>();
+                PteranodonDropSequence sequence = FindFirstObjectByType<PteranodonDropSequence>();
+                Require(controller != null && sequence != null && sequence.Ready, "controller / animated bird");
+                Require(EnvironmentRuntimeQa.ValidateMountainCaveForPreview(out string geometry), geometry);
+                Require(EnvironmentRuntimeQa.ValidateCaveFoliageForPreview(out string foliage), foliage);
+                controller.DeveloperSeekToProgress(RideMotionProfile.CrestStart - 0.028f);
+                controller.SetDeveloperPlaybackRate(1f);
+
+                float deadline = Time.realtimeSinceStartup + 90f;
+                while (!sequence.IsHolding && Time.realtimeSinceStartup < deadline) yield return null;
+                Require(sequence.IsHolding, "cart reaches crest hold");
+                Vector3 heldPosition = controller.transform.position;
+                Require(heldPosition.y > 65f && controller.RideSpeed < 0.001f, "high crest / stopped cart");
+                Capture("01-pico-e-drop", heldPosition + new Vector3(54f, 8f, 44f),
+                    Vector3.Lerp(heldPosition, new Vector3(39f, 15f, 62f), 0.45f));
+                bool firstLapShot = false, screamShot = false, strikeShot = false, pauseChecked = false;
+                float maximumHoldDrift = 0f;
+                while (!sequence.Released && Time.realtimeSinceStartup < deadline)
+                {
+                    maximumHoldDrift = Mathf.Max(maximumHoldDrift, Vector3.Distance(heldPosition, controller.transform.position));
+                    Require(controller.RideSpeed < 0.001f && maximumHoldDrift < 0.001f, "hold until impact");
+                    if (sequence.CurrentPhase == PteranodonDropSequence.Phase.Circling && !pauseChecked)
+                    {
+                        Require(controller.LiftChainVolume < 0.01f && controller.WheelRailVolume < 0.01f,
+                            "stationary chain and wheel audio fade out");
+                        float phaseTime = sequence.PhaseTime;
+                        Vector3 birdPosition = sequence.Actor.transform.position;
+                        Time.timeScale = 0f;
+                        yield return new WaitForSecondsRealtime(0.3f);
+                        Require(Mathf.Abs(sequence.PhaseTime - phaseTime) < 0.001f
+                            && Vector3.Distance(birdPosition, sequence.Actor.transform.position) < 0.001f,
+                            "pause freezes encounter");
+                        Time.timeScale = 1f;
+                        pauseChecked = true;
+                    }
+                    if (sequence.CurrentPhase == PteranodonDropSequence.Phase.Circling
+                        && sequence.PhaseTime > 0.45f && !firstLapShot)
+                    {
+                        Require(sequence.Actor.GetComponentInChildren<Animation>().isPlaying, "animated flight");
+                        Capture("02-primeira-volta");
+                        firstLapShot = true;
+                    }
+                    if (sequence.CurrentPhase == PteranodonDropSequence.Phase.Screeching && !screamShot)
+                    {
+                        Require(sequence.CompletedLaps == 2 && sequence.Screeched, "two full laps before screech");
+                        Capture("03-segunda-volta-e-grito");
+                        screamShot = true;
+                    }
+                    if (sequence.CurrentPhase == PteranodonDropSequence.Phase.Striking
+                        && sequence.PhaseTime > 0.74f && !strikeShot)
+                    {
+                        Capture("04-ataque");
+                        Capture("05-contato-lateral", heldPosition + new Vector3(11f, 5f, 11f),
+                            heldPosition + Vector3.up * 1.5f);
+                        strikeShot = true;
+                    }
+                    yield return null;
+                }
+                Require(sequence.Released && sequence.CompletedLaps == 2 && sequence.Screeched,
+                    "impact releases only after two laps and screech");
+                Require(sequence.ImpactContactGap < 0.025f, "wing touches cart panel at impact");
+                float contactGap = MeasureActualContact(sequence, out float headClearance);
+                Require(sequence.PanelContactMeasured && contactGap < 0.15f && headClearance > 0.4f,
+                    $"rendered wing contact={contactGap:F3}m, headClearance={headClearance:F3}m");
+                File.AppendAllText(Path.Combine(Output, "qa.txt"),
+                    $"Contact: wing={contactGap:F3}m, head={headClearance:F2}m, two laps and screech=PASS\n");
+                // Let skinning publish the exact impact pose before rendering a
+                // second camera; keep simulation stopped across those frames.
+                Time.timeScale = 0f;
+                yield return null;
+                yield return null;
+                Capture("05-contato-lateral", heldPosition + new Vector3(11f, 5f, 11f),
+                    heldPosition + Vector3.up * 1.5f);
+                foreach (SkinnedMeshRenderer skin in sequence.Actor.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    Debug.Log($"[Cave Drop Capture] actor={sequence.Actor.transform.position}, skin={skin.name}, "
+                        + $"enabled={skin.enabled}, bounds={skin.bounds}, panel={sequence.PanelContact}");
+                Time.timeScale = 1f;
+                float maximumSpeed = 0f, caveEntrySpeed = 0f;
+                bool dropShot = false, caveShot = false;
+                deadline = Time.realtimeSinceStartup + 120f;
+                while (controller.RideProgress < RideMotionProfile.DropRecoveryEnd && Time.realtimeSinceStartup < deadline)
+                {
+                    maximumSpeed = Mathf.Max(maximumSpeed, controller.RideSpeed);
+                    if (!dropShot && controller.RideProgress >= Mathf.Lerp(RideMotionProfile.CrestStart, MountainTrackCave.StartProgress, 0.6f))
+                    {
+                        Capture("06-mergulho-na-montanha");
+                        dropShot = true;
+                    }
+                    if (!caveShot && controller.RideProgress >= MountainTrackCave.StartProgress)
+                    {
+                        caveEntrySpeed = controller.RideSpeed;
+                        Capture("07-interior-em-velocidade");
+                        caveShot = true;
+                    }
+                    yield return null;
+                }
+                Require(maximumSpeed >= 23f && caveEntrySpeed >= 20f && caveShot, "fast drop into open cave");
+                Require(controller.RideProgress >= RideMotionProfile.DropRecoveryEnd && controller.RideSpeed < 13f,
+                    $"progressive recovery: progress={controller.RideProgress:F4}, speed={controller.RideSpeed:F2}m/s");
+
+                controller.DeveloperSeekToProgress(RideMotionProfile.DropRecoveryEnd + 0.004f);
+                yield return null;
+                Require(sequence.Released && !sequence.IsHolding && !sequence.Actor.activeSelf, "forward seek skips attack");
+                controller.DeveloperSeekToProgress(RideMotionProfile.CrestStart - 0.008f);
+                Require(!sequence.Released && sequence.CompletedLaps == 0 && !sequence.Screeched, "backward seek resets attack");
+                deadline = Time.realtimeSinceStartup + 90f;
+                while (!sequence.Released && Time.realtimeSinceStartup < deadline) yield return null;
+                Require(sequence.Released && sequence.CompletedLaps == 2 && sequence.Screeched, "second playback releases once");
+
+                string report = $"PASS | crest={heldPosition.y:F2}m, laps=2, holdDrift={maximumHoldDrift:F4}m, "
+                    + $"peakSpeed={maximumSpeed * 3.6f:F1}km/h, caveEntry={caveEntrySpeed * 3.6f:F1}km/h, "
+                    + $"wingContact={contactGap:F3}m, headClearance={headClearance:F2}m, "
+                    + $"pause=PASS, forwardSeek=PASS, replay=PASS\nGeometry: {geometry}\n";
+                File.WriteAllText(Path.Combine(Output, "qa.txt"), report);
+                Debug.Log("[Cave Drop QA] " + report);
+                pass = true;
+            }
+            finally
+            {
+                Time.timeScale = previousTimeScale;
+                if (!pass) File.AppendAllText(Path.Combine(Output, "qa.txt"), "FAIL / interrupted; inspect Unity Console.\n");
+                EditorApplication.isPlaying = false;
+            }
+        }
+
+        private static void Require(bool condition, string detail)
+        {
+            if (!condition) throw new InvalidOperationException("[Cave Drop QA] FAIL | " + detail);
+        }
+
+        private static float MeasureActualContact(PteranodonDropSequence sequence, out float headClearance)
+        {
+            float minimum = float.PositiveInfinity;
+            headClearance = float.PositiveInfinity;
+            Vector3 head = Camera.main.transform.position;
+            Mesh posed = new();
+            foreach (SkinnedMeshRenderer skin in sequence.Actor.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                skin.BakeMesh(posed);
+                foreach (Vector3 vertex in posed.vertices)
+                {
+                    Vector3 world = skin.transform.TransformPoint(vertex);
+                    minimum = Mathf.Min(minimum, Vector3.Distance(world, sequence.PanelContact));
+                    headClearance = Mathf.Min(headClearance, Vector3.Distance(world, head));
+                }
+            }
+            DestroyImmediate(posed);
+            return minimum;
+        }
+
+        internal static void Capture(string name, Vector3? position = null, Vector3? target = null, string outputDirectory = null)
+        {
+            Camera source = Camera.main;
+            GameObject temporary = new("Cave Drop Preview Camera");
+            Camera camera = temporary.AddComponent<Camera>();
+            camera.CopyFrom(source);
+            camera.enabled = false;
+            UniversalAdditionalCameraData data = temporary.AddComponent<UniversalAdditionalCameraData>();
+            data.renderPostProcessing = true;
+            camera.transform.SetPositionAndRotation(source.transform.position, source.transform.rotation);
+            if (position.HasValue)
+            {
+                camera.transform.position = position.Value;
+                camera.transform.LookAt(target.Value);
+                camera.fieldOfView = 62f;
+            }
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture texture = RenderTexture.GetTemporary(1920, 1080, 24, RenderTextureFormat.ARGB32);
+            Texture2D image = new(1920, 1080, TextureFormat.RGB24, false);
+            try
+            {
+                camera.targetTexture = texture;
+                camera.Render();
+                RenderTexture.active = texture;
+                image.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
+                image.Apply();
+                string directory = outputDirectory ?? Output;
+                Directory.CreateDirectory(directory);
+                File.WriteAllBytes(Path.Combine(directory, name + ".png"), image.EncodeToPNG());
+            }
+            finally
+            {
+                RenderTexture.active = previous;
+                camera.targetTexture = null;
+                RenderTexture.ReleaseTemporary(texture);
+                DestroyImmediate(image);
+                DestroyImmediate(temporary);
+            }
+        }
+    }
+}
+#endif

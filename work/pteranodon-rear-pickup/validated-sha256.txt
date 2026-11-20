@@ -1,0 +1,2 @@
+cd34458d13e76cacf148b641d14190690acf9d8e91b2ce16672641c0efd89c5e  Assets/_Game/Scripts/Runtime/PteranodonDropSequence.cs
+fc3c5863901446048acc7d164f5693243447c57b4c112090750889affe24bf49  Assets/_Game/Scripts/Runtime/CaveDropRuntimeQa.cs

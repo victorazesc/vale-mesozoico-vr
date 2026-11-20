@@ -1,0 +1,22 @@
+ℹ️  blendkit: Verbose is enabled [17:03:20.310, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [17:03:20.311, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [17:03:20.312, client_lib.py:156]
+Created history step 87229aa2-83f7-49a3-a08e-9ecf45dbbf9e
+ℹ️  blendkit: Created new search history step [17:03:20.316, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:03:20.316, download.py:419]
+00:00.830  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-download/imported.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:03:20.395, download.py:419]
+HEAD <Matrix 4x4 ( 0.0050,  0.0006, 0.0249,  0.0052)
+            (-0.0249, -0.0004, 0.0050, -2.0113)
+            ( 0.0005, -0.0254, 0.0005,  1.7568)
+            ( 0.0000,  0.0000, 0.0000,  1.0000)>
+HEAD_REST <Matrix 4x4 ( 0.0000, -0.0000,  0.0254,  0.0000)
+            (-0.0252, -0.0029,  0.0000, -1.9806)
+            ( 0.0029, -0.0252, -0.0000,  1.6105)
+            ( 0.0000,  0.0000,  0.0000,  1.0000)>
+MESH_BOUNDS [('3jl001', (0.3343179523944855, 0.35661783814430237, 0.9040634632110596), 'OBJECT', ''), ('Object001', (1.0622379704727791e-06, -3.0668256282806396, 0.6919851899147034), 'OBJECT', ''), ('Object002', (1.0160547494888306, -2.978569746017456, -18.855789184570312), 'BONE', 'Bip001 Head'), ('Object003', (0.999602735042572, -2.969000816345215, -18.907312393188477), 'BONE', 'Bip001 Head'), ('Icosphere', (0.0, 0.0, -1.0), 'OBJECT', '')]
+ℹ️  blendkit: Unregistering Blendkit add-on [17:03:20.402, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:03:20.403, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

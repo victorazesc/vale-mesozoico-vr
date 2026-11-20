@@ -1,0 +1,24 @@
+ℹ️  blendkit: Verbose is enabled [17:31:37.776, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [17:31:37.777, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [17:31:37.778, client_lib.py:156]
+Created history step 713de006-87ab-40b8-8e1f-786290271d61
+ℹ️  blendkit: Created new search history step [17:31:37.781, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:31:37.781, download.py:419]
+ℹ️  blendkit: Unregistering Blendkit add-on [17:31:37.788, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:31:37.789, download.py:419]
+17:31:37 | INFO: Data are loaded, start creating Blender stuff
+17:31:37 | INFO: Blender create Mesh node 网格.002
+17:31:37 | INFO: Blender create Mesh node 网格.003
+17:31:37 | INFO: Blender create Mesh node 网格
+17:31:37 | INFO: Blender create Mesh node 网格.001
+17:31:37 | INFO: glTF import finished in 0.13s
+IMPORT_BOUNDS [(-1.1556671857833862, 1.0948143005371094), (-3.748378038406372, 3.5271341800689697), (-0.005588055122643709, 3.2222201824188232)]
+
+FBX export starting... '/Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/_Game/Resources/Models/Dinosaurs/Triceratops.fbx'
+(bpy.data.armatures['Bip001'], 'POSE')
+export finished in 0.4125 sec.
+TRICERATOPS_IMPORT_OK triangles=11153 vertices=7530 bones=58 idle_frames=(0.8000000715255737, 216.80001831054688) walk_frames=(1.0, 61.0)
+Info: Saved as "Triceratops.blend"
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

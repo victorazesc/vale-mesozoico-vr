@@ -1,0 +1,20 @@
+ℹ️  blendkit: Verbose is enabled [11:18:01.585, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [11:18:01.586, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [11:18:01.587, client_lib.py:156]
+Created history step 1f1ea154-162f-4492-adca-40249baf0179
+ℹ️  blendkit: Created new search history step [11:18:01.590, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:18:01.590, download.py:419]
+00:00.647  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/Pteranodon_Realism_Refined.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:18:01.747, download.py:419]
+
+FBX export starting... '/Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/_Game/Resources/Models/Dinosaurs/PteranodonCrest/PteranodonCrest.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.6360 sec.
+Janela de informações: Packed 1 file(s)
+Janela de informações: Saved as "PteranodonCrest.blend"
+CREST_EXPORT_OK 13494 triangles
+ℹ️  blendkit: Unregistering Blendkit add-on [11:18:02.873, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:18:02.873, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

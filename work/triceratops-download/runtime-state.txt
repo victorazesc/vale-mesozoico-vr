@@ -1,0 +1,50 @@
+ACTOR Triceratops position=(76.24, 3.34, -36.59) enabled=True
+ _basePosition=(-0.07, 0.05, -0.13)
+ _bodyOffset=-0.2472942
+ _strideLength=1.495266
+ _slope=(-0.09274, 0.00000, 0.03606, 0.99504)
+ MODEL position=(-0.07, -0.20, -0.13) scale=(1.16, 1.16, 1.16)
+ Sole=(-7.93, 3.30, -0.07) Planted=(77.54, 3.53, -36.52) MinimumY=-0.0305775 MaximumY=0.152478 Swing=False Contact=(77.54, 3.53, -36.52)
+ Sole=(-7.85, 3.01, 0.38) Planted=(77.68, 3.77, -37.97) MinimumY=0.004120291 MaximumY=0.1859396 Swing=False Contact=(77.68, 3.77, -37.97)
+ Sole=(-6.16, 6.61, 0.12) Planted=(75.71, 3.12, -35.51) MinimumY=-0.006784176 MaximumY=0.1947934 Swing=False Contact=(75.71, 3.12, -35.51)
+ Sole=(-6.18, 6.60, -0.45) Planted=(74.54, 3.14, -36.67) MinimumY=-0.006496239 MaximumY=0.1945115 Swing=True Contact=(74.54, 3.15, -36.67)
+ACTOR Triceratops Herd Young position=(8.27, 2.38, 88.84) enabled=True
+ _basePosition=(-0.04, 0.03, -0.09)
+ _bodyOffset=-0.1717086
+ _strideLength=0.9968467
+ _slope=(0.06058, 0.00000, 0.09596, 0.99354)
+ MODEL position=(-0.04, -0.14, -0.09) scale=(0.77, 0.77, 0.77)
+ Sole=(-7.90, 3.09, -0.08) Planted=(7.68, 2.20, 88.08) MinimumY=-0.02538464 MaximumY=0.1576712 Swing=False Contact=(7.68, 2.20, 88.08)
+ Sole=(-7.82, 2.81, 0.38) Planted=(7.15, 2.36, 88.82) MinimumY=0.009314935 MaximumY=0.1911336 Swing=True Contact=(7.15, 2.47, 88.82)
+ Sole=(-5.96, 6.61, 0.12) Planted=(8.96, 2.36, 88.60) MinimumY=-0.001591087 MaximumY=0.1999875 Swing=False Contact=(8.96, 2.36, 88.60)
+ Sole=(-5.97, 6.60, -0.45) Planted=(9.08, 2.59, 89.59) MinimumY=-0.00130253 MaximumY=0.1997048 Swing=False Contact=(9.08, 2.59, 89.59)
+ACTOR Triceratops Return position=(-28.01, 1.15, -43.95) enabled=True
+ _basePosition=(-0.06, 0.05, -0.12)
+ _bodyOffset=-0.2091629
+ _strideLength=1.424065
+ _slope=(0.00984, 0.00000, -0.03204, 0.99944)
+ MODEL position=(-0.06, -0.16, -0.12) scale=(1.10, 1.10, 1.10)
+ Sole=(-7.93, 3.28, -0.08) Planted=(-28.22, 1.19, -45.73) MinimumY=-0.03005798 MaximumY=0.1529974 Swing=True Contact=(-28.22, 1.26, -45.73)
+ Sole=(-7.85, 2.99, 0.38) Planted=(-29.43, 1.07, -44.08) MinimumY=0.004640777 MaximumY=0.1864603 Swing=False Contact=(-29.43, 1.07, -44.08)
+ Sole=(-6.14, 6.61, 0.12) Planted=(-26.42, 1.24, -43.53) MinimumY=-0.006265363 MaximumY=0.1953131 Swing=False Contact=(-26.42, 1.24, -43.53)
+ Sole=(-6.16, 6.60, -0.45) Planted=(-28.08, 1.14, -42.90) MinimumY=-0.005977007 MaximumY=0.1950305 Swing=False Contact=(-28.08, 1.14, -42.90)
+ACTOR Triceratops Valley position=(-63.36, 0.49, -5.54) enabled=True
+ _basePosition=(-0.07, 0.05, -0.13)
+ _bodyOffset=-0.2305868
+ _strideLength=1.459665
+ _slope=(0.01101, 0.00000, 0.00741, 0.99991)
+ MODEL position=(-0.07, -0.18, -0.13) scale=(1.13, 1.13, 1.13)
+ Sole=(-7.93, 3.29, -0.08) Planted=(-62.22, 0.46, -6.02) MinimumY=-0.03032577 MaximumY=0.1527299 Swing=False Contact=(-62.22, 0.46, -6.02)
+ Sole=(-7.85, 3.00, 0.38) Planted=(-62.40, 0.46, -7.27) MinimumY=0.004373311 MaximumY=0.1861923 Swing=False Contact=(-62.40, 0.46, -7.27)
+ Sole=(-6.15, 6.61, 0.12) Planted=(-63.55, 0.50, -4.35) MinimumY=-0.006531355 MaximumY=0.1950468 Swing=False Contact=(-63.55, 0.50, -4.35)
+ Sole=(-6.17, 6.60, -0.45) Planted=(-64.94, 0.54, -5.16) MinimumY=-0.006243716 MaximumY=0.1947644 Swing=True Contact=(-64.94, 0.58, -5.16)
+ACTOR Triceratops Herd Leader position=(21.73, 2.02, 84.19) enabled=True
+ _basePosition=(-0.07, 0.05, -0.14)
+ _bodyOffset=-0.2088444
+ _strideLength=1.60207
+ _slope=(0.01897, 0.00000, -0.13990, 0.98998)
+ MODEL position=(-0.07, -0.16, -0.14) scale=(1.24, 1.24, 1.24)
+ Sole=(-7.93, 3.32, -0.07) Planted=(23.15, 2.18, 84.43) MinimumY=-0.0312715 MaximumY=0.1517843 Swing=False Contact=(23.15, 2.18, 84.43)
+ Sole=(-7.85, 3.04, 0.38) Planted=(23.41, 1.73, 82.89) MinimumY=0.003426792 MaximumY=0.1852462 Swing=True Contact=(23.41, 1.77, 82.89)
+ Sole=(-6.19, 6.61, 0.12) Planted=(21.05, 2.29, 85.22) MinimumY=-0.007476795 MaximumY=0.194101 Swing=False Contact=(21.05, 2.29, 85.22)
+ Sole=(-6.21, 6.60, -0.45) Planted=(19.79, 1.97, 84.26) MinimumY=-0.007189175 MaximumY=0.1938187 Swing=False Contact=(19.79, 1.97, 84.26)

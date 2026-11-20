@@ -1,0 +1,43 @@
+ℹ️  blendkit: Verbose is enabled [17:26:24.655, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [17:26:24.656, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [17:26:24.657, client_lib.py:156]
+Created history step f0d6ae40-6f67-43db-b7cf-1ed7618715c2
+ℹ️  blendkit: Created new search history step [17:26:24.660, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:26:24.660, download.py:419]
+00:00.753  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-download/imported.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:26:24.733, download.py:419]
+Traceback (most recent call last):
+  File "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-download/locate_eyes.py", line 18, in <module>
+    center=sum(vs,Vector())/len(vs)
+           ~~~~~~~~~~~~~~~~^~~~~~~~
+ZeroDivisionError: Vector division: divide by zero error
+EYE_FACE (0.0470588281750679, 3116, (0.4804, -2.2161, 1.2198))
+EYE_FACE (0.09019608050584793, 3730, (1.022, -2.243, 1.7637))
+EYE_FACE (0.12156863510608673, 3592, (0.6722, -2.5109, 1.6527))
+EYE_FACE (0.1411764770746231, 3871, (1.0216, -2.2296, 1.7225))
+EYE_FACE (0.1568627506494522, 4205, (0.3395, -2.2464, 1.6891))
+EYE_FACE (0.16078431904315948, 4268, (0.4703, -2.2883, 1.4195))
+EYE_FACE (0.17647060751914978, 3155, (0.465, -2.2266, 1.3795))
+EYE_FACE (0.1882353127002716, 3147, (0.2077, -2.1806, 1.8297))
+EYE_FACE (0.1882353127002716, 3835, (0.7249, -2.4434, 1.9117))
+EYE_FACE (0.1882353127002716, 4167, (0.5064, -2.3452, 1.6199))
+EYE_FACE (0.20000001788139343, 4210, (0.4411, -2.2769, 1.5282))
+EYE_FACE (0.21176472306251526, 4207, (0.4015, -2.2511, 1.5962))
+EYE_FACE (0.21568629145622253, 3535, (0.2207, -2.5961, 2.2858))
+EYE_FACE (0.21568629145622253, 3950, (0.7964, -2.3852, 1.9873))
+EYE_FACE (0.21568629145622253, 4206, (0.3316, -2.2741, 1.7268))
+EYE_FACE (0.2196078598499298, 3728, (1.0154, -2.2358, 1.8104))
+EYE_FACE (0.22352942824363708, 340, (0.6883, -1.6715, 1.5545))
+EYE_FACE (0.22352942824363708, 4192, (0.4948, -2.3385, 1.322))
+EYE_FACE (0.22352942824363708, 4742, (0.4511, -2.0864, 1.621))
+EYE_FACE (0.22745099663734436, 4170, (0.5297, -2.3389, 1.5347))
+EYE_FACE (0.23137256503105164, 4208, (0.3898, -2.2749, 1.6329))
+EYE_FACE (0.2352941334247589, 11, (0.5512, -2.085, 1.2127))
+EYE_FACE (0.2352941334247589, 4184, (0.3131, -2.3334, 1.8776))
+EYE_FACE (0.2352941334247589, 4190, (0.4667, -2.3104, 1.5317))
+EYE_FACE (0.24705883860588074, 350, (0.4897, -1.8471, 1.75))
+ℹ️  blendkit: Unregistering Blendkit add-on [17:26:25.089, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:26:25.090, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

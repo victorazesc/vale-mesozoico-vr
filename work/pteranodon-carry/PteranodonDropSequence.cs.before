@@ -1,0 +1,327 @@
+using UnityEngine;
+
+namespace ValeMesozoico
+{
+    // Advanced by the ride's simulation clock: pause, scrubbing and replay stay in sync.
+    internal sealed class PteranodonDropSequence : MonoBehaviour
+    {
+        internal enum Phase { Waiting, Approaching, Circling, Screeching, Striking, Departing, Complete }
+        internal const float OrbitSeconds = 5.2f;
+        private const float OrbitRadius = 8.5f;
+        private RideController _controller;
+        private GameObject _actor;
+        private DinosaurAudioEmitter _call;
+        private AudioSource _impact;
+        private Transform _cartVisual;
+        private Vector3 _visualPosition;
+        private Quaternion _visualRotation;
+        private Vector3 _center, _forward, _right, _strikeStart, _contact, _departureStart;
+        private Vector3 _panelContact, _wingContactOffset;
+        private Quaternion _strikeRotation, _flareRotation;
+        private float _elapsed;
+        private bool _flightResumed;
+
+        internal Phase CurrentPhase { get; private set; }
+        internal int CompletedLaps { get; private set; }
+        internal bool Screeched { get; private set; }
+        internal bool Released { get; private set; }
+        internal bool IsHolding => CurrentPhase >= Phase.Approaching && CurrentPhase <= Phase.Striking;
+        internal bool Ready => _actor != null;
+        internal GameObject Actor => _actor;
+        internal float PhaseTime => _elapsed;
+        internal float ImpactContactGap { get; private set; } = float.PositiveInfinity;
+        internal Vector3 PanelContact => _panelContact;
+        internal bool PanelContactMeasured { get; private set; }
+
+        internal static PteranodonDropSequence Create(Transform parent, RideController controller, RideSpline spline)
+        {
+            GameObject root = new("Cave Drop Encounter");
+            root.transform.SetParent(parent, false);
+            PteranodonDropSequence sequence = root.AddComponent<PteranodonDropSequence>();
+            sequence._controller = controller;
+            sequence._actor = OptimizedModelWorld.BuildDropPteranodon(root.transform);
+            if (sequence._actor == null)
+            {
+                Debug.LogError("[Cave Drop] Pteranodon model missing; bypassing hold.");
+                sequence.Released = true;
+                return sequence;
+            }
+            RidePose crest = spline.PoseAtDistance(spline.Length * RideMotionProfile.CrestStart);
+            sequence._forward = Vector3.ProjectOnPlane(crest.Tangent, Vector3.up).normalized;
+            sequence._right = Vector3.Cross(Vector3.up, sequence._forward);
+            sequence._center = crest.Position + Vector3.up * 4.2f;
+            // The inside wing clips the outside of the front right cart panel.
+            // Keep the bird's body and beak outside the rider's head space.
+            sequence._contact = crest.Position + sequence._right * 3.6f
+                + sequence._forward * 1.5f + Vector3.up * 1.9f;
+            sequence._call = EnhancedProceduralAudio.AttachDinosaurCall(sequence._actor, "Pteranodon", 7469);
+            sequence._call.enabled = false; // This actor calls only after its second lap.
+            GameObject impactAudio = new("Cart Wing Impact Audio");
+            impactAudio.transform.SetParent(root.transform, false);
+            sequence._impact = impactAudio.AddComponent<AudioSource>();
+            sequence._impact.clip = CreateImpactClip();
+            sequence._impact.playOnAwake = false;
+            sequence._impact.spatialBlend = 1f;
+            sequence._impact.minDistance = 3f;
+            sequence._impact.maxDistance = 28f;
+            sequence._impact.dopplerLevel = 0f;
+            sequence._impact.volume = 0.8f;
+            sequence._cartVisual = controller.transform.Find("Abandoned Coaster Cart 3D");
+            if (sequence._cartVisual != null)
+            {
+                sequence._visualPosition = sequence._cartVisual.localPosition;
+                sequence._visualRotation = sequence._cartVisual.localRotation;
+            }
+            sequence.ResetForProgress(0f);
+            return sequence;
+        }
+
+        internal void BeginHold()
+        {
+            if (!Ready || CurrentPhase != Phase.Waiting) return;
+            _actor.SetActive(true);
+            PlayFlight(1.05f);
+            Enter(Phase.Approaching);
+            PoseBird(ApproachPosition(0f), OrbitPosition(0f), 0f);
+            Debug.Log($"[Cave Drop] HOLD | height={_controller.transform.position.y:F1}m, speed={_controller.RideSpeed:F3}");
+        }
+
+        internal void Tick(float deltaTime)
+        {
+            if (!Ready || CurrentPhase == Phase.Waiting || CurrentPhase == Phase.Complete) return;
+            _elapsed += deltaTime;
+            switch (CurrentPhase)
+            {
+                case Phase.Approaching:
+                    float approach = Mathf.Clamp01(_elapsed / 2f);
+                    PoseBird(ApproachPosition(approach), ApproachPosition(Mathf.Min(1f, approach + 0.01f)), -8f);
+                    if (approach >= 1f) Enter(Phase.Circling);
+                    break;
+                case Phase.Circling:
+                    float angle = Mathf.Min(_elapsed / OrbitSeconds, 2f) * Mathf.PI * 2f;
+                    PoseBird(OrbitPosition(angle), OrbitPosition(angle + 0.015f), -14f);
+                    int laps = Mathf.Min(2, Mathf.FloorToInt((_elapsed + 0.00001f) / OrbitSeconds));
+                    if (laps > CompletedLaps)
+                    {
+                        CompletedLaps = laps;
+                        Debug.Log($"[Cave Drop] LAP | completed={CompletedLaps}/2");
+                    }
+                    if (_elapsed >= OrbitSeconds * 2f)
+                    {
+                        CompletedLaps = 2;
+                        Screeched = _call.PlayNow(1.45f, 0.93f);
+                        Enter(Phase.Screeching);
+                        PlayFlight(1.45f);
+                        Debug.Log($"[Cave Drop] SCREECH | laps={CompletedLaps}, played={Screeched}");
+                    }
+                    break;
+                case Phase.Screeching:
+                    float flare = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(_elapsed / 1.35f));
+                    Vector3 start = OrbitPosition(0f);
+                    _strikeStart = start + _forward * 2f + Vector3.up * 2.5f;
+                    PoseBird(Vector3.Lerp(start, _strikeStart, flare), _contact, Mathf.Lerp(-14f, 10f, flare));
+                    if (_elapsed >= 1.35f)
+                    {
+                        PrepareWingStrike();
+                        Enter(Phase.Striking);
+                    }
+                    break;
+                case Phase.Striking:
+                    float strike = Mathf.Clamp01(_elapsed / 0.85f);
+                    _actor.transform.SetPositionAndRotation(Vector3.Lerp(_strikeStart, _contact, strike * strike),
+                        Quaternion.Slerp(_flareRotation, _strikeRotation, Mathf.SmoothStep(0f, 1f, strike)));
+                    if (strike >= 1f)
+                    {
+                        ImpactContactGap = Vector3.Distance(_actor.transform.position + _wingContactOffset, _panelContact);
+                        _departureStart = _actor.transform.position;
+                        _impact.transform.position = _panelContact;
+                        _impact.Play();
+                        ApplyImpactReaction(0f);
+                        _flightResumed = false;
+                        _controller.TriggerEncounterHaptic(0.42f, 0.24f);
+                        Released = true;
+                        _controller.ReleaseCaveDrop();
+                        Enter(Phase.Departing);
+                        Debug.Log($"[Cave Drop] IMPACT / RELEASE | laps={CompletedLaps}, screeched={Screeched}, contactGap={ImpactContactGap:F4}m");
+                    }
+                    break;
+                case Phase.Departing:
+                    ApplyImpactReaction(_elapsed);
+                    if (_elapsed < 0.08f) break;
+                    if (!_flightResumed)
+                    {
+                        PlayFlight(1.2f);
+                        _flightResumed = true;
+                    }
+                    Vector3 departure = _departureStart + (_right * 8f + _forward * 7f + Vector3.up * 9f) * (_elapsed - 0.08f);
+                    PoseBird(departure, departure + _right + _forward + Vector3.up, -18f);
+                    if (_elapsed >= 3f)
+                    {
+                        RestoreCartVisual();
+                        _actor.SetActive(false);
+                        Enter(Phase.Complete);
+                    }
+                    break;
+            }
+        }
+
+        private Vector3 ApproachPosition(float t)
+        {
+            Vector3 end = OrbitPosition(0f);
+            return end - _right * (1f - t) * 22f + Vector3.up * (1f - t) * (1f - t) * 7f;
+        }
+
+        private Vector3 OrbitPosition(float angle)
+        {
+            return _center + (_forward * Mathf.Cos(angle) + _right * Mathf.Sin(angle)) * OrbitRadius
+                + Vector3.up * Mathf.Sin(angle * 2f) * 0.55f;
+        }
+
+        private void PoseBird(Vector3 position, Vector3 target, float bank)
+        {
+            Vector3 direction = target - position;
+            Quaternion rotation = direction.sqrMagnitude > 0.00001f
+                ? Quaternion.LookRotation(direction.normalized, Vector3.up) * Quaternion.Euler(0f, 0f, bank)
+                : _actor.transform.rotation;
+            _actor.transform.SetPositionAndRotation(position, rotation);
+        }
+
+        private void PlayFlight(float speed)
+        {
+            DinosaurAnimationRuntime.PlayPreferred(_actor, "fly", speed);
+            Animation animation = _actor.GetComponentInChildren<Animation>();
+            if (animation != null) animation.cullingType = AnimationCullingType.AlwaysAnimate;
+            foreach (SkinnedMeshRenderer skin in _actor.GetComponentsInChildren<SkinnedMeshRenderer>())
+                skin.updateWhenOffscreen = true;
+        }
+
+        private void Enter(Phase phase)
+        {
+            CurrentPhase = phase;
+            _elapsed = 0f;
+        }
+
+        private void PrepareWingStrike()
+        {
+            // Glide through the last dive with a fixed wing pose so contact does
+            // not depend on which frame of the flapping animation happens to play.
+            Animation animation = _actor.GetComponentInChildren<Animation>();
+            if (animation != null)
+            {
+                foreach (AnimationState state in animation)
+                    if (animation.IsPlaying(state.name)) state.speed = 0f;
+                animation.Sample();
+            }
+            _flareRotation = _actor.transform.rotation;
+            _panelContact = FindCartPanelContact();
+            Vector3 aim = _panelContact + _right * 3.5f + Vector3.up * 1.4f;
+            _strikeRotation = Quaternion.LookRotation((aim - _strikeStart).normalized, Vector3.up)
+                * Quaternion.Euler(0f, 0f, 18f);
+            _actor.transform.rotation = _strikeRotation;
+            float furthestInward = float.NegativeInfinity;
+            Mesh posed = new();
+            foreach (SkinnedMeshRenderer skin in _actor.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                skin.BakeMesh(posed);
+                foreach (Vector3 vertex in posed.vertices)
+                {
+                    Vector3 offset = skin.transform.TransformPoint(vertex) - _actor.transform.position;
+                    float inward = Vector3.Dot(offset, -_right);
+                    if (inward <= furthestInward) continue;
+                    furthestInward = inward;
+                    _wingContactOffset = offset;
+                }
+            }
+            Destroy(posed);
+            _contact = _panelContact - _wingContactOffset;
+            _actor.transform.rotation = _flareRotation;
+        }
+
+        private Vector3 FindCartPanelContact()
+        {
+            Vector3 target = _controller.transform.TransformPoint(new Vector3(0f, 0.35f, 0.5f));
+            Ray ray = new(target + _right * 8f, -_right);
+            float nearest = float.PositiveInfinity;
+            Vector3 contact = target + _right * 1.1f;
+            if (_cartVisual == null) return contact;
+            // Query the rendered body itself once; these probes never remain in
+            // the ride's physics world or obstruct the cart.
+            foreach (MeshFilter filter in _cartVisual.GetComponentsInChildren<MeshFilter>())
+            {
+                if (filter.sharedMesh == null) continue;
+                GameObject probe = new("Temporary Cart Contact Probe");
+                probe.transform.SetParent(filter.transform, false);
+                MeshCollider surface = probe.AddComponent<MeshCollider>();
+                surface.sharedMesh = filter.sharedMesh;
+                Physics.SyncTransforms();
+                if (surface.Raycast(ray, out RaycastHit hit, 16f) && hit.distance < nearest)
+                {
+                    nearest = hit.distance;
+                    contact = hit.point;
+                }
+                Destroy(probe);
+            }
+            PanelContactMeasured = !float.IsPositiveInfinity(nearest);
+            if (!PanelContactMeasured) Debug.LogWarning("[Cave Drop] Cart contact uses panel fallback.");
+            return contact;
+        }
+
+        internal void ResetForProgress(float progress)
+        {
+            CompletedLaps = 0;
+            Screeched = false;
+            ImpactContactGap = float.PositiveInfinity;
+            PanelContactMeasured = false;
+            Released = !Ready || progress > RideMotionProfile.CrestStart + 0.001f;
+            Enter(Released ? Phase.Complete : Phase.Waiting);
+            if (_actor != null)
+            {
+                foreach (AudioSource source in _actor.GetComponents<AudioSource>()) source.Stop();
+                _actor.SetActive(false);
+            }
+            if (_impact != null) _impact.Stop();
+            RestoreCartVisual();
+        }
+
+        private void ApplyImpactReaction(float time)
+        {
+            if (_cartVisual == null) return;
+            float envelope = Mathf.Exp(-time * 9f);
+            float jolt = Mathf.Cos(time * 29f) * envelope;
+            _cartVisual.localPosition = _visualPosition + new Vector3(-0.035f, -0.018f, 0.025f) * jolt;
+            _cartVisual.localRotation = _visualRotation * Quaternion.Euler(0.5f * jolt, 0f, -1.8f * jolt);
+        }
+
+        private void RestoreCartVisual()
+        {
+            if (_cartVisual == null) return;
+            _cartVisual.SetLocalPositionAndRotation(_visualPosition, _visualRotation);
+        }
+
+        private static AudioClip CreateImpactClip()
+        {
+            const int sampleRate = 22050;
+            float[] samples = new float[(int)(sampleRate * 0.65f)];
+            System.Random random = new(7469);
+            for (int i = 0; i < samples.Length; i++)
+            {
+                float t = i / (float)sampleRate;
+                float thump = Mathf.Sin(t * 2f * Mathf.PI * 72f) * Mathf.Exp(-t * 17f);
+                float metal = (Mathf.Sin(t * 2f * Mathf.PI * 387f) * 0.23f
+                    + Mathf.Sin(t * 2f * Mathf.PI * 619f) * 0.12f) * Mathf.Exp(-t * 12f);
+                float scrape = ((float)random.NextDouble() * 2f - 1f) * Mathf.Exp(-t * 28f) * 0.28f;
+                samples[i] = (thump * 0.54f + metal + scrape) * Mathf.Clamp01(t * 600f);
+            }
+            AudioClip clip = AudioClip.Create("Pteranodon Cart Impact", samples.Length, 1, sampleRate, false);
+            clip.SetData(samples, 0);
+            return clip;
+        }
+
+        private void OnDisable() => RestoreCartVisual();
+
+        private void OnDestroy()
+        {
+            if (_impact != null && _impact.clip != null) Destroy(_impact.clip);
+        }
+    }
+}

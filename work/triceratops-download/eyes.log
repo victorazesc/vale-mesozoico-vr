@@ -1,0 +1,22 @@
+ℹ️  blendkit: Verbose is enabled [17:22:48.107, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [17:22:48.108, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [17:22:48.110, client_lib.py:156]
+Created history step 4b4e1de8-4ebf-4865-9c61-80470ed59faf
+ℹ️  blendkit: Created new search history step [17:22:48.113, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:22:48.113, download.py:419]
+00:00.793  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-download/imported.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:22:48.189, download.py:419]
+EYES
+Object002 center (-0.06377226114273071, -0.009655432775616646, 0.009288134053349495) world <Matrix 4x4 (0.0852, -0.0000,  0.0000, -0.0043)
+            (0.0000, -0.0030, -0.0851,  0.8259)
+            (0.0000,  0.0851, -0.0030,  2.0435)
+            (0.0000,  0.0000,  0.0000,  1.0000)>
+Object003 center (-0.06636879593133926, -0.01361171156167984, 0.0014952343190088868) world <Matrix 4x4 ( 0.0901,  0.0000,  0.0000, -0.0006)
+            ( 0.0000, -0.0032, -0.0900,  0.8264)
+            (-0.0000,  0.0900, -0.0032,  2.0428)
+            ( 0.0000,  0.0000,  0.0000,  1.0000)>
+ℹ️  blendkit: Unregistering Blendkit add-on [17:22:48.212, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:22:48.212, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

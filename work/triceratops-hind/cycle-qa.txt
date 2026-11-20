@@ -1,0 +1,18 @@
+ℹ️  blendkit: Verbose is enabled [21:43:04.406, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [21:43:04.407, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [21:43:04.409, client_lib.py:156]
+Created history step 50cb4157-9d2f-41e1-b696-ebaba396efe9
+ℹ️  blendkit: Created new search history step [21:43:04.414, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [21:43:04.414, download.py:419]
+00:00.946  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/SourceAssets/Downloaded/Triceratops/Triceratops.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [21:43:04.500, download.py:419]
+WALK_LOOP position_error_m= 0.0 rotation_error_deg= 0.0
+SECONDARY_MOTION Bip001 Head 0.030800547374951595
+SECONDARY_MOTION Bip001 Tail4 0.08865482030691402
+SECONDARY_MOTION Bip001 Pelvis 0.026832860403481974
+WALK_CYCLE_PASS
+ℹ️  blendkit: Unregistering Blendkit add-on [21:43:04.513, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [21:43:04.514, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

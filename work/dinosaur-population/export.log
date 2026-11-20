@@ -1,0 +1,23 @@
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/prepare_animated_dinosaurs.py:22: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  if material.use_nodes:
+FBX version: 7400
+
+FBX export starting... '/Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/_Game/Resources/Models/Dinosaurs/Apatosaurus.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.4309 sec.
+DINOSAUR_EXPORT_OK Apatosaurus meshes=1 actions=6
+FBX version: 7400
+
+FBX export starting... '/Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/_Game/Resources/Models/Dinosaurs/Triceratops.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.3151 sec.
+DINOSAUR_EXPORT_OK Triceratops meshes=1 actions=6
+FBX version: 7400
+
+FBX export starting... '/Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/_Game/Resources/Models/Dinosaurs/Trex.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.2937 sec.
+DINOSAUR_EXPORT_OK Trex meshes=1 actions=6
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

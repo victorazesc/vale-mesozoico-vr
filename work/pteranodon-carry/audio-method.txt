@@ -1,0 +1,19 @@
+        private static AudioClip CreateImpactClip()
+        {
+            const int sampleRate = 22050;
+            float[] samples = new float[(int)(sampleRate * 0.65f)];
+            System.Random random = new(7469);
+            for (int i = 0; i < samples.Length; i++)
+            {
+                float t = i / (float)sampleRate;
+                float thump = Mathf.Sin(t * 2f * Mathf.PI * 72f) * Mathf.Exp(-t * 17f);
+                float metal = (Mathf.Sin(t * 2f * Mathf.PI * 387f) * 0.23f
+                    + Mathf.Sin(t * 2f * Mathf.PI * 619f) * 0.12f) * Mathf.Exp(-t * 12f);
+                float scrape = ((float)random.NextDouble() * 2f - 1f) * Mathf.Exp(-t * 28f) * 0.28f;
+                samples[i] = (thump * 0.54f + metal + scrape) * Mathf.Clamp01(t * 600f);
+            }
+            AudioClip clip = AudioClip.Create("Pteranodon Cart Impact", samples.Length, 1, sampleRate, false);
+            clip.SetData(samples, 0);
+            return clip;
+        }
+

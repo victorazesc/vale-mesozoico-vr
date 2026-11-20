@@ -1,0 +1,21 @@
+ℹ️  blendkit: Verbose is enabled [10:34:46.068, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [10:34:46.068, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [10:34:46.069, client_lib.py:156]
+Created history step ac5d0c08-9e79-4140-b5d9-8330a2c75994
+ℹ️  blendkit: Created new search history step [10:34:46.073, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [10:34:46.073, download.py:419]
+00:00.523  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-carry/source.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [10:34:46.174, download.py:419]
+00:03.043  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-carry/source-preview.png'
+POSE Bone head (0.0, 0.0, 1.652008295059204) tail (0.008562276139855385, -0.8684582710266113, 2.147696018218994)
+POSE Bone.001 head (0.00856227707117796, -0.8684583902359009, 2.1476962566375732) tail (0.01589241251349449, -1.6785422563552856, 2.654416561126709)
+POSE Bone.005 head (0.1650240570306778, -4.285715103149414, 3.7375879287719727) tail (0.24827581644058228, -4.347864151000977, 4.190773010253906)
+POSE Bone_L.001 head (0.3031497597694397, 0.03688518702983856, 1.5656135082244873) tail (0.4348219335079193, 0.3259534239768982, 1.4418593645095825)
+POSE Bone_L.002 head (0.4348219037055969, 0.32595330476760864, 1.4418593645095825) tail (0.3368399739265442, 1.0927903652191162, 1.8082761764526367)
+POSE Bone_L.003 head (0.3368399739265442, 1.0927903652191162, 1.8082761764526367) tail (0.3261874318122864, 1.6872847080230713, 1.5975124835968018)
+POSE Bone_L.004 head (0.3261874318122864, 1.6872847080230713, 1.5975124835968018) tail (0.2899654507637024, 1.9793097972869873, 1.4393839836120605)
+ℹ️  blendkit: Unregistering Blendkit add-on [10:34:48.600, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [10:34:48.600, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

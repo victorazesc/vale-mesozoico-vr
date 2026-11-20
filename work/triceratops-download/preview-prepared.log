@@ -1,0 +1,35 @@
+ℹ️  blendkit: Verbose is enabled [17:27:26.903, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [17:27:26.904, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [17:27:26.905, client_lib.py:156]
+Created history step ade87405-171b-49cd-b722-53003bb93425
+ℹ️  blendkit: Created new search history step [17:27:26.909, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:27:26.909, download.py:419]
+00:00.438  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/SourceAssets/Downloaded/Triceratops/Triceratops.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:27:26.951, download.py:419]
+/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-download/preview_source.py:25: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world.use_nodes = True
+00:02.699  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-download/prepared.png'
+POSE 0 {'Bip001 Head': (111.055, 0.0, -12.041), 'Bip001 L Hand': (70.04, 17.586, -75.474), 'Bip001 R Hand': (70.04, -17.586, -75.474), 'Bip001 L Foot': (-4.702, 22.4, -72.971), 'Bip001 R Foot': (-4.702, -22.399, -72.971)}
+POSE 12 {'Bip001 Head': (0.004, -1.982, 1.718), 'Bip001 L Hand': (0.679, -1.131, 0.103), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 24 {'Bip001 Head': (0.002, -1.944, 1.686), 'Bip001 L Hand': (0.68, -1.131, 0.102), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 36 {'Bip001 Head': (-0.031, -1.996, 1.864), 'Bip001 L Hand': (0.68, -1.131, 0.102), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 48 {'Bip001 Head': (-0.008, -2.02, 1.899), 'Bip001 L Hand': (0.679, -1.131, 0.102), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 60 {'Bip001 Head': (0.421, -1.695, 1.397), 'Bip001 L Hand': (0.672, -1.132, 0.105), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 72 {'Bip001 Head': (0.217, -2.051, 1.693), 'Bip001 L Hand': (0.669, -1.132, 0.107), 'Bip001 R Hand': (-0.693, -1.21, 0.107), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 84 {'Bip001 Head': (-0.06, -2.323, 2.131), 'Bip001 L Hand': (0.669, -1.132, 0.109), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 96 {'Bip001 Head': (-0.05, -2.366, 2.198), 'Bip001 L Hand': (0.669, -1.135, 0.114), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 108 {'Bip001 Head': (-0.018, -2.323, 2.164), 'Bip001 L Hand': (0.668, -1.133, 0.113), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 120 {'Bip001 Head': (-0.07, -1.996, 1.929), 'Bip001 L Hand': (0.675, -1.131, 0.106), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 132 {'Bip001 Head': (-0.081, -1.604, 1.565), 'Bip001 L Hand': (0.678, -1.131, 0.103), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 144 {'Bip001 Head': (-0.023, -2.096, 1.703), 'Bip001 L Hand': (0.67, -1.131, 0.107), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 156 {'Bip001 Head': (-0.013, -2.207, 1.882), 'Bip001 L Hand': (0.672, -1.131, 0.106), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 168 {'Bip001 Head': (-0.013, -2.185, 1.987), 'Bip001 L Hand': (0.677, -1.131, 0.104), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 180 {'Bip001 Head': (-0.008, -2.108, 1.925), 'Bip001 L Hand': (0.68, -1.131, 0.102), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 192 {'Bip001 Head': (0.002, -1.95, 1.696), 'Bip001 L Hand': (0.679, -1.131, 0.103), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 204 {'Bip001 Head': (0.005, -1.962, 1.7), 'Bip001 L Hand': (0.679, -1.131, 0.103), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+POSE 216 {'Bip001 Head': (0.005, -2.011, 1.756), 'Bip001 L Hand': (0.679, -1.131, 0.103), 'Bip001 R Hand': (-0.693, -1.21, 0.108), 'Bip001 L Foot': (0.6, 1.011, 0.171), 'Bip001 R Foot': (-0.652, 1.011, 0.171)}
+ℹ️  blendkit: Unregistering Blendkit add-on [17:27:29.174, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:27:29.175, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

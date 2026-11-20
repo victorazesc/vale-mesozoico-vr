@@ -1,0 +1,8 @@
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/build_track_mountain_cave.py:548: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  material.use_nodes = True
+Removed detached portal chips: islands=3, vertices=9
+Info: Saved as "TrackMountainCave.blend"
+TRACK_MOUNTAIN_CAVE_QA {"blocked_approach_departure_segments": 0, "blocked_centerline_segments": 0, "export_triangles": 38994, "export_vertices": 25954, "fully_enclosed_progress": [0.45779, 0.52692], "guaranteed_length_m": 25.944, "guaranteed_progress": [0.465, 0.515], "interior_triangles": 7926, "minimum_radial_clearance_m": 5.064, "non_manifold_edges": 0, "radial_wall_checks": 3864, "track_length_m": 518.8861, "unity_bounds_max": [58.429, 27.923, 83.254], "unity_bounds_min": [12.573, -8.0, 40.774], "volume_m3": 15693.66}
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

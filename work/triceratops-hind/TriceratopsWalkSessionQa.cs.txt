@@ -1,0 +1,285 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Rendering;
+using Object = UnityEngine.Object;
+
+namespace ValeMesozoico.Editor
+{
+    // Temporary local capture. Create work/triceratops-walk/run-qa with a run label.
+    [InitializeOnLoad]
+    internal static class TriceratopsWalkSessionQa
+    {
+        private const string Request = "work/triceratops-walk/run-qa";
+        private const string LabelKey = "ValeMesozoico.WalkQa.Label";
+        private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        private const int Fps = 30, FrameCount = 180, Width = 1280, Height = 720;
+        private static Camera _camera;
+        private static MonoBehaviour _hero;
+        private static RenderTexture _target;
+        private static Texture2D _image;
+        private static string _output;
+        private static int _frame, _lastFrame = -1;
+        private static float _start;
+        private static readonly List<AnimalSample> Animals = new();
+        private static readonly StringBuilder Csv = new();
+
+        private sealed class AnimalSample
+        {
+            internal MonoBehaviour Animal;
+            internal int InitialFootfalls, Transitions, Samples, SlipSamples, StanceReplants;
+            internal float LastBodyY, LastTime, MaxBodyDelta, MaxBodySpeed, MaxSlip, SumSlip, MaxSupportError;
+            internal float InitialCycle, LastCycle;
+            internal bool Initialized;
+            internal readonly Vector3[] LastContacts = new Vector3[4];
+            internal readonly Vector3[] LastPlanted = new Vector3[4];
+            internal readonly bool[] LastSwing = new bool[4];
+            internal readonly int[] Touchdowns = new int[4];
+        }
+
+        static TriceratopsWalkSessionQa()
+        {
+            EditorApplication.update += Poll;
+            RenderPipelineManager.beginCameraRendering += BeginCamera;
+            RenderPipelineManager.endCameraRendering += EndCamera;
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.ExitingPlayMode) Cleanup();
+            };
+        }
+
+        private static object Value(object owner, string name)
+        {
+            if (owner == null) return null;
+            Type type = owner.GetType();
+            return type.GetField(name, Flags)?.GetValue(owner) ?? type.GetProperty(name, Flags)?.GetValue(owner);
+        }
+
+        private static string F(float value) => value.ToString("F6", CultureInfo.InvariantCulture);
+
+        private static void Poll()
+        {
+            if (EditorApplication.isCompiling || EditorApplication.isUpdating) return;
+            if (File.Exists(Request))
+            {
+                if (EditorApplication.isPlayingOrWillChangePlaymode)
+                {
+                    EditorApplication.isPlaying = false;
+                    return;
+                }
+                string label = File.ReadAllText(Request).Trim();
+                if (label.Length == 0 || label.Any(c => !char.IsLetterOrDigit(c) && c != '-' && c != '_'))
+                    label = "capture-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
+                File.Delete(Request);
+                foreach (string key in new[] { "Running", "Finishing", "PlayModeExitRequested" })
+                    SessionState.SetBool("ValeMesozoico.PreviewCapture." + key, false);
+                SessionState.SetBool("ValeMesozoico.TriceratopsPreview", false);
+                SessionState.SetString(LabelKey, label);
+                AssetDatabase.ImportAsset("Assets/_Game/Resources/Models/Dinosaurs/Triceratops.fbx",
+                    ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
+                EditorApplication.EnterPlaymode();
+                return;
+            }
+            if (!EditorApplication.isPlaying || string.IsNullOrEmpty(SessionState.GetString(LabelKey, ""))) return;
+            Application.runInBackground = true;
+            if (_camera == null && Time.time >= 21f) Initialize();
+            if (_camera != null) PositionCamera();
+        }
+
+        private static void Initialize()
+        {
+            MonoBehaviour[] behaviours = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+            _hero = behaviours.FirstOrDefault(b => b != null && b.GetType().Name == "TriceratopsGrounding" && b.name == "Triceratops");
+            if (_hero == null || Camera.main == null) return;
+            _camera = Camera.main;
+            foreach (MonoBehaviour behaviour in behaviours)
+                if (behaviour != null && new[] { "RideController", "XRHeadTracker", "ComfortFade", "TriceratopsRuntimeQa" }.Contains(behaviour.GetType().Name))
+                    behaviour.enabled = false;
+            Transform fade = _camera.transform.Find("Comfort Fade");
+            if (fade != null) fade.gameObject.SetActive(false);
+            _camera.transform.SetParent(null, true);
+            _camera.enabled = true;
+            _camera.stereoTargetEye = StereoTargetEyeMask.None;
+            _camera.aspect = (float)Width / Height;
+            _camera.fieldOfView = 52f;
+            _camera.nearClipPlane = 0.05f;
+            _camera.farClipPlane = 500f;
+            _target = new RenderTexture(Width, Height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB)
+                { name = "Triceratops Walk QA", antiAliasing = 1, useMipMap = false, autoGenerateMips = false };
+            _target.Create();
+            _camera.targetTexture = _target;
+            _image = new Texture2D(Width, Height, TextureFormat.RGB24, false);
+            _output = Path.GetFullPath("work/triceratops-walk/" + SessionState.GetString(LabelKey, "capture"));
+            Directory.CreateDirectory(_output);
+            Directory.CreateDirectory(Path.Combine(_output, "frames"));
+            Animals.Clear();
+            foreach (MonoBehaviour animal in behaviours.Where(b => b != null && b.GetType().Name == "TriceratopsGrounding"))
+                Animals.Add(new AnimalSample { Animal = animal, InitialFootfalls = (int)(Value(animal, "Footfalls") ?? 0) });
+            Csv.Clear();
+            Csv.AppendLine("frame,time,actor,normalizedTime,walkSpeed,movementSpeed,footfalls,bodyY,bodyOffset,bodyVerticalSpeed,leg,swing,contactX,contactY,contactZ,stanceSlip,transition,stanceReplant,supportError,bendForward,kneeAngle");
+            _start = Time.time;
+            _frame = 0;
+            _lastFrame = -1;
+            Time.captureFramerate = Fps;
+            Debug.Log("[Triceratops Walk QA] Capturing " + _output);
+        }
+
+        private static void BeginCamera(ScriptableRenderContext context, Camera camera)
+        {
+            if (camera != _camera || _hero == null) return;
+            PositionCamera();
+        }
+
+        private static void PositionCamera()
+        {
+            if (_camera == null || _hero == null) return;
+            Transform actor = _hero.transform;
+            Vector3 center = actor.position + Vector3.up * 1.8f;
+            _camera.transform.position = center + actor.right * 11f + actor.forward * 4f + Vector3.up * 1.3f;
+            _camera.transform.LookAt(center + actor.forward * 0.25f);
+        }
+
+        private static void EndCamera(ScriptableRenderContext context, Camera camera)
+        {
+            if (camera != _camera || _target == null || _lastFrame == Time.frameCount || _frame >= FrameCount) return;
+            _lastFrame = Time.frameCount;
+            try
+            {
+                RenderTexture previous = RenderTexture.active;
+                RenderTexture.active = _target;
+                _image.ReadPixels(new Rect(0, 0, Width, Height), 0, 0, false);
+                _image.Apply(false, false);
+                RenderTexture.active = previous;
+                File.WriteAllBytes(Path.Combine(_output, "frames", $"frame-{_frame:0000}.png"), _image.EncodeToPNG());
+                Sample();
+                _frame++;
+                if (_frame >= FrameCount) Finish();
+            }
+            catch (Exception exception)
+            {
+                File.WriteAllText(Path.Combine(_output, "ERROR.txt"), exception.ToString());
+                Debug.LogException(exception);
+                Finish();
+            }
+        }
+
+        private static void Sample()
+        {
+            foreach (AnimalSample sample in Animals)
+            {
+                MonoBehaviour animal = sample.Animal;
+                Transform model = animal.transform.Find("Model Scale");
+                AnimationState walk = Value(animal, "_walk") as AnimationState;
+                float bodyY = model == null ? animal.transform.position.y : model.position.y;
+                float bodyOffset = (float)(Value(animal, "_bodyOffset") ?? 0f);
+                float bodySpeed = 0f;
+                if (sample.Initialized)
+                {
+                    sample.MaxBodyDelta = Mathf.Max(sample.MaxBodyDelta, Mathf.Abs(bodyY - sample.LastBodyY));
+                    bodySpeed = (bodyY - sample.LastBodyY) / Mathf.Max(0.0001f, Time.time - sample.LastTime);
+                    sample.MaxBodySpeed = Mathf.Max(sample.MaxBodySpeed, Mathf.Abs(bodySpeed));
+                }
+                else sample.InitialCycle = walk?.normalizedTime ?? 0f;
+                sample.LastCycle = walk?.normalizedTime ?? 0f;
+                sample.LastBodyY = bodyY;
+                sample.LastTime = Time.time;
+                int footfalls = (int)(Value(animal, "Footfalls") ?? 0);
+                int index = 0;
+                IEnumerable legs = Value(animal, "_legs") as IEnumerable;
+                if (legs == null) continue;
+                foreach (object leg in legs)
+                {
+                    if (leg == null) { index++; continue; }
+                    bool swing = (bool)(Value(leg, "Swing") ?? false);
+                    Vector3 contact = (Vector3)(Value(leg, "Contact") ?? Vector3.zero);
+                    Vector3 planted = (Vector3)(Value(leg, "Planted") ?? contact);
+                    bool transition = sample.Initialized && swing != sample.LastSwing[index];
+                    bool replant = false;
+                    float slip = 0f, supportError = 0f;
+                    if (sample.Initialized && !swing && !sample.LastSwing[index])
+                    {
+                        Vector3 delta = contact - sample.LastContacts[index];
+                        slip = new Vector2(delta.x, delta.z).magnitude;
+                        sample.MaxSlip = Mathf.Max(sample.MaxSlip, slip);
+                        sample.SumSlip += slip;
+                        sample.SlipSamples++;
+                        replant = Vector3.Distance(planted, sample.LastPlanted[index]) > 0.01f;
+                        if (replant) sample.StanceReplants++;
+                    }
+                    if (!swing)
+                    {
+                        MethodInfo ground = animal.GetType().GetMethod("Ground", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                        if (ground != null)
+                        {
+                            supportError = Mathf.Abs(contact.y - (float)ground.Invoke(null, new object[] { contact }));
+                            sample.MaxSupportError = Mathf.Max(sample.MaxSupportError, supportError);
+                        }
+                    }
+                    if (transition)
+                    {
+                        sample.Transitions++;
+                        if (!swing) sample.Touchdowns[index]++;
+                    }
+                    sample.LastContacts[index] = contact;
+                    sample.LastPlanted[index] = planted;
+                    sample.LastSwing[index] = swing;
+                    Transform upper = Value(leg, "Upper") as Transform;
+                    Transform lower = Value(leg, "Lower") as Transform;
+                    Transform foot = Value(leg, "Foot") as Transform;
+                    Vector3 axis = (foot.position - upper.position).normalized;
+                    Vector3 pole = Vector3.ProjectOnPlane(lower.position - upper.position, axis).normalized;
+                    float bendForward = Vector3.Dot(pole, animal.transform.forward);
+                    float kneeAngle = Vector3.Angle(upper.position - lower.position, foot.position - lower.position);
+                    Csv.AppendLine(string.Join(",", _frame, F(Time.time - _start), animal.name,
+                        F(walk?.normalizedTime ?? 0f), F(walk?.speed ?? 0f), F((float)(Value(animal, "_movementSpeed") ?? 0f)),
+                        footfalls, F(bodyY), F(bodyOffset), F(bodySpeed), index, swing ? 1 : 0, F(contact.x), F(contact.y), F(contact.z),
+                        F(slip), transition ? 1 : 0, replant ? 1 : 0, F(supportError), F(bendForward), F(kneeAngle)));
+                    index++;
+                }
+                sample.Samples++;
+                sample.Initialized = true;
+            }
+        }
+
+        private static void Finish()
+        {
+            File.WriteAllText(Path.Combine(_output, "motion.csv"), Csv.ToString());
+            StringBuilder report = new();
+            report.AppendLine($"frames={_frame} fps={Fps} simulatedSeconds={F(Time.time - _start)}");
+            foreach (AnimalSample sample in Animals)
+            {
+                int footfalls = (int)(Value(sample.Animal, "Footfalls") ?? 0) - sample.InitialFootfalls;
+                report.AppendLine($"{sample.Animal.name}: footfalls={footfalls} stanceTransitions={sample.Transitions} "
+                    + $"cycles={F(sample.LastCycle - sample.InitialCycle)} touchdownsFL_FR_BL_BR={string.Join("/", sample.Touchdowns)} stanceReplants={sample.StanceReplants} "
+                    + $"maxStanceSlide={F(sample.MaxSlip)}m meanStanceSlide={F(sample.SumSlip / Mathf.Max(1, sample.SlipSamples))}m "
+                    + $"maxBodyDeltaPerFrame={F(sample.MaxBodyDelta)}m maxBodySpeed={F(sample.MaxBodySpeed)}m/s maxSupportError={F(sample.MaxSupportError)}m");
+            }
+            File.WriteAllText(Path.Combine(_output, "summary.txt"), report.ToString());
+            File.WriteAllText(Path.Combine(_output, "DONE"), DateTime.UtcNow.ToString("O"));
+            Debug.Log("[Triceratops Walk QA] " + report);
+            SessionState.SetString(LabelKey, "");
+            EditorApplication.delayCall += () => EditorApplication.isPlaying = false;
+        }
+
+        private static void Cleanup()
+        {
+            Time.captureFramerate = 0;
+            if (_camera != null) _camera.targetTexture = null;
+            if (_target != null) { _target.Release(); Object.DestroyImmediate(_target); }
+            if (_image != null) Object.DestroyImmediate(_image);
+            _target = null;
+            _image = null;
+            _camera = null;
+            _hero = null;
+        }
+    }
+}
+#endif

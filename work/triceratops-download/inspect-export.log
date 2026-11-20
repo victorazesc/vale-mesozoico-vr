@@ -1,0 +1,20 @@
+ℹ️  blendkit: Verbose is enabled [17:00:36.216, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [17:00:36.217, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [17:00:36.218, client_lib.py:156]
+Created history step 05f74753-0840-413c-958f-6cb381b030be
+ℹ️  blendkit: Created new search history step [17:00:36.222, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:00:36.222, download.py:419]
+00:00.891  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/SourceAssets/Downloaded/Triceratops/Triceratops.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:00:36.265, download.py:419]
+NLA [('Idle', [('Idle', 1.0, 2.0, 0.0, 1.0, 'OBBip001')]), ('Walk', [('Walk', 300.0, 360.0, 1.0, 61.0, 'OBBip001')])]
+BOUNDS (-1.1556671857833862, -3.748378038406372, -18.986474990844727) (1.0948143005371094, 3.5271341800689697, 3.2222201824188232)
+BOTTOM [(7275, (0.44627058506011963, -3.0249979496002197, -18.986474990844727), [('Bip001 Head', 1.0)]), (7307, (0.44627058506011963, -3.0249979496002197, -18.986474990844727), [('Bip001 Head', 1.0)]), (7491, (0.44627058506011963, -3.0249979496002197, -18.986474990844727), [('Bip001 Head', 1.0)]), (7523, (0.44627058506011963, -3.0249979496002197, -18.986474990844727), [('Bip001 Head', 1.0)]), (7243, (0.4002540409564972, -3.054560661315918, -18.98433494567871), [('Bip001 Head', 1.0)])]
+BODY_MATRIX <Matrix 4x4 ( 0.0000, 0.0254,  0.0000, 0.0000)
+            (-0.0254, 0.0000, -0.0009, 0.8276)
+            (-0.0009, 0.0000,  0.0254, 2.0158)
+            ( 0.0000, 0.0000,  0.0000, 1.0000)>
+ℹ️  blendkit: Unregistering Blendkit add-on [17:00:36.279, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:00:36.279, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

@@ -1,0 +1,17 @@
+ℹ️  blendkit: Verbose is enabled [11:11:24.202, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [11:11:24.203, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [11:11:24.204, client_lib.py:156]
+Created history step 39cfe003-28c8-4186-8979-b96c42e6c685
+ℹ️  blendkit: Created new search history step [11:11:24.208, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:11:24.208, download.py:419]
+00:00.633  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/Pteranodon_Realism_Preview.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:11:24.369, download.py:419]
+00:07.150  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/04-refined-head.png'
+00:10.853  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/05-refined-full.png'
+Janela de informações: Saved as "Pteranodon_Realism_Refined.blend"
+REFINED_PREVIEW_OK
+ℹ️  blendkit: Unregistering Blendkit add-on [11:11:34.476, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:11:34.476, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

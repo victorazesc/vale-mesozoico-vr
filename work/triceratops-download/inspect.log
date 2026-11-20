@@ -1,0 +1,146 @@
+ℹ️  blendkit: Verbose is enabled [16:49:49.014, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [16:49:49.015, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [16:49:49.016, client_lib.py:156]
+Created history step af4b3f6f-b115-4394-b7de-2ba64e133246
+ℹ️  blendkit: Created new search history step [16:49:49.020, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [16:49:49.020, download.py:419]
+ℹ️  blendkit: Unregistering Blendkit add-on [16:49:49.025, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [16:49:49.025, download.py:419]
+16:49:49 | INFO: Data are loaded, start creating Blender stuff
+16:49:49 | INFO: Blender create Mesh node 网格.002
+16:49:49 | INFO: Blender create Mesh node 网格.003
+16:49:49 | INFO: Blender create Mesh node 网格
+16:49:49 | INFO: Blender create Mesh node 网格.001
+16:49:49 | INFO: glTF import finished in 0.13s
+FPS 24
+OBJECT Light EMPTY parent None scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (4.076245307922363, 1.0054539442062378, 5.903861999511719)
+OBJECT Camera EMPTY parent None scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (7.358891487121582, -6.925790786743164, 4.958309173583984)
+OBJECT Bip001 ARMATURE parent None scale (0.02539999969303608, 0.02540000155568123, 0.02540000155568123) dim (12.213769912719727, 10.73762035369873, 11.222333908081055) location (2.129685143514859e-11, 0.8276325464248657, 2.0157933235168457)
+ANIM Bip001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+BONE Bip001 Pelvis head (-0.0, 0.828, 2.016)
+BONE Bip001 Spine head (-0.0, 0.626, 2.088)
+BONE Bip001 Spine1 head (0.0, -0.124, 2.009)
+BONE Bip001 Spine2 head (0.0, -0.791, 1.896)
+BONE Bip001 Neck head (0.0, -1.503, 1.659)
+BONE Bip001 Neck1 head (0.0, -1.746, 1.619)
+BONE Bip001 Head head (0.0, -1.981, 1.611)
+BONE Bip001 L Clavicle head (0.42, -1.031, 1.738)
+BONE Bip001 L UpperArm head (0.563, -1.409, 1.324)
+BONE Bip001 L Forearm head (0.484, -0.818, 0.776)
+BONE Bip001 L Hand head (0.447, -0.883, 0.037)
+BONE Bip001 L Finger0 head (0.3, -1.211, -0.049)
+BONE Bip001 L Finger1 head (0.448, -1.234, -0.055)
+BONE Bip001 L Finger2 head (0.562, -1.186, -0.049)
+BONE Bip001 L Finger3 head (0.665, -1.118, -0.043)
+BONE Bip001 R Clavicle head (-0.42, -1.031, 1.738)
+BONE Bip001 R UpperArm head (-0.563, -1.409, 1.324)
+BONE Bip001 R Forearm head (-0.484, -0.818, 0.776)
+BONE Bip001 R Hand head (-0.447, -0.883, 0.037)
+BONE Bip001 R Finger0 head (-0.3, -1.211, -0.049)
+BONE Bip001 R Finger1 head (-0.448, -1.234, -0.055)
+BONE Bip001 R Finger2 head (-0.561, -1.186, -0.049)
+BONE Bip001 R Finger3 head (-0.665, -1.118, -0.043)
+BONE Bip001 L Thigh head (0.627, 0.828, 2.016)
+BONE Bip001 L Calf head (0.596, 0.772, 1.008)
+BONE Bip001 L Foot head (0.569, 1.012, 0.168)
+BONE Bip001 L Toe0 head (0.789, 0.789, -0.007)
+BONE Bip001 R Thigh head (-0.627, 0.828, 2.016)
+BONE Bip001 R Calf head (-0.596, 0.772, 1.008)
+BONE Bip001 R Foot head (-0.569, 1.012, 0.168)
+BONE Bip001 R Toe3 head (-0.41, 0.737, -0.009)
+BONE Bip001 Tail head (-0.0, 1.368, 1.991)
+BONE Bip001 Tail1 head (-0.0, 1.722, 1.657)
+BONE Bip001 Tail2 head (-0.0, 2.135, 1.384)
+BONE Bip001 Tail3 head (-0.0, 2.596, 1.191)
+BONE Bip001 Tail4 head (-0.0, 3.103, 1.221)
+OBJECT 3jl001 MESH parent Bip001 scale (1.0, 1.0, 1.0) dim (7.240440845489502, 2.2504587173461914, 3.3360888957977295) location (0.0, 0.0, 0.0)
+OBJECT Object001 MESH parent Bip001 scale (1.0, 1.0, 1.0) dim (0.3220233917236328, 0.269268274307251, 0.3401482403278351) location (0.0, 0.0, 0.0)
+OBJECT Bip001 HeadNub EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (60.8474235534668, -20.964298248291016, -3.8146970382513246e-06)
+OBJECT Object002 MESH parent Bip001 scale (132.00071716308594, 132.0006866455078, 132.0006866455078) dim (0.04742885008454323, 0.7222056984901428, 0.05053595080971718) location (-72.1697769165039, -7.071948051452637, 1.0833320617675781)
+OBJECT Object003 MESH parent Bip001 scale (139.65164184570312, 139.65162658691406, 139.65159606933594) dim (0.28028830885887146, 0.730686604976654, 0.279422789812088) location (-78.02837371826172, -6.75629997253418, 0.29131364822387695)
+OBJECT Bip001 L Finger0Nub EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.2358970642089844, -13.022965431213379, -3.814697720372351e-06)
+OBJECT Bip001 L Finger1Nub EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.235889196395874, -13.022969245910645, -1.9073481780651491e-06)
+OBJECT Bip001 L Finger2Nub EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.8830716609954834, -13.02297306060791, -3.874301000905689e-06)
+OBJECT Bip001 L Finger3Nub EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.235889196395874, -13.022967338562012, 1.9073481780651491e-06)
+OBJECT Bip001 R Finger0Nub EMPTY parent Bip001 scale (-1.0, -0.9999999403953552, -1.0) dim (0.0, 0.0, 0.0) location (3.2358856201171875, -13.022966384887695, 3.814697720372351e-06)
+OBJECT Bip001 R Finger1Nub EMPTY parent Bip001 scale (-1.0, -1.0, -1.0000001192092896) dim (0.0, 0.0, 0.0) location (3.235877752304077, -13.022967338562012, 0.0)
+OBJECT Bip001 R Finger2Nub EMPTY parent Bip001 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.8830795288085938, -13.022964477539062, 1.4305119293567259e-06)
+OBJECT Bip001 R Finger3Nub EMPTY parent Bip001 scale (-1.0, -1.0, -1.0000001192092896) dim (0.0, 0.0, 0.0) location (3.2358970642089844, -13.022967338562012, 1.9073486328125e-06)
+OBJECT Bip001 L Toe0Nub EMPTY parent Bip001 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (2.9583961963653564, -14.142260551452637, 0.0)
+OBJECT Bip001 L Toe1 EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571681022644043, -2.0369014739990234, -2.246762752532959)
+OBJECT Bip001 L Toe1Nub EMPTY parent Bip001 L Toe1 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.1556224822998047, 0.0, 0.0)
+OBJECT Bip001 L Toe2 EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571680068969727, -1.7756195068359375, 3.396101474761963)
+OBJECT Bip001 L Toe2Nub EMPTY parent Bip001 L Toe2 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.3528499603271484, 0.0, 0.0)
+OBJECT Bip001 L Toe3 EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571681022644043, -4.198957443237305, 7.914527893066406)
+OBJECT Bip001 L Toe3Nub EMPTY parent Bip001 L Toe3 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.550077438354492, 0.0, 0.0)
+OBJECT Bip001 R Toe3Nub EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.5500755310058594, -14.307201385498047, -4.7683693082944956e-07)
+OBJECT Bip001 R Toe0 EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571681976318359, -4.01491641998291, 7.133426189422607)
+OBJECT Bip001 R Toe0Nub EMPTY parent Bip001 R Toe0 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (2.958395004272461, 0.0, 0.0)
+OBJECT Bip001 R Toe1 EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571681499481201, -2.201840400695801, 2.2467613220214844)
+OBJECT Bip001 R Toe1Nub EMPTY parent Bip001 R Toe1 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.1556224822998047, 0.0, 0.0)
+OBJECT Bip001 R Toe2 EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571681499481201, -1.9405641555786133, -3.396104335784912)
+OBJECT Bip001 R Toe2Nub EMPTY parent Bip001 R Toe2 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.3528480529785156, 0.0, 0.0)
+OBJECT Bip001 TailNub EMPTY parent Bip001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (18.162282943725586, -20.019804000854492, 3.814697265625e-06)
+OBJECT Bip001 HeadNub.001 EMPTY parent None scale (0.9999999403953552, 1.0, 1.0000001192092896) dim (0.0, 0.0, 0.0) location (60.847412109375, -20.96430778503418, -1.11262045265903e-06)
+ANIM Bip001 HeadNub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Finger0Nub.001 EMPTY parent None scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.2358946800231934, -13.77180290222168, 0.0)
+ANIM Bip001 L Finger0Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Finger1Nub.001 EMPTY parent None scale (1.0, 1.0, 0.9999999403953552) dim (0.0, 0.0, 0.0) location (3.2358932495117188, -13.77180290222168, 0.0)
+ANIM Bip001 L Finger1Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Finger2Nub.001 EMPTY parent None scale (1.000000238418579, 1.0000001192092896, 1.0000001192092896) dim (0.0, 0.0, 0.0) location (3.883070230484009, -13.77180290222168, -1.5621384363839752e-06)
+ANIM Bip001 L Finger2Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Finger3Nub.001 EMPTY parent None scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.235891103744507, -13.77180290222168, -1.5099844858923461e-06)
+ANIM Bip001 L Finger3Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Finger0Nub.001 EMPTY parent None scale (-1.0, -0.9999999403953552, -1.0) dim (0.0, 0.0, 0.0) location (3.2358901500701904, -13.771805763244629, 7.9472818015347e-07)
+ANIM Bip001 R Finger0Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Finger1Nub.001 EMPTY parent None scale (-1.0, -1.0, -1.0000001192092896) dim (0.0, 0.0, 0.0) location (3.2358856201171875, -13.771805763244629, 7.9472818015347e-07)
+ANIM Bip001 R Finger1Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Finger2Nub.001 EMPTY parent None scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.88307785987854, -13.771805763244629, 1.5099844858923461e-06)
+ANIM Bip001 R Finger2Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Finger3Nub.001 EMPTY parent None scale (-1.0, -1.0, -1.0000001192092896) dim (0.0, 0.0, 0.0) location (3.235893964767456, -13.771805763244629, -3.97364090076735e-07)
+ANIM Bip001 R Finger3Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Toe0Nub.001 EMPTY parent None scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (2.9583988189697266, -14.142268180847168, 0.0)
+ANIM Bip001 L Toe0Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Toe1.001 EMPTY parent None scale (0.9999998807907104, 1.0, 0.9999998807907104) dim (0.0, 0.0, 0.0) location (6.571681499481201, -2.0369086265563965, -2.246764659881592)
+ANIM Bip001 L Toe1.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Toe1Nub.001 EMPTY parent Bip001 L Toe1.001 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.155622720718384, -1.1796753796033954e-08, -7.9472818015347e-07)
+ANIM Bip001 L Toe1Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Toe2.001 EMPTY parent None scale (1.0, 1.0, 1.0000001192092896) dim (0.0, 0.0, 0.0) location (6.571681022644043, -1.775628924369812, 3.39609956741333)
+ANIM Bip001 L Toe2.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Toe2Nub.001 EMPTY parent Bip001 L Toe2.001 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.3528499603271484, 1.4901161193847656e-08, 0.0)
+ANIM Bip001 L Toe2Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Toe3.001 EMPTY parent None scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571681499481201, -4.198966026306152, 7.9145283699035645)
+ANIM Bip001 L Toe3.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 L Toe3Nub.001 EMPTY parent Bip001 L Toe3.001 scale (-1.0, -1.0, -1.0) dim (0.0, 0.0, 0.0) location (3.550077438354492, 0.0, 7.549922429461731e-07)
+ANIM Bip001 L Toe3Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Toe0.001 EMPTY parent None scale (1.0000001192092896, 1.0, 1.0000001192092896) dim (0.0, 0.0, 0.0) location (6.571681499481201, -4.014913558959961, 7.133424758911133)
+ANIM Bip001 R Toe0.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Toe0Nub.001 EMPTY parent Bip001 R Toe0.001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (2.958395481109619, 3.1044069537244923e-09, 0.0)
+ANIM Bip001 R Toe0Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Toe1.001 EMPTY parent None scale (1.0000001192092896, 1.0, 0.9999999403953552) dim (0.0, 0.0, 0.0) location (6.571681022644043, -2.2018392086029053, 2.246763229370117)
+ANIM Bip001 R Toe1.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Toe1Nub.001 EMPTY parent Bip001 R Toe1.001 scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.1556224822998047, -1.4901161193847656e-08, 0.0)
+ANIM Bip001 R Toe1Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Toe2.001 EMPTY parent None scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (6.571681022644043, -1.9405592679977417, -3.3961029052734375)
+ANIM Bip001 R Toe2.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Toe2Nub.001 EMPTY parent Bip001 R Toe2.001 scale (0.9999999403953552, 1.0, 0.9999999403953552) dim (0.0, 0.0, 0.0) location (3.3528480529785156, 1.4901161193847656e-08, 1.5099844858923461e-06)
+ANIM Bip001 R Toe2Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 R Toe3Nub.001 EMPTY parent None scale (1.0, 1.0, 1.0) dim (0.0, 0.0, 0.0) location (3.5500755310058594, -14.30720043182373, -1.986820450383675e-07)
+ANIM Bip001 R Toe3Nub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Bip001 TailNub.001 EMPTY parent None scale (0.9999998211860657, 0.9999999403953552, 0.9999999403953552) dim (0.0, 0.0, 0.0) location (18.16228485107422, -20.01979637145996, -3.814697265625e-06)
+ANIM Bip001 TailNub.001 action <bpy_struct, Action("Animation") at 0xa01009688> NLA [('Animation', [('Animation', 1.0, 217.00001525878906)])]
+OBJECT Icosphere MESH parent None scale (1.0, 1.0, 1.0) dim (1.9021157026290894, 1.9999998807907104, 2.0) location (0.0, 0.0, 0.0)
+ACTION Animation (0.8000000715255737, 216.80001831054688) slots ['OBBip001', 'OBBip001 HeadNub.001', 'OBBip001 L Finger0Nub.001', 'OBBip001 L Finger1Nub.001', 'OBBip001 L Finger2Nub.001', 'OBBip001 L Finger3Nub.001', 'OBBip001 R Finger0Nub.001', 'OBBip001 R Finger1Nub.001', 'OBBip001 R Finger2Nub.001', 'OBBip001 R Finger3Nub.001', 'OBBip001 L Toe0Nub.001', 'OBBip001 L Toe1Nub.001', 'OBBip001 L Toe1.001', 'OBBip001 L Toe2Nub.001', 'OBBip001 L Toe2.001', 'OBBip001 L Toe3Nub.001', 'OBBip001 L Toe3.001', 'OBBip001 R Toe0Nub.001', 'OBBip001 R Toe0.001', 'OBBip001 R Toe1Nub.001', 'OBBip001 R Toe1.001', 'OBBip001 R Toe2Nub.001', 'OBBip001 R Toe2.001', 'OBBip001 R Toe3Nub.001', 'OBBip001 TailNub.001']
+IMAGE 三角龙_b (2048, 2048) sRGB
+IMAGE 三角龙_m (2048, 2048) Non-Color
+IMAGE 三角龙_n (2048, 2048) Non-Color
+POSE 0 [('Bip001 Head', (0.005, -2.011, 1.757)), ('Bip001 L Hand', (0.679, -1.131, 0.103)), ('Bip001 R Hand', (-0.693, -1.21, 0.108)), ('Bip001 L Foot', (0.6, 1.011, 0.171)), ('Bip001 R Foot', (-0.652, 1.011, 0.171))]
+POSE 20 [('Bip001 Head', (0.003, -1.95, 1.685)), ('Bip001 L Hand', (0.68, -1.131, 0.102)), ('Bip001 R Hand', (-0.693, -1.21, 0.108)), ('Bip001 L Foot', (0.6, 1.011, 0.171)), ('Bip001 R Foot', (-0.652, 1.011, 0.171))]
+POSE 40 [('Bip001 Head', (-0.04, -2.012, 1.92)), ('Bip001 L Hand', (0.68, -1.131, 0.102)), ('Bip001 R Hand', (-0.693, -1.21, 0.108)), ('Bip001 L Foot', (0.6, 1.011, 0.171)), ('Bip001 R Foot', (-0.652, 1.011, 0.171))]
+POSE 60 [('Bip001 Head', (0.426, -1.689, 1.389)), ('Bip001 L Hand', (0.672, -1.131, 0.106)), ('Bip001 R Hand', (-0.693, -1.21, 0.108)), ('Bip001 L Foot', (0.6, 1.011, 0.171)), ('Bip001 R Foot', (-0.652, 1.011, 0.171))]
+POSE 80 [('Bip001 Head', (-0.037, -2.294, 2.081)), ('Bip001 L Hand', (0.669, -1.132, 0.109)), ('Bip001 R Hand', (-0.693, -1.21, 0.108)), ('Bip001 L Foot', (0.6, 1.011, 0.171)), ('Bip001 R Foot', (-0.652, 1.011, 0.171))]
+POSE 100 [('Bip001 Head', (-0.034, -2.362, 2.195)), ('Bip001 L Hand', (0.669, -1.136, 0.116)), ('Bip001 R Hand', (-0.693, -1.21, 0.108)), ('Bip001 L Foot', (0.6, 1.011, 0.171)), ('Bip001 R Foot', (-0.652, 1.011, 0.171))]
+Info: Saved as "imported.blend"
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

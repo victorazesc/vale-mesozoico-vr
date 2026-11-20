@@ -1,0 +1,1280 @@
+[Dinosaur QA] PASS | actors=12, ground3D=9, roamers=7, audioEmitters=10, geometryValid=9, grounded=9, skinnedRenderers=12, animations=12, triangles=53620, breakFragments=12
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.DinosaurRuntimeQa/<Start>d__1:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:372)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 372)
+
+[Developer Timeline QA] PASS | controller=True, timeline=True, allowed=True, defaultRate=1x
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideDebugTimelineQa/<Start>d__1:MoveNext () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:214)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs Line: 214)
+
+[Imported Environment QA] PASS | instances=2749, renderers=2804, meshes=68, materials=21, pbrMaterials=20, waterMaterials=1, texturedMaterials=17, cutoutMaterials=7, lagoonX=39.4, caveX=35.5, terrainUvs=27024, terrainTexture=JungleGround_Albedo, terrainColor=RGBA(0.820, 0.870, 0.810, 1.000), riderGround=[PC_Boulder_026:PC_PolyHaven_RockMossSet01_CC0@7.9, Terrain_Editable_129x129:M_Terrain_Jungle_PBR@34.4], trackVerticalRange=65.4m, sways=246, swayDelta=0.714deg
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.EnvironmentRuntimeQa/<ValidateImportedEnvironment>d__2:MoveNext () (at Assets/_Game/Scripts/Runtime/EnvironmentRuntimeQa.cs:421)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/_Game/Scripts/Runtime/EnvironmentRuntimeQa.cs Line: 421)
+
+[Dinosaur Placement QA] Audit written
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:135)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEngine.MonoBehaviour:StartCoroutineManaged2 (System.Collections.IEnumerator)
+UnityEngine.MonoBehaviour:StartCoroutine (System.Collections.IEnumerator) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/MonoBehaviour.bindings.cs:114)
+ValeMesozoico.DinosaurPlacementQa:Tick () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:57)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:392)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs Line: 135)
+
+[Developer Timeline] SEEK | from=0.002, to=0.089, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideController:DeveloperSeekToProgress (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:655)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:147)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEngine.MonoBehaviour:StartCoroutineManaged2 (System.Collections.IEnumerator)
+UnityEngine.MonoBehaviour:StartCoroutine (System.Collections.IEnumerator) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/MonoBehaviour.bindings.cs:114)
+ValeMesozoico.DinosaurPlacementQa:Tick () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:57)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:392)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Lift Audio QA] ACTIVE | progress=0.089, chainVolume=0.213, wheelVolume=0.059
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TrackRuntimeQa/<Start>d__5:MoveNext () (at Assets/_Game/Scripts/Runtime/TrackRuntimeQa.cs:142)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/_Game/Scripts/Runtime/TrackRuntimeQa.cs Line: 142)
+
+[Dinosaur Placement QA] Screenshot: /Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/../work/dinosaur-population/12-final-apatosaurus.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:177)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEditor.EditorGUIUtility:RenderPlayModeViewCamerasInternal (UnityEngine.RenderTexture,int,UnityEngine.Vector2,bool,bool)
+UnityEditor.PlayModeView:RenderView (UnityEngine.Vector2,bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/PlayModeView/PlayModeView.cs:246)
+UnityEditor.GameView:OnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GameView/GameView.cs:1054)
+UnityEditor.HostView:InvokeOnGUI (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/HostView.cs:517)
+UnityEditor.DockArea:DrawView (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:409)
+UnityEditor.DockArea:OldOnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:400)
+UnityEngine.UIElements.IMGUIContainer:DoOnGUI (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,bool,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:407)
+UnityEngine.UIElements.IMGUIContainer:HandleIMGUIEvent (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:732)
+UnityEngine.UIElements.IMGUIContainer:DoIMGUIRepaint () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:594)
+UnityEngine.UIElements.UIR.RenderChainCommand:ExecuteNonDrawMesh (UnityEngine.UIElements.UIR.DrawParams,single,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderers.cs:148)
+UnityEngine.UIElements.UIR.UIRenderDevice:EvaluateChain (UnityEngine.UIElements.UIR.RenderChainCommand,UnityEngine.Material,UnityEngine.Texture,UnityEngine.Texture,System.Nullable`1<UnityEngine.Rect>,UnityEngine.Vector2,single,bool,UnityEngine.UIElements.TextureSlotCount,bool,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderDevice.cs:1152)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderSingleTree (UnityEngine.UIElements.UIR.RenderTree,UnityEngine.RenderTexture,UnityEngine.RectInt,UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:414)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderRootTree () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:359)
+UnityEngine.UIElements.UIRRepaintUpdater:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRepaintUpdater.cs:143)
+UnityEngine.UIElements.BaseVisualElementPanel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:913)
+UnityEngine.UIElements.Panel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:1604)
+UnityEngine.UIElements.UIElementsUtility:DoDispatch (UnityEngine.UIElements.BaseVisualElementPanel) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:516)
+UnityEngine.UIElements.UIElementsUtility:UnityEngine.UIElements.IUIElementsUtility.ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:244)
+UnityEngine.UIElements.UIEventRegistration:ProcessEvent (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:79)
+UnityEngine.UIElements.UIEventRegistration/<>c:<.cctor>b__1_2 (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:33)
+UnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/IMGUI/GUIUtility.cs:224)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs Line: 177)
+
+[Cave Drop] rimHeight=0.58..0.68, sides=(0.30, 0.58, 0.00)/(-0.30, 0.58, 0.00), headLocal=(0.00, 0.96, -0.54)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.PteranodonDropSequence:MeasurePanels () (at Assets/_Game/Scripts/Runtime/PteranodonDropSequence.cs:437)
+ValeMesozoico.PteranodonDropSequence:BeginHold () (at Assets/_Game/Scripts/Runtime/PteranodonDropSequence.cs:112)
+ValeMesozoico.RideController:StepCrestBrake (single,single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:497)
+ValeMesozoico.RideController:StepRide (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:467)
+ValeMesozoico.RideController:Update () (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:389)
+
+(Filename: Assets/_Game/Scripts/Runtime/PteranodonDropSequence.cs Line: 437)
+
+[Cave Drop] HOLD | crest=69.81m, span=14m, panels=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.PteranodonDropSequence:BeginHold () (at Assets/_Game/Scripts/Runtime/PteranodonDropSequence.cs:118)
+ValeMesozoico.RideController:StepCrestBrake (single,single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:497)
+ValeMesozoico.RideController:StepRide (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:467)
+ValeMesozoico.RideController:Update () (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:389)
+
+(Filename: Assets/_Game/Scripts/Runtime/PteranodonDropSequence.cs Line: 118)
+
+[Dinosaur Placement QA] Audit written
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:135)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEngine.MonoBehaviour:StartCoroutineManaged2 (System.Collections.IEnumerator)
+UnityEngine.MonoBehaviour:StartCoroutine (System.Collections.IEnumerator) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/MonoBehaviour.bindings.cs:114)
+ValeMesozoico.DinosaurPlacementQa:Tick () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:57)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:392)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs Line: 135)
+
+Asset Pipeline Refresh (id=09f33a8bb561742dc9247aadf191be55): Total: 0.212 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+[Lift Audio QA] FAIL | liftObserved=True, progress=0.313
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+ValeMesozoico.TrackRuntimeQa/<Start>d__5:MoveNext () (at Assets/_Game/Scripts/Runtime/TrackRuntimeQa.cs:166)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/_Game/Scripts/Runtime/TrackRuntimeQa.cs Line: 166)
+
+[T-Rex QA] FAIL | timeout=True, progress=0.313
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+ValeMesozoico.DinosaurRuntimeQa/<Start>d__1:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:415)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 415)
+
+[Developer Timeline] SEEK | from=0.313, to=0.858, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideController:DeveloperSeekToProgress (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:655)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:147)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEngine.MonoBehaviour:StartCoroutineManaged2 (System.Collections.IEnumerator)
+UnityEngine.MonoBehaviour:StartCoroutine (System.Collections.IEnumerator) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/MonoBehaviour.bindings.cs:114)
+ValeMesozoico.DinosaurPlacementQa:Tick () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:57)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:392)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] CHASE START
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:BeginChase () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:167)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:148)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 167)
+
+[T-Rex Encounter] ROAR | played=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:185)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 185)
+
+[Dinosaur Placement QA] Screenshot: /Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/../work/dinosaur-population/13-trex-encontro.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:177)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEditor.EditorGUIUtility:RenderPlayModeViewCamerasInternal (UnityEngine.RenderTexture,int,UnityEngine.Vector2,bool,bool)
+UnityEditor.PlayModeView:RenderView (UnityEngine.Vector2,bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/PlayModeView/PlayModeView.cs:246)
+UnityEditor.GameView:OnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GameView/GameView.cs:1054)
+UnityEditor.HostView:InvokeOnGUI (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/HostView.cs:517)
+UnityEditor.DockArea:DrawView (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:409)
+UnityEditor.DockArea:OldOnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:400)
+UnityEngine.UIElements.IMGUIContainer:DoOnGUI (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,bool,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:407)
+UnityEngine.UIElements.IMGUIContainer:HandleIMGUIEvent (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:732)
+UnityEngine.UIElements.IMGUIContainer:DoIMGUIRepaint () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:594)
+UnityEngine.UIElements.UIR.RenderChainCommand:ExecuteNonDrawMesh (UnityEngine.UIElements.UIR.DrawParams,single,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderers.cs:148)
+UnityEngine.UIElements.UIR.UIRenderDevice:EvaluateChain (UnityEngine.UIElements.UIR.RenderChainCommand,UnityEngine.Material,UnityEngine.Texture,UnityEngine.Texture,System.Nullable`1<UnityEngine.Rect>,UnityEngine.Vector2,single,bool,UnityEngine.UIElements.TextureSlotCount,bool,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderDevice.cs:1152)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderSingleTree (UnityEngine.UIElements.UIR.RenderTree,UnityEngine.RenderTexture,UnityEngine.RectInt,UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:414)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderRootTree () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:359)
+UnityEngine.UIElements.UIRRepaintUpdater:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRepaintUpdater.cs:143)
+UnityEngine.UIElements.BaseVisualElementPanel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:913)
+UnityEngine.UIElements.Panel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:1604)
+UnityEngine.UIElements.UIElementsUtility:DoDispatch (UnityEngine.UIElements.BaseVisualElementPanel) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:516)
+UnityEngine.UIElements.UIElementsUtility:UnityEngine.UIElements.IUIElementsUtility.ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:244)
+UnityEngine.UIElements.UIEventRegistration:ProcessEvent (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:79)
+UnityEngine.UIElements.UIEventRegistration/<>c:<.cctor>b__1_2 (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:33)
+UnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/IMGUI/GUIUtility.cs:224)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs Line: 177)
+
+[Developer Timeline] SEEK | from=0.863, to=0.920, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideController:DeveloperSeekToProgress (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:655)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:147)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEngine.MonoBehaviour:StartCoroutineManaged2 (System.Collections.IEnumerator)
+UnityEngine.MonoBehaviour:StartCoroutine (System.Collections.IEnumerator) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/MonoBehaviour.bindings.cs:114)
+ValeMesozoico.DinosaurPlacementQa:Tick () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:57)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:392)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] TRACK BREAK | fragments=12
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TrackBreakSetpiece:Break () (at Assets/_Game/Scripts/Runtime/RideSpline.cs:982)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:205)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/RideSpline.cs Line: 982)
+
+[T-Rex Encounter] STRIKE | trackBroken=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:209)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 209)
+
+[Dinosaur Placement QA] Screenshot: /Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/../work/dinosaur-population/14-trex-fim.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:177)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEditor.EditorGUIUtility:RenderPlayModeViewCamerasInternal (UnityEngine.RenderTexture,int,UnityEngine.Vector2,bool,bool)
+UnityEditor.PlayModeView:RenderView (UnityEngine.Vector2,bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/PlayModeView/PlayModeView.cs:246)
+UnityEditor.GameView:OnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GameView/GameView.cs:1054)
+UnityEditor.HostView:InvokeOnGUI (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/HostView.cs:517)
+UnityEditor.DockArea:DrawView (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:409)
+UnityEditor.DockArea:OldOnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:400)
+UnityEngine.UIElements.IMGUIContainer:DoOnGUI (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,bool,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:407)
+UnityEngine.UIElements.IMGUIContainer:HandleIMGUIEvent (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:732)
+UnityEngine.UIElements.IMGUIContainer:DoIMGUIRepaint () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:594)
+UnityEngine.UIElements.UIR.RenderChainCommand:ExecuteNonDrawMesh (UnityEngine.UIElements.UIR.DrawParams,single,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderers.cs:148)
+UnityEngine.UIElements.UIR.UIRenderDevice:EvaluateChain (UnityEngine.UIElements.UIR.RenderChainCommand,UnityEngine.Material,UnityEngine.Texture,UnityEngine.Texture,System.Nullable`1<UnityEngine.Rect>,UnityEngine.Vector2,single,bool,UnityEngine.UIElements.TextureSlotCount,bool,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderDevice.cs:1152)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderSingleTree (UnityEngine.UIElements.UIR.RenderTree,UnityEngine.RenderTexture,UnityEngine.RectInt,UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:414)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderRootTree () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:359)
+UnityEngine.UIElements.UIRRepaintUpdater:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRepaintUpdater.cs:143)
+UnityEngine.UIElements.BaseVisualElementPanel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:913)
+UnityEngine.UIElements.Panel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:1604)
+UnityEngine.UIElements.UIElementsUtility:DoDispatch (UnityEngine.UIElements.BaseVisualElementPanel) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:516)
+UnityEngine.UIElements.UIElementsUtility:UnityEngine.UIElements.IUIElementsUtility.ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:244)
+UnityEngine.UIElements.UIEventRegistration:ProcessEvent (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:79)
+UnityEngine.UIElements.UIEventRegistration/<>c:<.cctor>b__1_2 (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:33)
+UnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/IMGUI/GUIUtility.cs:224)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs Line: 177)
+
+[T-Rex Encounter] COMPLETE | roar=True, trackBroken=True, travel=9.1m
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:222)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 222)
+
+[Developer Timeline] SEEK | from=0.925, to=0.027, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideController:DeveloperSeekToProgress (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:655)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:147)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEngine.MonoBehaviour:StartCoroutineManaged2 (System.Collections.IEnumerator)
+UnityEngine.MonoBehaviour:StartCoroutine (System.Collections.IEnumerator) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/MonoBehaviour.bindings.cs:114)
+ValeMesozoico.DinosaurPlacementQa:Tick () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:57)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions () (at /Users/bokken/build/output/unity/unity/Editor/Mono/EditorApplication.cs:392)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Dinosaur Placement QA] Screenshot: /Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/../work/dinosaur-population/15-vale-final.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.DinosaurPlacementQa/<Run>d__4:MoveNext () (at Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs:177)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+UnityEditor.EditorGUIUtility:RenderPlayModeViewCamerasInternal (UnityEngine.RenderTexture,int,UnityEngine.Vector2,bool,bool)
+UnityEditor.PlayModeView:RenderView (UnityEngine.Vector2,bool) (at /Users/bokken/build/output/unity/unity/Editor/Mono/PlayModeView/PlayModeView.cs:246)
+UnityEditor.GameView:OnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GameView/GameView.cs:1054)
+UnityEditor.HostView:InvokeOnGUI (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/HostView.cs:517)
+UnityEditor.DockArea:DrawView (UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:409)
+UnityEditor.DockArea:OldOnGUI () (at /Users/bokken/build/output/unity/unity/Editor/Mono/GUI/DockArea.cs:400)
+UnityEngine.UIElements.IMGUIContainer:DoOnGUI (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,bool,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:407)
+UnityEngine.UIElements.IMGUIContainer:HandleIMGUIEvent (UnityEngine.Event,UnityEngine.Matrix4x4,UnityEngine.Rect,System.Action,bool) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:732)
+UnityEngine.UIElements.IMGUIContainer:DoIMGUIRepaint () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/IMGUIContainer.cs:594)
+UnityEngine.UIElements.UIR.RenderChainCommand:ExecuteNonDrawMesh (UnityEngine.UIElements.UIR.DrawParams,single,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderers.cs:148)
+UnityEngine.UIElements.UIR.UIRenderDevice:EvaluateChain (UnityEngine.UIElements.UIR.RenderChainCommand,UnityEngine.Material,UnityEngine.Texture,UnityEngine.Texture,System.Nullable`1<UnityEngine.Rect>,UnityEngine.Vector2,single,bool,UnityEngine.UIElements.TextureSlotCount,bool,System.Exception&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRenderer/UIRenderDevice.cs:1152)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderSingleTree (UnityEngine.UIElements.UIR.RenderTree,UnityEngine.RenderTexture,UnityEngine.RectInt,UnityEngine.Rect) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:414)
+UnityEngine.UIElements.UIR.RenderTreeManager:RenderRootTree () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRenderTreeManager.cs:359)
+UnityEngine.UIElements.UIRRepaintUpdater:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Renderer/UIRRepaintUpdater.cs:143)
+UnityEngine.UIElements.BaseVisualElementPanel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:913)
+UnityEngine.UIElements.Panel:Render () (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/Panel.cs:1604)
+UnityEngine.UIElements.UIElementsUtility:DoDispatch (UnityEngine.UIElements.BaseVisualElementPanel) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:516)
+UnityEngine.UIElements.UIElementsUtility:UnityEngine.UIElements.IUIElementsUtility.ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:244)
+UnityEngine.UIElements.UIEventRegistration:ProcessEvent (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:79)
+UnityEngine.UIElements.UIEventRegistration/<>c:<.cctor>b__1_2 (int,intptr) (at /Users/bokken/build/output/unity/unity/Modules/UIElements/Core/UIElementsUtility.cs:33)
+UnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&) (at /Users/bokken/build/output/unity/unity/Modules/IMGUI/GUIUtility.cs:224)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurPlacementQa.cs Line: 177)
+
+[Developer Timeline] SEEK | from=0.214, to=0.340, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.348, to=0.357, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.357, to=0.427, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.430, to=0.458, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.461, to=0.458, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.459, to=0.462, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.493, to=0.500, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.503, to=0.637, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.638, to=0.637, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.638, to=0.668, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.677, to=0.676, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.701, to=0.690, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.694, to=0.715, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.795, to=0.719, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.733, to=0.732, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.732, to=0.734, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.735, to=0.780, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.781, to=0.792, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.794, to=0.811, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.811, to=0.860, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] CHASE START
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:BeginChase () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:167)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:148)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 167)
+
+[T-Rex Encounter] ROAR | played=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:185)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 185)
+
+[Developer Timeline] SEEK | from=0.863, to=0.879, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.882, to=0.840, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[T-Rex Encounter] CHASE START
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:BeginChase () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:167)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:148)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 167)
+
+[T-Rex Encounter] ROAR | played=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:185)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 185)
+
+[Developer Timeline] SEEK | from=0.849, to=0.815, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[T-Rex Encounter] CHASE START
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:BeginChase () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:167)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:148)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 167)
+
+[Developer Timeline] SEEK | from=0.840, to=0.811, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.811, to=0.807, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.807, to=0.796, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.797, to=0.776, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.776, to=0.765, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.767, to=0.763, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.763, to=0.759, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[Developer Timeline] SEEK | from=0.762, to=0.767, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.767, to=0.817, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.819, to=0.829, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.830, to=0.832, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.832, to=0.836, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] CHASE START
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:BeginChase () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:167)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:148)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 167)
+
+[Developer Timeline] SEEK | from=0.836, to=0.840, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.841, to=0.844, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.844, to=0.846, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] ROAR | played=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:185)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 185)
+
+[Developer Timeline] SEEK | from=0.847, to=0.848, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.848, to=0.850, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.850, to=0.852, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.853, to=0.863, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.863, to=0.865, backward=False
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[Developer Timeline] SEEK | from=0.866, to=0.850, backward=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideController:CompleteDeveloperScrub (single) (at Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs:713)
+ValeMesozoico.RideDebugTimeline:Update () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:139)
+
+(Filename: Assets/_Game/Scripts/Runtime/JurassicRideBootstrap.cs Line: 713)
+
+[T-Rex Encounter] RESET
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:ResetEncounter () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:266)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:135)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 266)
+
+[T-Rex Encounter] CHASE START
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:BeginChase () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:167)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:148)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 167)
+
+[T-Rex Encounter] ROAR | played=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:185)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 185)
+
+[T-Rex Encounter] TRACK BREAK | fragments=12
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TrackBreakSetpiece:Break () (at Assets/_Game/Scripts/Runtime/RideSpline.cs:982)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:205)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/RideSpline.cs Line: 982)
+
+[T-Rex Encounter] STRIKE | trackBroken=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:209)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 209)
+
+[T-Rex Encounter] COMPLETE | roar=True, trackBroken=True, travel=37.3m
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.TyrannosaurusChaseSequence:UpdateChase (single) (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:222)
+ValeMesozoico.TyrannosaurusChaseSequence:Update () (at Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs:153)
+
+(Filename: Assets/_Game/Scripts/Runtime/DinosaurEncounterRuntime.cs Line: 222)
+
+[Developer Timeline] PAUSE | progress=0.961
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ValeMesozoico.RideDebugTimeline:SetPaused (bool) (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:150)
+ValeMesozoico.RideDebugTimeline:OnGUI () (at Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs:91)
+
+(Filename: Assets/_Game/Scripts/Runtime/RideDebugTimeline.cs Line: 150)
+
+Asset Pipeline Refresh (id=439d868766fbf48b091c4eea69e1ee72): Total: 0.268 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+2026-09-06 14:52:03.105 Unity[79750:90785321] NSEventModifierFlagFunction specified to -setKeyEquivalentModifierMask: for item <NSMenuItem: 0xc25e71f40 SDF, ke='Command-F12'>, but is only supported for system-provided menu items; will not be used
+Thread 0x33bf8b000 may have been prematurely finalized
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            25.162 ms
+	Integration:            1543.678 ms
+	Integration of assets:  0.008 ms
+	Thread Wait Time:       26.769 ms
+	Total Operation Time:   1595.618 ms
+Unloading 1207 unused Assets / (13.1 MB). Loaded Objects now: 24209.
+Memory consumption went from 483.7 MB to 470.5 MB.
+Total: 23.232333 ms (FindLiveObjects: 0.889458 ms CreateObjectMapping: 0.358375 ms MarkObjects: 19.666167 ms  DeleteObjects: 2.317666 ms)
+
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details

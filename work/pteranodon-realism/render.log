@@ -1,0 +1,20 @@
+ℹ️  blendkit: Verbose is enabled [11:08:58.549, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [11:08:58.550, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [11:08:58.551, client_lib.py:156]
+Created history step b4d8f8cc-194f-4100-920f-1617f6a8fbc8
+ℹ️  blendkit: Created new search history step [11:08:58.555, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:08:58.555, download.py:419]
+00:00.594  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/original.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:08:58.717, download.py:419]
+/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/render_preview.py:36: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world.use_nodes = True
+00:05.930  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/01-original-2k.png'
+00:09.777  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/02-realistic-full.png'
+00:14.874  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism/03-realistic-head.png'
+Janela de informações: Saved as "Pteranodon_Realism_Preview.blend"
+PREVIEW_OK /Users/victorazevedo/projetos/vale-mesozoico-vr/work/pteranodon-realism
+ℹ️  blendkit: Unregistering Blendkit add-on [11:09:12.882, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [11:09:12.883, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

@@ -1,0 +1,20 @@
+ℹ️  blendkit: Verbose is enabled [17:02:09.645, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [17:02:09.646, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [17:02:09.647, client_lib.py:156]
+Created history step 213e885a-75d6-47c6-a55b-ff56d85b3483
+ℹ️  blendkit: Created new search history step [17:02:09.651, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:02:09.651, download.py:419]
+00:00.474  blend            | Read blend: "/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-download/imported.blend"
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:02:09.723, download.py:419]
+ORIGINAL parent Bip001 bone Bip001 Head type BONE world_vertex (0.343930721282959, -5.0785017013549805, -18.863746643066406) rest_vertex (0.343930721282959, -5.0785017013549805, -18.863746643066406)
+DETACHED parent Bip001 bone Bip001 Head type OBJECT world_vertex (0.34393075108528137, -5.0785017013549805, -18.86374855041504) rest_vertex (0.34393075108528137, -5.0785017013549805, -18.86374855041504)
+MODIFIER parent Bip001 bone Bip001 Head type OBJECT world_vertex (0.34393078088760376, -5.078501224517822, -18.863746643066406) rest_vertex (0.34393075108528137, -5.0785017013549805, -18.86374855041504)
+BODY_MODIFIERS [('ARMATURE', 'Bip001')]
+JOINED_REST parent Bip001 bone  type OBJECT world_vertex (0.3343179523944855, 0.3566177785396576, 0.9040635824203491) rest_vertex (0.3343179523944855, 0.3566177785396576, 0.9040634632110596)
+JOINED_POSE parent Bip001 bone  type OBJECT world_vertex (0.3366397023200989, 0.34168118238449097, 0.9016202688217163) rest_vertex (0.3343179523944855, 0.3566177785396576, 0.9040634632110596)
+BOUND -18.986774444580078
+ℹ️  blendkit: Unregistering Blendkit add-on [17:02:09.738, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [17:02:09.739, download.py:419]
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

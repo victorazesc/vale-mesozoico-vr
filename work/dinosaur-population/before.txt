@@ -1,0 +1,58 @@
+Apatosaurus: active=True, pos=(105.16, 9.58, -8.82), ground=12.00, gap=-2.42, bounds=Center: (105.16, 16.83, -8.82), Extents: (14.16, 7.25, 9.56), animation=Armature|Apatosaurus_Walk
+  renderer=Cylinder, enabled=True, visible=False, mats=Material:Universal Render Pipeline/Simple Lit,Brown:Universal Render Pipeline/Simple Lit
+Apatosaurus Young: active=True, pos=(53.62, -3.42, 19.81), ground=-4.91, gap=1.49, bounds=Center: (53.62, 1.18, 19.81), Extents: (9.57, 4.60, 1.85), animation=Armature|Apatosaurus_Walk
+  renderer=Cylinder, enabled=True, visible=False, mats=Material:Universal Render Pipeline/Simple Lit,Brown:Universal Render Pipeline/Simple Lit
+Triceratops: active=True, pos=(1.99, 0.98, 58.92), ground=-1.55, gap=2.53, bounds=Center: (1.99, 3.68, 58.92), Extents: (3.22, 2.70, 5.54), animation=Armature|Triceratops_Walk
+  renderer=Triceratops, enabled=True, visible=False, mats=LightBrown:Universal Render Pipeline/Simple Lit,Purple:Universal Render Pipeline/Simple Lit,Brown:Universal Render Pipeline/Simple Lit
+Triceratops Herd Leader: active=True, pos=(-41.22, 4.64, 82.18), ground=1.67, gap=2.98, bounds=Center: (-41.22, 7.04, 82.18), Extents: (2.55, 2.40, 4.89), animation=Armature|Triceratops_Walk
+  renderer=Triceratops, enabled=True, visible=False, mats=LightBrown:Universal Render Pipeline/Simple Lit,Purple:Universal Render Pipeline/Simple Lit,Brown:Universal Render Pipeline/Simple Lit
+Triceratops Herd Young: active=True, pos=(-48.59, 5.18, 81.19), ground=2.37, gap=2.80, bounds=Center: (-48.59, 7.23, 81.19), Extents: (3.96, 2.05, 3.59), animation=Armature|Triceratops_Walk
+  renderer=Triceratops, enabled=True, visible=False, mats=LightBrown:Universal Render Pipeline/Simple Lit,Purple:Universal Render Pipeline/Simple Lit,Brown:Universal Render Pipeline/Simple Lit
+Tyrannosaurus Rex Chase: active=False, pos=(-25.61, 2.84, 79.93), ground=0.41, gap=2.42, bounds=Center: (-25.61, 7.59, 79.93), Extents: (7.12, 4.75, 8.79), animation=Armature|TRex_Run
+  renderer=Trex, enabled=True, visible=False, mats=LightYellow:Universal Render Pipeline/Simple Lit,LightGreen:Universal Render Pipeline/Simple Lit,Green:Universal Render Pipeline/Simple Lit,Black:Universal Render Pipeline/Simple Lit,Red:Universal Render Pipeline/Simple Lit
+Pteranodon 1: active=True, pos=(34.31, 27.97, 33.37), ground=-5.40, gap=33.37, bounds=Center: (34.32, 27.97, 33.36), Extents: (2.38, 3.05, 3.92), animation=Pteranodon_Rig|flying
+  renderer=Pteranodon_Body, enabled=True, visible=False, mats=Pteranodon PBR Quest:Universal Render Pipeline/Simple Lit
+Pteranodon 2: active=True, pos=(10.94, 31.41, 27.03), ground=-4.09, gap=35.50, bounds=Center: (10.95, 31.41, 27.03), Extents: (3.19, 2.54, 1.68), animation=Pteranodon_Rig|flying
+  renderer=Pteranodon_Body, enabled=True, visible=False, mats=Pteranodon PBR Quest:Universal Render Pipeline/Simple Lit
+Pteranodon 3: active=True, pos=(34.23, 33.01, -1.89), ground=-3.00, gap=36.00, bounds=Center: (34.22, 33.01, -1.88), Extents: (1.69, 2.03, 2.83), animation=Pteranodon_Rig|flying
+  renderer=Pteranodon_Body, enabled=True, visible=True, mats=Pteranodon PBR Quest:Universal Render Pipeline/Simple Lit
+route base=0.000 progress=0.0000 position=(0.00, 4.20, -56.00) forward=(1.00, 0.01, 0.08)
+route base=0.025 progress=0.0222 position=(12.95, 4.35, -55.30) forward=(1.00, 0.01, 0.05)
+route base=0.050 progress=0.0443 position=(25.85, 4.63, -54.01) forward=(0.99, 0.03, 0.17)
+route base=0.075 progress=0.0665 position=(38.26, 5.24, -50.40) forward=(0.93, 0.05, 0.37)
+route base=0.100 progress=0.0887 position=(49.88, 5.97, -44.70) forward=(0.86, 0.07, 0.50)
+route base=0.125 progress=0.1108 position=(60.44, 7.23, -37.31) forward=(0.75, 0.14, 0.64)
+route base=0.150 progress=0.1330 position=(69.16, 9.35, -27.98) forward=(0.59, 0.17, 0.79)
+route base=0.175 progress=0.1552 position=(75.80, 11.94, -17.17) forward=(0.42, 0.26, 0.87)
+route base=0.200 progress=0.1773 position=(79.83, 16.55, -5.80) forward=(0.19, 0.47, 0.86)
+route base=0.225 progress=0.1995 position=(80.58, 23.68, 4.97) forward=(-0.04, 0.60, 0.80)
+route base=0.250 progress=0.2216 position=(79.32, 31.77, 15.02) forward=(-0.15, 0.65, 0.75)
+route base=0.275 progress=0.2438 position=(76.90, 40.38, 24.41) forward=(-0.23, 0.68, 0.69)
+route base=0.300 progress=0.2660 position=(72.94, 49.73, 32.42) forward=(-0.40, 0.75, 0.52)
+route base=0.325 progress=0.2881 position=(67.07, 59.60, 38.41) forward=(-0.49, 0.76, 0.43)
+route base=0.350 progress=0.3103 position=(60.56, 68.80, 44.74) forward=(-0.52, 0.54, 0.66)
+route base=0.375 progress=0.3325 position=(53.41, 63.16, 51.76) forward=(-0.34, -0.92, 0.20)
+route base=0.400 progress=0.3546 position=(49.98, 50.76, 53.26) forward=(-0.24, -0.97, 0.08)
+route base=0.425 progress=0.3768 position=(46.99, 38.18, 54.34) forward=(-0.23, -0.97, 0.09)
+route base=0.450 progress=0.3990 position=(43.92, 25.70, 56.07) forward=(-0.25, -0.95, 0.21)
+route base=0.475 progress=0.4211 position=(41.77, 13.48, 59.74) forward=(-0.18, -0.91, 0.38)
+route base=0.500 progress=0.4433 position=(35.15, 5.19, 66.07) forward=(-0.78, -0.22, 0.58)
+route base=0.525 progress=0.4655 position=(24.30, 4.97, 73.06) forward=(-0.90, 0.07, 0.44)
+route base=0.550 progress=0.4876 position=(11.86, 5.54, 76.33) forward=(-1.00, 0.02, 0.08)
+route base=0.575 progress=0.5098 position=(-1.10, 5.93, 76.28) forward=(-1.00, 0.04, -0.08)
+route base=0.600 progress=0.5319 position=(-13.91, 6.52, 74.39) forward=(-0.97, 0.05, -0.22)
+route base=0.625 progress=0.5706 position=(-33.24, 10.21, 64.36) forward=(-0.70, 0.55, -0.45)
+route base=0.650 progress=0.6266 position=(-23.56, 21.91, 74.99) forward=(0.45, -0.77, 0.45)
+route base=0.675 progress=0.6831 position=(-42.05, 10.17, 65.73) forward=(-0.51, 0.77, -0.38)
+route base=0.700 progress=0.7340 position=(-56.66, 9.93, 46.85) forward=(-0.63, -0.03, -0.78)
+route base=0.725 progress=0.7562 position=(-63.96, 9.06, 36.18) forward=(-0.50, -0.09, -0.86)
+route base=0.750 progress=0.7784 position=(-69.52, 7.78, 24.55) forward=(-0.35, -0.10, -0.93)
+route base=0.775 progress=0.8005 position=(-72.60, 6.73, 12.03) forward=(-0.11, -0.07, -0.99)
+route base=0.800 progress=0.8227 position=(-72.51, 5.94, -0.90) forward=(0.11, -0.06, -0.99)
+route base=0.825 progress=0.8449 position=(-70.07, 5.28, -13.61) forward=(0.27, -0.05, -0.96)
+route base=0.850 progress=0.8670 position=(-65.37, 4.81, -25.65) forward=(0.48, -0.02, -0.87)
+route base=0.875 progress=0.8892 position=(-57.85, 4.62, -36.19) forward=(0.66, -0.01, -0.75)
+route base=0.900 progress=0.9113 position=(-48.64, 4.49, -45.31) forward=(0.76, -0.01, -0.65)
+route base=0.925 progress=0.9335 position=(-37.96, 4.32, -52.62) forward=(0.89, -0.01, -0.46)
+route base=0.950 progress=0.9557 position=(-25.80, 4.20, -57.04) forward=(0.98, -0.01, -0.21)
+route base=0.975 progress=0.9778 position=(-12.89, 4.13, -57.43) forward=(1.00, 0.00, 0.10)

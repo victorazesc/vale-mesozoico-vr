@@ -1,0 +1,20 @@
+ℹ️  blendkit: Verbose is enabled [10:41:29.525, addon_updater.py:150]
+ℹ️  blendkit: Read in JSON settings from file [10:41:29.526, addon_updater.py:150]
+ℹ️  blendkit: Ports reordered so first port is now 62485 (previous index was 0) [10:41:29.527, client_lib.py:156]
+Created history step 5e1e0fee-0df5-44e5-9aa9-ad34c327340a
+ℹ️  blendkit: Created new search history step [10:41:29.530, search.py:2698]
+ℹ️  blendkit: No temporarily enabled addons to clean up [10:41:29.531, download.py:419]
+ℹ️  blendkit: Unregistering Blendkit add-on [10:41:29.533, __init__.py:2973]
+ℹ️  blendkit: No temporarily enabled addons to clean up [10:41:29.533, download.py:419]
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/export_quetzalcoatlus.py:43: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  if material.use_nodes:
+FBX version: 7400
+Info: Applied modifier was not first, result may not be as expected
+
+FBX export starting... '/Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/_Game/Resources/Models/Dinosaurs/Quetzalcoatlus/Quetzalcoatlus.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.2336 sec.
+QUETZALCOATLUS_EXPORT_OK triangles 47998 bones 36 animation Flight frames (1.0, 150.0)
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit
