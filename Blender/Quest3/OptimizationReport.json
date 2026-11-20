@@ -1,0 +1,38 @@
+{
+  "frame_budget_ms": 13.89,
+  "heavy_canopy_proxy_objects": 119,
+  "heavy_canopy_source_triangles_replaced": 246760267,
+  "mesh_after": {
+    "meshes": 60,
+    "triangles": 467525,
+    "vertices": 265129
+  },
+  "mesh_before": {
+    "meshes": 68,
+    "triangles": 4670207,
+    "vertices": 3653886
+  },
+  "objects_after": 2832,
+  "objects_before": 3297,
+  "objects_removed": 465,
+  "output": "/Users/victorazevedo/projetos/vale-mesozoico-vr/Blender/ValeMesozoico_Quest3_Optimized.blend",
+  "output_bytes": 30310556,
+  "profile": "Meta Quest 3 quality 72 Hz",
+  "quality_guards": [
+    "full 3D density within 24 m of the track",
+    "hero dinosaurs, cart, track, cave and lagoon never density-thinned",
+    "PC master scene is not overwritten",
+    "cinematic volumes and external cave mask removed",
+    "ASTC and URP targets recorded for Unity import"
+  ],
+  "removed_by_reason": {
+    "cinematic_atmosphere": 1,
+    "explicit_quest3_disable": 2,
+    "library_template_object": 38,
+    "rock_density": 10,
+    "vegetation_density": 414
+  },
+  "source": "/Users/victorazevedo/projetos/vale-mesozoico-vr/Blender/ValeMesozoico_Editable.blend",
+  "source_bytes": 116738592,
+  "visible_instance_triangles_after": 11061837
+}
