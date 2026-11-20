@@ -1,0 +1,11 @@
+PASS
+Triceratops: PASS length=8.40m supportError=0.012m samples=480 steps=29 meshGap=0.000m penetration=0.019m dustBursts=27 vertices=7022
+  Swept clearance to rails: 3.26m (whole roaming envelope)
+Triceratops Herd Leader: PASS length=9.00m supportError=0.012m samples=480 steps=27 meshGap=0.001m penetration=0.028m dustBursts=0 vertices=7022
+  Swept clearance to rails: 3.64m (whole roaming envelope)
+Triceratops Return: PASS length=8.00m supportError=0.012m samples=480 steps=28 meshGap=0.000m penetration=0.016m dustBursts=3 vertices=7022
+  Swept clearance to rails: 4.72m (whole roaming envelope)
+Triceratops Valley: PASS length=8.20m supportError=0.012m samples=480 steps=29 meshGap=0.001m penetration=0.014m dustBursts=0 vertices=7022
+  Swept clearance to rails: 3.59m (whole roaming envelope)
+Triceratops Herd Young: PASS length=5.60m supportError=0.013m samples=480 steps=38 meshGap=0.000m penetration=0.015m dustBursts=0 vertices=7022
+  Swept clearance to rails: 5.63m (whole roaming envelope)
