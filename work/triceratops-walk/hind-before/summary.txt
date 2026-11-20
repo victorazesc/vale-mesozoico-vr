@@ -1,0 +1,6 @@
+frames=180 fps=30 simulatedSeconds=6.000000
+Triceratops Herd Young: footfalls=12 stanceTransitions=24 cycles=3.102143 touchdownsFL_FR_BL_BR=3/3/3/3 stanceReplants=0 maxStanceSlide=0.000015m meanStanceSlide=0.000004m maxBodyDeltaPerFrame=0.023429m maxBodySpeed=0.702861m/s maxSupportError=0.012007m
+Triceratops: footfalls=8 stanceTransitions=16 cycles=2.045446 touchdownsFL_FR_BL_BR=2/2/2/2 stanceReplants=0 maxStanceSlide=0.000814m meanStanceSlide=0.000010m maxBodyDeltaPerFrame=0.024562m maxBodySpeed=0.736850m/s maxSupportError=0.012569m
+Triceratops Valley: footfalls=8 stanceTransitions=16 cycles=1.883012 touchdownsFL_FR_BL_BR=2/2/2/2 stanceReplants=0 maxStanceSlide=0.000512m meanStanceSlide=0.000006m maxBodyDeltaPerFrame=0.021983m maxBodySpeed=0.659500m/s maxSupportError=0.012594m
+Triceratops Herd Leader: footfalls=8 stanceTransitions=16 cycles=1.944824 touchdownsFL_FR_BL_BR=2/2/2/2 stanceReplants=0 maxStanceSlide=0.006140m meanStanceSlide=0.000028m maxBodyDeltaPerFrame=0.024263m maxBodySpeed=0.727899m/s maxSupportError=0.014882m
+Triceratops Return: footfalls=10 stanceTransitions=20 cycles=2.435362 touchdownsFL_FR_BL_BR=3/2/3/2 stanceReplants=0 maxStanceSlide=0.000009m meanStanceSlide=0.000002m maxBodyDeltaPerFrame=0.022448m maxBodySpeed=0.673453m/s maxSupportError=0.012003m
