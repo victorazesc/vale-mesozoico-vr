@@ -1,0 +1,22 @@
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/refine_triceratops.py:31: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  material.use_nodes = True
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/refine_triceratops.py:126: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  detail_material.use_nodes = True
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/refine_triceratops.py:154: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  pupil_material.use_nodes = True
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/refine_triceratops.py:203: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  baked_material.use_nodes = True
+/Users/victorazevedo/projetos/vale-mesozoico-vr/Tools/Blender/refine_triceratops.py:258: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world.use_nodes = True
+00:09.285  render           | Saved: '/Users/victorazevedo/projetos/vale-mesozoico-vr/work/triceratops-realism/model-refined.png'
+FBX version: 7400
+Info: Baking map saved to internal image, save it externally or pack it
+Info: Baking map saved to internal image, save it externally or pack it
+
+FBX export starting... '/Users/victorazevedo/projetos/vale-mesozoico-vr/Assets/_Game/Resources/Models/Dinosaurs/Triceratops.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.3474 sec.
+TRICERATOPS_REFINED {"source_vertices": 669, "vertices": 11262, "triangles": 22496, "posed_dimensions": [5.672754287719727, 20.918582916259766, 8.422924041748047], "clips": ["Triceratops_Attack", "Triceratops_Death", "Triceratops_Idle", "Triceratops_Jump", "Triceratops_Run", "Triceratops_Walk"]}
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:48:20)
+
+Blender quit

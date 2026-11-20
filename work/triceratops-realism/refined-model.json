@@ -1,0 +1,18 @@
+{
+  "source_vertices": 669,
+  "vertices": 11262,
+  "triangles": 22496,
+  "posed_dimensions": [
+    5.672754287719727,
+    20.918582916259766,
+    8.422924041748047
+  ],
+  "clips": [
+    "Triceratops_Attack",
+    "Triceratops_Death",
+    "Triceratops_Idle",
+    "Triceratops_Jump",
+    "Triceratops_Run",
+    "Triceratops_Walk"
+  ]
+}

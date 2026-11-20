@@ -1,0 +1,11 @@
+FAIL
+Triceratops Valley: FAIL length=9.84m supportError=0.315m samples=480 steps=0 meshGap=0.288m penetration=0.007m dustBursts=0 vertices=7022
+  Swept clearance to rails: 3.63m (whole roaming envelope)
+Triceratops Herd Young: FAIL length=6.72m supportError=1.033m samples=480 steps=0 meshGap=1.017m penetration=0.000m dustBursts=0 vertices=7022
+  Swept clearance to rails: 5.58m (whole roaming envelope)
+Triceratops Herd Leader: FAIL length=10.80m supportError=0.745m samples=480 steps=0 meshGap=0.690m penetration=0.001m dustBursts=0 vertices=7022
+  Swept clearance to rails: 3.59m (whole roaming envelope)
+Triceratops Return: FAIL length=9.60m supportError=0.532m samples=480 steps=0 meshGap=0.451m penetration=0.091m dustBursts=0 vertices=7022
+  Swept clearance to rails: 4.85m (whole roaming envelope)
+Triceratops: FAIL length=10.08m supportError=0.012m samples=480 steps=0 meshGap=0.000m penetration=0.030m dustBursts=0 vertices=7022
+  Swept clearance to rails: 3.76m (whole roaming envelope)

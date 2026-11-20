@@ -1,0 +1,50 @@
+hind-before Triceratops 2 flips 8 knee 103.48 176.54 maxDelta 10.0 straight170 3 straight175 3 support 0.01201 slip 0.00026
+hind-before Triceratops 3 flips 4 knee 99.12 176.52 maxDelta 10.12 straight170 2 straight175 2 support 0.01257 slip 0.00081
+hind-before Triceratops Herd Leader 2 flips 5 knee 73.19 152.61 maxDelta 5.53 straight170 0 straight175 0 support 0.01201 slip 1e-05
+hind-before Triceratops Herd Leader 3 flips 4 knee 89.31 176.65 maxDelta 11.77 straight170 3 straight175 2 support 0.01267 slip 0.00161
+hind-before Triceratops Herd Young 2 flips 6 knee 106.15 146.31 maxDelta 8.68 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-before Triceratops Herd Young 3 flips 6 knee 104.9 161.29 maxDelta 12.23 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-before Triceratops Return 2 flips 6 knee 106.94 140.35 maxDelta 5.95 straight170 0 straight175 0 support 0.012 slip 1e-05
+hind-before Triceratops Return 3 flips 4 knee 107.07 161.46 maxDelta 8.42 straight170 0 straight175 0 support 0.012 slip 1e-05
+hind-before Triceratops Valley 2 flips 6 knee 93.58 138.85 maxDelta 5.57 straight170 0 straight175 0 support 0.012 slip 1e-05
+hind-before Triceratops Valley 3 flips 4 knee 92.27 176.54 maxDelta 17.36 straight170 8 straight175 6 support 0.01259 slip 0.00051
+hind-after Triceratops 2 flips 0 knee 97.22 176.82 maxDelta 7.51 straight170 3 straight175 1 support 0.01201 slip 2e-05
+hind-after Triceratops 3 flips 0 knee 90.03 176.86 maxDelta 11.1 straight170 5 straight175 4 support 0.01201 slip 2e-05
+hind-after Triceratops Herd Leader 2 flips 0 knee 70.52 161.81 maxDelta 5.53 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-after Triceratops Herd Leader 3 flips 0 knee 90.19 176.94 maxDelta 10.02 straight170 3 straight175 3 support 0.01201 slip 2e-05
+hind-after Triceratops Herd Young 2 flips 0 knee 84.45 140.82 maxDelta 6.54 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-after Triceratops Herd Young 3 flips 0 knee 83.39 156.26 maxDelta 10.03 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-after Triceratops Return 2 flips 0 knee 109.83 170.73 maxDelta 9.01 straight170 1 straight175 0 support 0.012 slip 1e-05
+hind-after Triceratops Return 3 flips 0 knee 105.14 158.54 maxDelta 6.92 straight170 0 straight175 0 support 0.012 slip 1e-05
+hind-after Triceratops Valley 2 flips 0 knee 85.04 176.79 maxDelta 8.32 straight170 2 straight175 1 support 0.012 slip 1e-05
+hind-after Triceratops Valley 3 flips 0 knee 87.94 176.85 maxDelta 16.6 straight170 11 straight175 11 support 0.01219 slip 0.00128
+hind-refined Triceratops 2 flips 0 knee 93.52 161.17 maxDelta 5.57 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-refined Triceratops 3 flips 0 knee 81.79 161.17 maxDelta 8.27 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-refined Triceratops Herd Leader 2 flips 0 knee 65.45 157.79 maxDelta 5.55 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-refined Triceratops Herd Leader 3 flips 0 knee 86.25 161.81 maxDelta 6.31 straight170 0 straight175 0 support 0.01201 slip 2e-05
+hind-refined Triceratops Herd Young 2 flips 0 knee 80.49 140.82 maxDelta 6.53 straight170 0 straight175 0 support 0.012 slip 2e-05
+hind-refined Triceratops Herd Young 3 flips 0 knee 80.76 148.02 maxDelta 8.94 straight170 0 straight175 0 support 0.012 slip 2e-05
+hind-refined Triceratops Return 2 flips 0 knee 109.82 160.71 maxDelta 7.76 straight170 0 straight175 0 support 0.012 slip 1e-05
+hind-refined Triceratops Return 3 flips 0 knee 104.84 158.55 maxDelta 6.92 straight170 0 straight175 0 support 0.012 slip 1e-05
+hind-refined Triceratops Valley 2 flips 0 knee 78.33 160.94 maxDelta 7.31 straight170 0 straight175 0 support 0.012 slip 1e-05
+hind-refined Triceratops Valley 3 flips 0 knee 78.68 161.53 maxDelta 9.9 straight170 0 straight175 0 support 0.012 slip 0.00147
+posture Triceratops 2 flips 0 knee 75.97 129.85 maxDelta 2.46 straight170 0 straight175 0 support 0.01201 slip 2e-05
+posture Triceratops 3 flips 0 knee 82.14 161.17 maxDelta 8.73 straight170 0 straight175 0 support 0.01201 slip 2e-05
+posture Triceratops Herd Leader 2 flips 0 knee 80.29 127.16 maxDelta 3.02 straight170 0 straight175 0 support 0.01201 slip 2e-05
+posture Triceratops Herd Leader 3 flips 0 knee 87.02 164.07 maxDelta 8.89 straight170 0 straight175 0 support 0.012 slip 1e-05
+posture Triceratops Herd Young 2 flips 0 knee 111.22 144.22 maxDelta 7.21 straight170 0 straight175 0 support 0.012 slip 2e-05
+posture Triceratops Herd Young 3 flips 0 knee 109.8 156.93 maxDelta 10.01 straight170 0 straight175 0 support 0.012 slip 2e-05
+posture Triceratops Return 2 flips 0 knee 109.65 142.19 maxDelta 4.87 straight170 0 straight175 0 support 0.012 slip 1e-05
+posture Triceratops Return 3 flips 0 knee 108.63 157.69 maxDelta 6.86 straight170 0 straight175 0 support 0.012 slip 1e-05
+posture Triceratops Valley 2 flips 0 knee 72.0 137.29 maxDelta 3.1 straight170 0 straight175 0 support 0.012 slip 1e-05
+posture Triceratops Valley 3 flips 0 knee 73.66 162.0 maxDelta 9.85 straight170 0 straight175 0 support 0.012 slip 1e-05
+cadence Triceratops 2 flips 0 knee 107.89 136.86 maxDelta 4.74 straight170 0 straight175 0 support 0.01201 slip 2e-05
+cadence Triceratops 3 flips 0 knee 109.88 149.05 maxDelta 7.26 straight170 0 straight175 0 support 0.01201 slip 2e-05
+cadence Triceratops Herd Leader 2 flips 0 knee 107.76 131.98 maxDelta 4.26 straight170 0 straight175 0 support 0.01201 slip 2e-05
+cadence Triceratops Herd Leader 3 flips 0 knee 108.89 143.51 maxDelta 6.65 straight170 0 straight175 0 support 0.01201 slip 2e-05
+cadence Triceratops Herd Young 2 flips 0 knee 111.17 145.94 maxDelta 7.46 straight170 0 straight175 0 support 0.01201 slip 2e-05
+cadence Triceratops Herd Young 3 flips 0 knee 109.91 156.93 maxDelta 10.53 straight170 0 straight175 0 support 0.01201 slip 2e-05
+cadence Triceratops Return 2 flips 0 knee 109.67 137.1 maxDelta 5.08 straight170 0 straight175 0 support 0.012 slip 1e-05
+cadence Triceratops Return 3 flips 0 knee 108.71 142.38 maxDelta 6.5 straight170 0 straight175 0 support 0.012 slip 1e-05
+cadence Triceratops Valley 2 flips 0 knee 109.61 131.34 maxDelta 4.39 straight170 0 straight175 0 support 0.012 slip 1e-05
+cadence Triceratops Valley 3 flips 0 knee 109.25 141.46 maxDelta 6.59 straight170 0 straight175 0 support 0.012 slip 1e-05

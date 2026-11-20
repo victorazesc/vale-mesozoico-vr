@@ -1,0 +1,91 @@
+#if UNITY_EDITOR
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Reflection;
+using UnityEditor;
+using UnityEngine;
+
+namespace ValeMesozoico.Editor
+{
+    [InitializeOnLoad]
+    internal static class TriceratopsImportSessionQa
+    {
+        private const string Request = "work/triceratops-download/run-qa";
+
+        static TriceratopsImportSessionQa() => EditorApplication.update += Poll;
+
+        private static void Poll()
+        {
+            if (EditorApplication.isPlaying && SessionState.GetBool("ValeMesozoico.PreviewCapture.Running", false)
+                && SessionState.GetBool("ValeMesozoico.TriceratopsPreview", false))
+            {
+                Application.runInBackground = true;
+                System.Type qa = System.AppDomain.CurrentDomain.GetAssemblies()
+                    .Select(assembly => assembly.GetType("ValeMesozoico.TriceratopsRuntimeQa"))
+                    .FirstOrDefault(type => type != null);
+                if (qa != null && Object.FindObjectsByType(qa, FindObjectsSortMode.None).Length == 0)
+                    new GameObject("Triceratops Runtime QA").AddComponent(qa);
+            }
+            if (EditorApplication.isPlaying && Time.time > 10f && File.Exists("work/triceratops-download/inspect-runtime"))
+            {
+                File.Delete("work/triceratops-download/inspect-runtime");
+                StringBuilder state = new();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+                foreach (MonoBehaviour component in Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                             .Where(c => c != null && c.GetType().Name == "TriceratopsGrounding"))
+                {
+                    state.AppendLine($"ACTOR {component.name} position={component.transform.position} enabled={component.enabled}");
+                    foreach (string field in new[] { "_basePosition", "_bodyOffset", "_strideLength", "_slope" })
+                        state.AppendLine($" {field}={component.GetType().GetField(field, flags).GetValue(component)}");
+                    Transform scale = component.transform.Find("Model Scale");
+                    state.AppendLine($" MODEL position={scale.localPosition} scale={scale.localScale}");
+                    foreach (object leg in (System.Array)component.GetType().GetField("_legs", flags).GetValue(component))
+                    {
+                        if (leg == null) continue;
+                        foreach (string field in new[] { "Sole", "Planted", "MinimumY", "MaximumY", "Swing" })
+                            state.Append($" {field}={leg.GetType().GetField(field, flags).GetValue(leg)}");
+                        state.AppendLine($" Contact={leg.GetType().GetProperty("Contact", flags).GetValue(leg)}");
+                    }
+                }
+                File.WriteAllText("work/triceratops-download/runtime-state.txt", state.ToString());
+            }
+            if (!File.Exists(Request) || EditorApplication.isCompiling || EditorApplication.isUpdating) return;
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                EditorApplication.isPlaying = false;
+                return;
+            }
+            File.Delete(Request);
+            StringBuilder report = new();
+            const string path = "Assets/_Game/Resources/Models/Dinosaurs/Triceratops.fbx";
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
+            report.AppendLine($"MODEL timestamp={File.GetLastWriteTimeUtc(path):O}");
+            GameObject model = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(path));
+            foreach (AnimationClip clip in AssetDatabase.LoadAllAssetsAtPath(path).OfType<AnimationClip>()
+                         .Where(clip => !clip.name.StartsWith("__preview__")))
+            {
+                report.AppendLine($"CLIP {clip.name} length={clip.length:F3} legacy={clip.legacy}");
+                foreach (float time in new[] { 0f, clip.length * 0.25f, clip.length * 0.5f, clip.length })
+                {
+                    clip.SampleAnimation(model, time);
+                    foreach (SkinnedMeshRenderer skin in model.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    {
+                        Mesh mesh = new();
+                        skin.BakeMesh(mesh, true);
+                        Bounds bounds = new(skin.transform.TransformPoint(mesh.vertices[0]), Vector3.zero);
+                        foreach (Vector3 vertex in mesh.vertices) bounds.Encapsulate(skin.transform.TransformPoint(vertex));
+                        report.AppendLine($"  t={time:F2} vertices={mesh.vertexCount} bounds={bounds} transform={skin.transform.localToWorldMatrix}");
+                        foreach (Transform bone in skin.bones.Where(bone => bone.name.EndsWith(" Hand") || bone.name.EndsWith(" Foot")))
+                            report.AppendLine($"  FOOT {bone.name}: {bone.position}");
+                        Object.DestroyImmediate(mesh);
+                    }
+                }
+            }
+            Object.DestroyImmediate(model);
+            File.WriteAllText("work/triceratops-download/import-qa.txt", report.ToString());
+            ScenePreviewCapture.CaptureTriceratopsInEditor();
+        }
+    }
+}
+#endif
